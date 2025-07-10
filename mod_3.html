@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Development & Training</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            scroll-snap-align: start;
+            position: relative;
+        }
+        .container-snap {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        .draggable {
+            cursor: move;
+            user-select: none;
+        }
+        .dragging {
+            opacity: 0.5;
+            background-color: #cce7ff;
+        }
+        .drop-zone {
+            border: 2px dashed #9ca3af; /* gray-400 */
+            transition: background-color 0.3s;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .drop-zone.over {
+            background-color: #e0f2fe; /* sky-100 */
+        }
+        .feedback-correct {
+            border: 2px solid #22c55e !important; /* green-500 */
+        }
+        .feedback-incorrect {
+            border: 2px solid #ef4444 !important; /* red-500 */
+        }
+        .nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .nav-dots a {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .nav-dots a.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
+        .arrow {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            color: rgba(0, 0, 0, 0.4);
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-15px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="container-snap">
+        <!-- Slide 1: Title -->
+        <section id="slide-1" class="slide bg-gradient-to-br from-blue-100 to-cyan-200 text-slate-800">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-7xl font-bold mb-4">Staff Development & Training</h1>
+                <p class="text-xl md:text-2xl text-slate-600">An Interactive Learning Module</p>
+                <p class="mt-8 text-lg">Scroll down to begin</p>
+            </div>
+            <a href="#slide-2" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- Slide 2: Getting Started - Ranking -->
+        <section id="slide-2" class="slide bg-gradient-to-br from-cyan-200 to-blue-100 text-slate-800">
+            <div class="w-full max-w-2xl text-center">
+                <h2 class="text-3xl font-bold mb-2">Getting Started</h2>
+                <p class="text-lg mb-6">Which benefits are most attractive for a first job? Drag and drop to rank them from most attractive (top) to least attractive (bottom).</p>
+                <div id="ranking-list" class="space-y-3">
+                    <!-- Items will be injected by JS -->
+                </div>
+            </div>
+            <a href="#slide-3" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- Slide 3: Vocabulary - Fill in the blanks -->
+        <section id="slide-3" class="slide bg-gradient-to-br from-blue-100 to-purple-200 text-slate-800">
+            <div class="w-full max-w-4xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Vocabulary Challenge</h2>
+                <div class="bg-white/50 p-6 rounded-xl shadow-lg">
+                    <p class="text-center mb-4 font-semibold">Complete the sentences using words from the box.</p>
+                    <div class="flex flex-wrap justify-center gap-2 mb-6 p-4 bg-blue-50 rounded-lg">
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">ability</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">certificate</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">course</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">degree</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">development</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">experience</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">hands-on</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">knowledge</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">qualifications</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">skills</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">trainee</span>
+                        <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm">training</span>
+                    </div>
+                    <div id="fill-in-the-blanks-container" class="space-y-4 text-gray-700">
+                        <!-- Sentences will be injected by JS -->
+                    </div>
+                    <div class="text-center mt-6">
+                        <button id="check-vocab-btn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-4" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+        
+        <!-- Slide 4: Reading - Multiple Choice -->
+        <section id="slide-4" class="slide bg-gradient-to-br from-purple-200 to-pink-200 text-slate-800">
+            <div class="w-full max-w-4xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Reading Comprehension</h2>
+                <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row gap-6">
+                    <!-- Reading Text Column -->
+                    <div class="md:w-1/2 flex flex-col">
+                        <h3 class="font-bold text-xl mb-4 text-center">Go anywhere</h3>
+                        <div class="reading-text bg-white/50 p-4 rounded-lg overflow-y-auto flex-grow">
+                            <p class="font-semibold mb-2">Company background</p>
+                            <p class="text-sm mb-4">FLIGHT CENTRE Limited is one of the world's largest independent travel retailers, employing more than 5,500 people worldwide.</p>
+                            <p class="text-sm">
+                                We believe in giving you a lot of responsibility from day one - but that doesn't mean throwing you in at the deep end. One of our major priorities is to <strong>[1]</strong> you get the training and support you need to gain the skills which will allow you to succeed personally and professionally.
+                                <br><br>
+                                The training starts as soon as you <strong>[2]</strong> and it never stops. The initial programme is <strong>[3]</strong> partly at your office and partly in our dedicated Learning Centre. For the first 12 months, you'll have a regular programme of training <strong>[4]</strong> topics as diverse as Advanced Sales, Goal Setting and Time Management, as well as Airfares and Packages.
+                                <br><br>
+                                After that, you can develop in any direction you choose by <strong>[5]</strong> a range of courses and events in four key development areas: Sales and Service, Product and Airfares, Systems, and Personal Development. All this is provided at no <strong>[6]</strong> to you - which is exactly the way it should be. We have a consistent <strong>[7]</strong> of promoting from within; currently about 90 per cent of our Team Leaders have come through the ranks...
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Questions Column -->
+                    <div class="md:w-1/2">
+                         <h3 class="font-bold text-xl mb-4 text-center">Complete the Text</h3>
+                        <div id="multiple-choice-container" class="space-y-3">
+                            <!-- Multiple choice questions will be injected by JS -->
+                        </div>
+                         <div class="text-center mt-6">
+                            <button id="check-mcq-btn" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                            <p id="mcq-score" class="mt-4 font-semibold text-lg"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <a href="#slide-5" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- Slide 5: Talking Points -->
+        <section id="slide-5" class="slide bg-gradient-to-br from-pink-200 to-rose-200 text-slate-800">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Talking Points</h2>
+                <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row items-center gap-8">
+                    <!-- Talking Points List -->
+                    <div class="md:w-1/2">
+                        <ul class="space-y-4 list-disc list-inside text-gray-700">
+                            <li>Companies should pay for training to do the job, but staff should pay for training which gives them qualifications.</li>
+                            <li>Training should be done in employees' free time.</li>
+                            <li>If a company trains you, you should agree to work for that company for a number of years afterwards.</li>
+                            <li>It doesn't matter what you study. The important thing is to get a good degree.</li>
+                            <li>All staff need continuous training, not just new recruits.</li>
+                        </ul>
+                    </div>
+                    <!-- Image -->
+                    <div class="md:w-1/2">
+                        <img src="https://johanka2014.github.io/bus_bench/training.png" alt="Two people in a discussion during a training session" class="rounded-lg shadow-xl w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-6" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- Slide 6: Listening Activity -->
+        <section id="slide-6" class="slide bg-gradient-to-br from-rose-200 to-orange-200 text-slate-800">
+            <div class="w-full max-w-4xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Listening Activity</h2>
+                <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg">
+                    <p class="text-center mb-2">Listen to the conversation.</p>
+                    <div class="flex justify-center mb-6">
+                        <audio controls src="https://johanka2014.github.io/bus_bench/02_Unit_1.mp3">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    <p class="text-center mb-6">Then, match the phrases with their definitions by dragging the definitions from the right to the correct boxes on the left.</p>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <!-- Drop Zones -->
+                        <div id="listening-phrases" class="md:w-1/2 space-y-3">
+                            <!-- Phrases (drop zones) will be injected by JS -->
+                        </div>
+                        <!-- Draggable Items -->
+                        <div id="listening-definitions" class="md:w-1/2 space-y-3 p-4 bg-rose-50 rounded-lg">
+                             <!-- Definitions (draggable) will be injected by JS -->
+                        </div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <button id="check-listening-btn" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-7" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+        
+        <!-- Slide 7: Listening Discussion -->
+        <section id="slide-7" class="slide bg-gradient-to-br from-orange-200 to-amber-200 text-slate-800">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Discuss with a Partner</h2>
+                <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row items-center gap-8">
+                    <!-- Talking Points List -->
+                    <div class="md:w-1/2">
+                        <ul class="space-y-3 list-decimal list-inside text-gray-700">
+                            <li>What are the advantages of a course which is tailor-made?</li>
+                            <li>How can trainers design courses which meet the learning goals of their trainees?</li>
+                            <li>How much of a company's budget should be used for training?</li>
+                            <li>What sort of courses are suited to hands-on training?</li>
+                            <li>Why is it important nowadays to be computer literate?</li>
+                            <li>In your job, or a job you know about, what are the core skills?</li>
+                        </ul>
+                    </div>
+                    <!-- Image -->
+                    <div class="md:w-1/2">
+                        <img src="https://johanka2014.github.io/bus_bench/training.png" alt="Two people in a discussion during a training session" class="rounded-lg shadow-xl w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-8" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- Slide 8: Reading - Deloitte -->
+        <section id="slide-8" class="slide bg-gradient-to-br from-amber-200 to-lime-200 text-slate-800">
+            <div class="w-full max-w-6xl">
+                 <h2 class="text-3xl font-bold mb-6 text-center">Reading: A Great Start to a Promising Career</h2>
+                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg">
+                    <div class="text-center mb-6">
+                        <h3 class="font-bold text-xl">Training at Deloitte Touche</h3>
+                        <p>Deloitte Touche Tohmatsu is a worldwide company offering management consultancy, auditing and financial advisory services.</p>
+                        <p class="mt-4">Read the article, then drag the sentences to fill the gaps.</p>
+                    </div>
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <!-- Article Text -->
+                        <div id="deloitte-article" class="lg:w-2/3 space-y-4 text-sm">
+                            <!-- Article paragraphs will be injected by JS -->
+                        </div>
+                        <!-- Draggable Sentences -->
+                        <div id="deloitte-sentences" class="lg:w-1/3 space-y-3 p-4 bg-amber-50 rounded-lg">
+                            <h4 class="font-bold text-center mb-2">Sentences to Place</h4>
+                            <!-- Draggable sentences will be injected by JS -->
+                        </div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <button id="check-deloitte-btn" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                    </div>
+                 </div>
+            </div>
+            <a href="#slide-9" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- Slide 9: Staff Training Scheme Talking Points -->
+        <section id="slide-9" class="slide bg-gradient-to-br from-lime-200 to-green-200 text-slate-800">
+            <div class="w-full max-w-5xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Staff Training Scheme</h2>
+                <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row items-center gap-8">
+                    <!-- Talking Points List -->
+                    <div class="md:w-1/2">
+                        <p class="mb-4 text-gray-800">Your company has decided it needs to provide more training for staff. You have been asked to help prepare a staff training programme. Discuss the situation together and decide:</p>
+                        <ul class="space-y-4 list-disc list-inside text-gray-700">
+                            <li>what kinds of courses would be most useful</li>
+                            <li>how to choose who should go on the courses</li>
+                            <li>whether the courses should happen during working time or free time</li>
+                        </ul>
+                    </div>
+                    <!-- Image -->
+                    <div class="md:w-1/2">
+                        <img src="https://johanka2014.github.io/bus_bench/training2.png" alt="A group of people in a training meeting" class="rounded-lg shadow-xl w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-1" class="arrow">
+                <i class="fas fa-chevron-up"></i>
+            </a>
+        </section>
+
+    </div>
+    
+    <!-- Navigation Dots -->
+    <nav class="nav-dots" id="nav-dots-container">
+        <!-- Dots will be injected by JS -->
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- STATE MANAGEMENT ---
+            // A single object to hold the state of our application, including the currently dragged element.
+            const appState = {
+                currentDraggable: null,
+            };
+
+            // --- INITIALIZATION ---
+            // This function runs once the page is loaded. It sets up the initial state of all activities.
+            function initializeActivities() {
+                setupNavigation();
+                populateRankingList();
+                populateVocabChallenge();
+                populateMultipleChoice();
+                populateListeningActivity();
+                populateDeloitteActivity();
+            }
+
+            // --- NAVIGATION ---
+            function setupNavigation() {
+                const slides = document.querySelectorAll('.slide');
+                const navDotsContainer = document.getElementById('nav-dots-container');
+
+                slides.forEach(slide => {
+                    const dot = document.createElement('a');
+                    dot.href = `#${slide.id}`;
+                    navDotsContainer.appendChild(dot);
+                });
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const activeDot = navDotsContainer.querySelector(`a.active`);
+                            if (activeDot) activeDot.classList.remove('active');
+                            const newActiveDot = navDotsContainer.querySelector(`a[href="#${entry.target.id}"]`);
+                            if(newActiveDot) newActiveDot.classList.add('active');
+                        }
+                    });
+                }, { threshold: 0.6 });
+
+                slides.forEach(slide => observer.observe(slide));
+            }
+
+            // --- EVENT HANDLING (DELEGATION) ---
+            // A single click listener for the entire document to handle all "check answer" buttons.
+            document.addEventListener('click', function(e) {
+                if (e.target.matches('#check-vocab-btn')) {
+                    checkVocabAnswers();
+                }
+                if (e.target.matches('#check-mcq-btn')) {
+                    checkMcqAnswers();
+                }
+                if (e.target.matches('#check-listening-btn')) {
+                    checkListeningAnswers();
+                }
+                if (e.target.matches('#check-deloitte-btn')) {
+                    checkDeloitteAnswers();
+                }
+            });
+
+            // A single set of drag-and-drop listeners for the entire document.
+            document.addEventListener('dragstart', (e) => {
+                if (e.target.classList.contains('draggable')) {
+                    appState.currentDraggable = e.target;
+                    setTimeout(() => e.target.classList.add('dragging'), 0);
+                }
+            });
+
+            document.addEventListener('dragend', () => {
+                if (appState.currentDraggable) {
+                    appState.currentDraggable.classList.remove('dragging');
+                    appState.currentDraggable = null;
+                }
+            });
+
+            document.addEventListener('dragover', (e) => {
+                e.preventDefault(); // Necessary to allow dropping.
+            });
+
+            document.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const dropZone = e.target.closest('.drop-zone');
+                const draggableContainer = e.target.closest('#ranking-list, #listening-definitions, #deloitte-sentences');
+
+                if (dropZone && appState.currentDraggable && !dropZone.hasChildNodes()) {
+                    // Drop into a specific drop zone
+                    dropZone.appendChild(appState.currentDraggable);
+                } else if (draggableContainer && appState.currentDraggable) {
+                    // Return to the original container
+                    draggableContainer.appendChild(appState.currentDraggable);
+                }
+                 
+                // Handle reordering for ranking list
+                if (e.target.closest('#ranking-list') && appState.currentDraggable) {
+                    const list = document.getElementById('ranking-list');
+                    const afterElement = getDragAfterElement(list, e.clientY);
+                    if (afterElement == null) {
+                        list.appendChild(appState.currentDraggable);
+                    } else {
+                        list.insertBefore(appState.currentDraggable, afterElement);
+                    }
+                }
+
+                document.querySelectorAll('.drop-zone.over').forEach(zone => zone.classList.remove('over'));
+            });
+            
+            document.addEventListener('dragenter', e => {
+                if (e.target.classList.contains('drop-zone')) {
+                    e.target.classList.add('over');
+                }
+            });
+
+            document.addEventListener('dragleave', e => {
+                 if (e.target.classList.contains('drop-zone')) {
+                    e.target.classList.remove('over');
+                }
+            });
+
+            function getDragAfterElement(container, y) {
+                const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+
+            // --- ACTIVITY 1: RANKING LIST ---
+            function populateRankingList() {
+                const rankingList = document.getElementById('ranking-list');
+                const benefits = ['A bonus scheme', 'Responsibility', 'A high salary', 'An in-house training scheme', 'The opportunity to travel', 'A permanent contract', 'Long holidays', 'Rapid promotion'];
+                benefits.forEach(benefit => {
+                    const listItem = document.createElement('div');
+                    listItem.className = 'draggable bg-white p-4 rounded-lg shadow-md';
+                    listItem.draggable = true;
+                    listItem.textContent = benefit;
+                    rankingList.appendChild(listItem);
+                });
+            }
+
+            // --- ACTIVITY 2: VOCABULARY CHALLENGE ---
+            function populateVocabChallenge() {
+                const vocabContainer = document.getElementById('fill-in-the-blanks-container');
+                const vocabSentences = [
+                    { text: "Our school-leaver {1} programme aims to teach you key {2}, such as word processing and bookkeeping.", answers: ["trainee", "skills"] },
+                    { text: "Although he lacks formal {1} such as a university {2}, he came through the ranks due to his {3} to take on new ideas and to manage people.", answers: ["qualifications", "degree", "ability"] },
+                    { text: "The {1} you study at university is likely to decide the sort of job you do afterwards. However, whatever you study, it's always useful to have a university {2}.", answers: ["course", "degree"] },
+                    { text: "At the end of the four-week training {1}, you will receive a {2}. The {1} aims to give you a thorough {3} of the company's activities and the {4} to do your job competently. However, there are a lot of things which you can only learn with {5}, and this takes a lot of time.", answers: ["course", "certificate", "knowledge", "skills", "experience"] },
+                    { text: "He has excellent qualifications, and with our policy of professional {1} and on-the-job {2}, he will almost certainly become one of our high fliers. In fact, next week he's going on a management {3}.", answers: ["development", "training", "course"] },
+                    { text: "As a {1} computer technician, his training course is much more {2} than theoretical.", answers: ["trainee", "hands-on"] }
+                ];
+                vocabSentences.forEach((item, index) => {
+                    let sentenceHTML = item.text;
+                    for (let i = 0; i < item.answers.length; i++) {
+                        sentenceHTML = sentenceHTML.replace(`{${i+1}}`, `<input type="text" class="mx-1 p-1 rounded border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-32" data-answer="${item.answers[i].toLowerCase()}">`);
+                    }
+                    const p = document.createElement('p');
+                    p.innerHTML = `<span class="font-bold mr-2">${index + 1}.</span> ${sentenceHTML}`;
+                    vocabContainer.appendChild(p);
+                });
+            }
+
+            function checkVocabAnswers() {
+                document.querySelectorAll('#fill-in-the-blanks-container input').forEach(input => {
+                    const userAnswer = input.value.trim().toLowerCase();
+                    const correctAnswer = input.dataset.answer;
+                    input.classList.remove('feedback-correct', 'feedback-incorrect');
+                    input.classList.add(userAnswer === correctAnswer ? 'feedback-correct' : 'feedback-incorrect');
+                });
+            }
+
+            // --- ACTIVITY 3: MULTIPLE CHOICE ---
+            function populateMultipleChoice() {
+                const mcqContainer = document.getElementById('multiple-choice-container');
+                const mcqData = [
+                    { question: "Gap [1]", options: ["want", "make sure", "hope", "prepare"], answer: "make sure" },
+                    { question: "Gap [2]", options: ["join", "recruit", "contract", "employ"], answer: "join" },
+                    { question: "Gap [3]", options: ["introduced", "done", "based", "fixed"], answer: "based" },
+                    { question: "Gap [4]", options: ["dealing", "covering", "learning", "working"], answer: "covering" },
+                    { question: "Gap [5]", options: ["going", "assisting", "training", "attending"], answer: "attending" },
+                    { question: "Gap [6]", options: ["money", "payment", "cost", "price"], answer: "cost" },
+                    { question: "Gap [7]", options: ["record", "reputation", "activity", "standard"], answer: "record" },
+                ];
+                mcqData.forEach((item, index) => {
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'p-3 border-b border-purple-200';
+                    let optionsHTML = `<p class="font-semibold mb-2">${item.question}</p><div class="flex flex-wrap gap-2">`;
+                    item.options.forEach(option => {
+                        optionsHTML += `<label class="flex items-center space-x-2 cursor-pointer bg-white hover:bg-purple-100 px-2 py-1 rounded-lg transition text-sm"><input type="radio" name="mcq-${index}" value="${option}" class="form-radio text-purple-500"><span>${option}</span></label>`;
+                    });
+                    optionsHTML += `</div><div class="feedback-text mt-2 text-xs font-medium"></div>`;
+                    questionDiv.innerHTML = optionsHTML;
+                    mcqContainer.appendChild(questionDiv);
+                });
+            }
+
+            function checkMcqAnswers() {
+                let score = 0;
+                const mcqContainer = document.getElementById('multiple-choice-container');
+                mcqContainer.querySelectorAll('.p-3').forEach((questionDiv, index) => {
+                    const feedbackEl = questionDiv.querySelector('.feedback-text');
+                    const selected = questionDiv.querySelector(`input[name="mcq-${index}"]:checked`);
+                    const correctAnswer = mcqContainer.querySelectorAll('.p-3')[index].__mcq_answer; // Custom property to store answer
+                    
+                    feedbackEl.textContent = '';
+                    feedbackEl.classList.remove('text-green-600', 'text-red-600');
+
+                    if (selected) {
+                        if (selected.value === document.getElementById('multiple-choice-container').__mcq_data[index].answer) {
+                            score++;
+                            feedbackEl.textContent = 'Correct!';
+                            feedbackEl.classList.add('text-green-600');
+                        } else {
+                            feedbackEl.textContent = `Incorrect. The correct answer is "${document.getElementById('multiple-choice-container').__mcq_data[index].answer}".`;
+                            feedbackEl.classList.add('text-red-600');
+                        }
+                    } else {
+                        feedbackEl.textContent = 'Please select an answer.';
+                        feedbackEl.classList.add('text-red-600');
+                    }
+                });
+                 const mcqData = document.getElementById('multiple-choice-container').__mcq_data;
+                 document.getElementById('mcq-score').textContent = `Your score: ${score} / ${mcqData.length}`;
+            }
+             // Store data on the element to avoid global variables
+            document.getElementById('multiple-choice-container').__mcq_data = [
+                { answer: "make sure" }, { answer: "join" }, { answer: "based" }, { answer: "covering" }, { answer: "attending" }, { answer: "cost" }, { answer: "record" }
+            ];
+
+
+            // --- ACTIVITY 4: LISTENING MATCHING ---
+            function populateListeningActivity() {
+                const phrasesContainer = document.getElementById('listening-phrases');
+                const definitionsContainer = document.getElementById('listening-definitions');
+                const listeningData = [
+                    { id: 1, phrase: 'tailor made', definition: 'specially designed to meet your needs' },
+                    { id: 2, phrase: 'learning goals', definition: 'your objectives when doing the course' },
+                    { id: 3, phrase: 'training budget', definition: 'money reserved for training staff' },
+                    { id: 4, phrase: 'hands-on training', definition: 'practical, not theoretical training' },
+                    { id: 5, phrase: 'computer literate', definition: 'able to use a computer' },
+                    { id: 6, phrase: 'core skills', definition: 'basic essential skills' },
+                ];
+                const shuffledDefinitions = [...listeningData].sort(() => Math.random() - 0.5);
+                listeningData.forEach(item => {
+                    phrasesContainer.innerHTML += `<div class="flex items-center gap-3"><span class="font-semibold">${item.id}. ${item.phrase}</span><div class="drop-zone flex-grow p-3 rounded-lg bg-white" data-match-id="${item.id}"></div></div>`;
+                });
+                shuffledDefinitions.forEach(item => {
+                    definitionsContainer.innerHTML += `<div class="draggable bg-white p-3 rounded-lg shadow" draggable="true" data-id="${item.id}">${item.definition}</div>`;
+                });
+            }
+
+            function checkListeningAnswers() {
+                document.querySelectorAll('#listening-phrases .drop-zone').forEach(zone => {
+                    zone.classList.remove('feedback-correct', 'feedback-incorrect');
+                    const droppedItem = zone.querySelector('.draggable');
+                    if (droppedItem) {
+                        zone.classList.add(zone.dataset.matchId === droppedItem.dataset.id ? 'feedback-correct' : 'feedback-incorrect');
+                    } else {
+                        zone.classList.add('feedback-incorrect');
+                    }
+                });
+            }
+
+            // --- ACTIVITY 5: DELOITTE READING ---
+            function populateDeloitteActivity() {
+                const articleContainer = document.getElementById('deloitte-article');
+                const sentencesContainer = document.getElementById('deloitte-sentences');
+                const articleParagraphs = [
+                    `I've been with for Deloitte for nearly two years now. I was originally attracted to this company in my final year at Cambridge. I was looking for a company which would put me in the fast lane to promotion and I realised that, in my case, this meant an organisation with a policy of on the job training and development. <div class="drop-zone my-2 rounded-lg p-2" data-match-id="F"></div> As I discovered at my first recruitment interview, they also place a lot of emphasis on getting professional qualifications, which really impressed me.`,
+                    `Deloitte actually helps employees to reduce the conflict between work and study. In my case, this means I've always been allowed to give exam preparation priority over my client work. Right from the beginning, my boss, Neil, has gone out of his way to help and encourage me. <div class="drop-zone my-2 rounded-lg p-2" data-match-id="C"></div> I find it's a good moment to discuss solutions to any problems I have with him.`,
+                    `Apart from professional qualifications, we're also given plenty of internal training. This includes courses intended to help develop one's organisational, delivery and leadership qualities. <div class="drop-zone my-2 rounded-lg p-2" data-match-id="B"></div> This gave me a really confident and practical start to my work with the firm, as so much of my work involves using exactly these skills.`,
+                    `Another thing which attracted me to Deloitte was that you can choose your training method to suit your individual learning patterns. This is because they want us to pass our exams at the first attempt. <div class="drop-zone my-2 rounded-lg p-2" data-match-id="A"></div> Also, I think, when you've got your professional qualifications you're treated with much more respect by both your colleagues and your clients.`,
+                    `When I arrived at Deloitte, we went through an initial three-day programme to develop our core skills and introduce us to the firm and our new colleagues. <div class="drop-zone my-2 rounded-lg p-2" data-match-id="E"></div> In the near future, I expect to be passing on the knowledge I have acquired to next year's intake of graduate trainees. We are given formal six-monthly appraisals and, what is more, we are given plenty of advice by peers, managers and partners.`,
+                    `Fully funded study towards professional qualifications is a vital part of many careers in Deloitte, and at the moment I'm starting on a Masters degree in Business Management with the London School of Economics. <div class="drop-zone my-2 rounded-lg p-2" data-match-id="D"></div> On the other hand, we are provided with very generous study leave, and the firm has a great track record of success. I can see myself working here for many years to come, as they're providing me with all the opportunities I need.`
+                ];
+                const deloitteSentences = [
+                    { id: 'A', text: "At Deloitte, there's a national 'first time, every time' culture, which makes sense because the sooner you pass exams, the sooner you get down to real work." },
+                    { id: 'B', text: "For example, there is a course I did quite early on in the job called Introduction to Client Services, which concentrated on presentation, interview, teamwork and writing skills." },
+                    { id: 'C', text: "He monitors my progress formally, but apart from that, we usually have lunch together once or twice a week." },
+                    { id: 'D', text: "It is pretty tough, as I have to fit the academic work in around my daily workload." },
+                    { id: 'E', text: "Naturally enough, much of what I've learnt has been taught me informally by the people I work with." },
+                    { id: 'F', text: "On their website, Deloitte talked about job satisfaction and giving employees the chance to grow and develop throughout their careers, so it seemed a company worth applying for." },
+                    { id: 'G', text: "The firm has agreements with local training colleges, who provide many of the courses graduate trainees follow." }
+                ];
+                articleContainer.innerHTML = articleParagraphs.join('');
+                sentencesContainer.innerHTML += deloitteSentences.sort(() => Math.random() - 0.5).map(item =>
+                    `<div class="draggable bg-white p-3 rounded-lg shadow text-sm" draggable="true" data-id="${item.id}">${item.text}</div>`
+                ).join('');
+            }
+
+            function checkDeloitteAnswers() {
+                document.querySelectorAll('#deloitte-article .drop-zone').forEach(zone => {
+                    zone.classList.remove('feedback-correct', 'feedback-incorrect');
+                    const droppedItem = zone.querySelector('.draggable');
+                    if (droppedItem) {
+                        zone.classList.add(zone.dataset.matchId === droppedItem.dataset.id ? 'feedback-correct' : 'feedback-incorrect');
+                    } else {
+                        zone.classList.add('feedback-incorrect');
+                    }
+                });
+            }
+
+            // --- RUN INITIALIZATION ---
+            initializeActivities();
+        });
+    </script>
+</body>
+</html>
