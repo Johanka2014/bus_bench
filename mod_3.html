@@ -40,7 +40,7 @@
         }
         .drop-zone {
             border: 2px dashed #9ca3af; /* gray-400 */
-            transition: background-color 0.3s;
+            transition: background-color: 0.3s;
             min-height: 60px;
             display: flex;
             align-items: center;
@@ -94,6 +94,11 @@
             60% {
                 transform: translateX(-50%) translateY(-10px);
             }
+        }
+         .highlight {
+            background-color: rgba(255, 192, 203, 0.5); /* Light pink highlight */
+            padding: 0 4px;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -206,8 +211,19 @@
                 <h2 class="text-3xl font-bold mb-6 text-center">Grammar: Comparison Practice</h2>
                 <div class="bg-white/50 p-6 rounded-xl shadow-lg">
                     <p class="text-center mb-4 font-semibold">Complete the sentences with the correct comparative or superlative form of the words in the box.</p>
-                    <div class="flex flex-wrap justify-center gap-2 mb-6 p-4 bg-purple-50 rounded-lg text-sm">
-                        <span>challenging</span><span>economical</span><span>far</span><span>friendly</span><span>great</span><span>hard</span><span>highly</span><span>impressive</span><span>little</span><span>long</span><span>motivating</span><span>strong</span>
+                    <div class="flex flex-wrap justify-center gap-2 mb-6 p-4 bg-purple-50 rounded-lg">
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">challenging</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">economical</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">far</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">friendly</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">great</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">hard</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">highly</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">impressive</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">little</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">long</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">motivating</span>
+                        <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm">strong</span>
                     </div>
                     <div id="grammar-comparison-container" class="space-y-3 text-gray-700">
                         <!-- Sentences with inputs injected by JS -->
@@ -224,31 +240,29 @@
         
         <!-- Slide 6: Reading - Multiple Choice -->
         <section id="slide-6" class="slide bg-gradient-to-br from-violet-200 to-pink-200 text-slate-800">
-            <div class="w-full max-w-4xl">
+            <div class="w-full max-w-5xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Reading Comprehension</h2>
-                <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row gap-6">
-                    <!-- Reading Text Column -->
-                    <div class="md:w-1/2 flex flex-col">
+                <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left">
+                    <!-- Full Width Reading Text -->
+                    <div>
                         <h3 class="font-bold text-xl mb-4 text-center">Go anywhere</h3>
-                        <div class="reading-text bg-white/50 p-4 rounded-lg overflow-y-auto flex-grow">
+                        <div class="reading-text bg-white/50 p-4 rounded-lg mb-8">
                             <p class="font-semibold mb-2">Company background</p>
                             <p class="text-sm mb-4">FLIGHT CENTRE Limited is one of the world's largest independent travel retailers, employing more than 5,500 people worldwide.</p>
-                            <p class="text-sm">
+                            <p class="text-sm leading-relaxed">
                                 We believe in giving you a lot of responsibility from day one - but that doesn't mean throwing you in at the deep end. One of our major priorities is to <strong>[1]</strong> you get the training and support you need to gain the skills which will allow you to succeed personally and professionally.
-                                <br><br>
                                 The training starts as soon as you <strong>[2]</strong> and it never stops. The initial programme is <strong>[3]</strong> partly at your office and partly in our dedicated Learning Centre. For the first 12 months, you'll have a regular programme of training <strong>[4]</strong> topics as diverse as Advanced Sales, Goal Setting and Time Management, as well as Airfares and Packages.
-                                <br><br>
                                 After that, you can develop in any direction you choose by <strong>[5]</strong> a range of courses and events in four key development areas: Sales and Service, Product and Airfares, Systems, and Personal Development. All this is provided at no <strong>[6]</strong> to you - which is exactly the way it should be. We have a consistent <strong>[7]</strong> of promoting from within; currently about 90 per cent of our Team Leaders have come through the ranks...
                             </p>
                         </div>
                     </div>
-                    <!-- Questions Column -->
-                    <div class="md:w-1/2">
-                         <h3 class="font-bold text-xl mb-4 text-center">Complete the Text</h3>
-                        <div id="multiple-choice-container" class="space-y-3">
+                    <!-- Two-Column Questions -->
+                    <div>
+                        <h3 class="font-bold text-xl mb-4 text-center">Complete the Text</h3>
+                        <div id="multiple-choice-container" class="grid md:grid-cols-2 gap-x-6 gap-y-4">
                             <!-- Multiple choice questions will be injected by JS -->
                         </div>
-                         <div class="text-center mt-6">
+                         <div class="text-center mt-8">
                             <button id="check-mcq-btn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
                             <p id="mcq-score" class="mt-4 font-semibold text-lg"></p>
                         </div>
@@ -336,7 +350,7 @@
                     </div>
                     <!-- Image -->
                     <div class="md:w-1/2">
-                        <img src="https://johanka2014.github.io/bus_bench/training.png" alt="Two people in a discussion during a training session" class="rounded-lg shadow-xl w-full h-full object-cover">
+                        <img src="https://johanka2014.github.io/bus_bench/training3.png" alt="A person writing notes during a meeting" class="rounded-lg shadow-xl w-full h-full object-cover">
                     </div>
                 </div>
             </div>
@@ -345,52 +359,22 @@
             </a>
         </section>
 
-        <!-- Slide 10: Reading - Deloitte -->
-        <section id="slide-10" class="slide bg-gradient-to-br from-amber-200 to-lime-200 text-slate-800">
+        <!-- Slide 10: Vocabulary Finder -->
+        <section id="slide-10" class="slide bg-gradient-to-br from-lime-200 to-green-200 text-slate-800">
             <div class="w-full max-w-6xl">
-                 <h2 class="text-3xl font-bold mb-6 text-center">Reading: A Great Start to a Promising Career</h2>
-                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg">
-                    <div class="text-center mb-6">
-                        <h3 class="font-bold text-xl">Training at Deloitte Touche</h3>
-                        <p>Deloitte Touche Tohmatsu is a worldwide company offering management consultancy, auditing and financial advisory services.</p>
-                        <p class="mt-4">Read the article, then drag the sentences to fill the gaps.</p>
-                    </div>
-                    <div class="flex flex-col lg:flex-row gap-6">
-                        <!-- Article Text -->
-                        <div id="deloitte-article" class="lg:w-2/3 space-y-4 text-sm">
-                            <!-- Article paragraphs will be injected by JS -->
-                        </div>
-                        <!-- Draggable Sentences -->
-                        <div id="deloitte-sentences" class="lg:w-1/3 space-y-3 p-4 bg-amber-50 rounded-lg">
-                            <h4 class="font-bold text-center mb-2">Sentences to Place</h4>
-                            <!-- Draggable sentences will be injected by JS -->
-                        </div>
-                    </div>
-                    <div class="text-center mt-8">
-                        <button id="check-deloitte-btn" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
-                    </div>
-                 </div>
-            </div>
-            <a href="#slide-11" class="arrow">
-                <i class="fas fa-chevron-down"></i>
-            </a>
-        </section>
-
-        <!-- Slide 11: Vocabulary Finder -->
-        <section id="slide-11" class="slide bg-gradient-to-br from-lime-200 to-green-200 text-slate-800">
-            <div class="w-full max-w-6xl">
-                <h2 class="text-3xl font-bold mb-6 text-center">Vocabulary: Find the Phrase</h2>
+                <h2 class="text-3xl font-bold mb-6 text-center">Reading & Vocabulary</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg flex flex-col lg:flex-row gap-6">
-                    <!-- Full Text Column -->
+                    <!-- Gapped Text Column -->
                     <div class="lg:w-1/2">
-                        <h3 class="font-bold text-lg mb-2 text-center">Article Text</h3>
-                        <div id="deloitte-full-text" class="text-xs p-4 bg-white/50 rounded-lg max-h-96 lg:max-h-full overflow-y-auto space-y-2">
-                           <!-- Full text injected by JS -->
+                        <h3 class="font-bold text-lg mb-2 text-center">A Great Start to a Promising Career</h3>
+                        <div id="deloitte-gapped-text" class="text-sm p-4 bg-white/50 rounded-lg max-h-96 lg:max-h-full overflow-y-auto space-y-3 mb-4">
+                           <!-- Gapped text injected by JS -->
                         </div>
                     </div>
                     <!-- Questions Column -->
                     <div class="lg:w-1/2">
                         <h3 class="font-bold text-lg mb-2 text-center">Find words or phrases in the text which mean the following.</h3>
+                        <p class="text-xs text-center mb-4 text-gray-600">(Note: Some answers are in the sentences for the next activity)</p>
                         <div id="vocab-finder-container" class="space-y-2">
                             <!-- Questions injected by JS -->
                         </div>
@@ -399,6 +383,36 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <a href="#slide-11" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- Slide 11: Reading - Deloitte Gap-Fill -->
+        <section id="slide-11" class="slide bg-gradient-to-br from-amber-200 to-lime-200 text-slate-800">
+            <div class="w-full max-w-6xl">
+                 <h2 class="text-3xl font-bold mb-6 text-center">Reading: Fill the Gaps</h2>
+                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg">
+                    <div class="text-center mb-6">
+                        <h3 class="font-bold text-xl">Training at Deloitte Touche</h3>
+                        <p>Now, drag the sentences to complete the article about Sally Shoesmith's career.</p>
+                    </div>
+                    <div class="flex flex-col lg:flex-row gap-8">
+                        <!-- Article Text -->
+                        <div id="deloitte-article" class="lg:w-1/2 space-y-4 text-sm">
+                            <!-- Article paragraphs will be injected by JS -->
+                        </div>
+                        <!-- Draggable Sentences -->
+                        <div id="deloitte-sentences" class="lg:w-1/2 space-y-3 p-4 bg-amber-50 rounded-lg">
+                            <h4 class="font-bold text-center mb-2">Sentences to Place</h4>
+                            <!-- Draggable sentences will be injected by JS -->
+                        </div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <button id="check-deloitte-btn" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                    </div>
+                 </div>
             </div>
             <a href="#slide-12" class="arrow">
                 <i class="fas fa-chevron-down"></i>
@@ -433,17 +447,22 @@
             </a>
         </section>
 
-        <!-- Slide 13: Grammar - Tenses Practice -->
+        <!-- Slide 13: Grammar: Tense Identification -->
         <section id="slide-13" class="slide bg-gradient-to-br from-emerald-300 to-emerald-200 text-slate-800">
-             <div class="w-full max-w-4xl">
-                <h2 class="text-3xl font-bold mb-6 text-center">Grammar: Tense Practice</h2>
-                <div class="bg-white/50 p-6 rounded-xl shadow-lg">
-                    <p class="text-center mb-4 font-semibold">Identify the tense used in each sentence.</p>
-                    <div id="grammar-tenses-container" class="space-y-4 text-gray-700">
-                        <!-- Sentences with inputs injected by JS -->
+             <div class="w-full max-w-6xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Grammar: Tense Identification</h2>
+                <div class="bg-white/50 p-6 rounded-xl shadow-lg flex flex-col md:flex-row items-center gap-8">
+                    <div class="md:w-2/5">
+                        <img src="https://johanka2014.github.io/bus_bench/woman_studying.png" alt="Woman studying at a desk" class="rounded-lg shadow-lg w-full object-cover">
                     </div>
-                    <div class="text-center mt-6">
-                        <button id="check-grammar-tenses-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                    <div class="md:w-3/5">
+                        <p class="text-center mb-4 font-semibold">Identify the tense used in each sentence from the article.</p>
+                        <div id="grammar-tenses-container" class="space-y-4 text-gray-700">
+                            <!-- Sentences with inputs injected by JS -->
+                        </div>
+                        <div class="text-center mt-6">
+                            <button id="check-grammar-tenses-btn" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -452,8 +471,47 @@
             </a>
         </section>
 
-        <!-- Slide 14: Staff Training Scheme Talking Points -->
+        <!-- Slide 14: Grammar Practice - Correct Mistakes -->
         <section id="slide-14" class="slide bg-gradient-to-br from-emerald-200 to-teal-200 text-slate-800">
+            <div class="w-full max-w-4xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Grammar: Correct the Mistakes</h2>
+                <div class="bg-white/50 p-6 rounded-xl shadow-lg">
+                    <p class="text-center mb-4 font-semibold">Correct the mistakes in the <span class="highlight">highlighted phrases</span>. Type the full correct phrase.</p>
+                    <div id="grammar-corrections-container" class="space-y-3 text-gray-700">
+                        <!-- Sentences will be injected by JS -->
+                    </div>
+                    <div class="text-center mt-6">
+                        <button id="check-grammar-corrections-btn" class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-15" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- Slide 15: Grammar Practice - Complete Dialogues -->
+        <section id="slide-15" class="slide bg-gradient-to-br from-teal-200 to-cyan-200 text-slate-800">
+            <div class="w-full max-w-4xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Grammar: Complete the Dialogues</h2>
+                <div class="bg-white/50 p-6 rounded-xl shadow-lg">
+                    <p class="text-center mb-4 font-semibold">Complete the dialogues with the past simple or present perfect form of the verbs.</p>
+                    <div id="grammar-dialogues-container" class="space-y-4 text-gray-700">
+                        <!-- Dialogues will be injected by JS -->
+                    </div>
+                    <div class="text-center mt-6">
+                        <button id="check-grammar-dialogues-btn" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-16" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+
+        <!-- Slide 16: Staff Training Scheme Talking Points -->
+        <section id="slide-16" class="slide bg-gradient-to-br from-emerald-200 to-teal-200 text-slate-800">
             <div class="w-full max-w-5xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Staff Training Scheme</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row items-center gap-8">
@@ -472,13 +530,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-15" class="arrow">
+            <a href="#slide-17" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 15: Workbook Vocabulary -->
-        <section id="slide-15" class="slide bg-gradient-to-br from-teal-200 to-cyan-200 text-slate-800">
+        <!-- Slide 17: Workbook Vocabulary -->
+        <section id="slide-17" class="slide bg-gradient-to-br from-teal-200 to-cyan-200 text-slate-800">
             <div class="w-full max-w-4xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Workbook: Vocabulary</h2>
                 <div class="bg-white/50 p-6 rounded-xl shadow-lg">
@@ -494,13 +552,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-16" class="arrow">
+            <a href="#slide-18" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 16: Workbook Writing Practice -->
-        <section id="slide-16" class="slide bg-gradient-to-br from-cyan-200 to-blue-200 text-slate-800">
+        <!-- Slide 18: Workbook Writing Practice -->
+        <section id="slide-18" class="slide bg-gradient-to-br from-cyan-200 to-blue-200 text-slate-800">
             <div class="w-full max-w-5xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Workbook: Writing Practice</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row items-center gap-8">
@@ -518,13 +576,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-17" class="arrow">
+            <a href="#slide-19" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 17: Workbook Grammar -->
-        <section id="slide-17" class="slide bg-gradient-to-br from-blue-200 to-indigo-200 text-slate-800">
+        <!-- Slide 19: Workbook Grammar -->
+        <section id="slide-19" class="slide bg-gradient-to-br from-blue-200 to-indigo-200 text-slate-800">
             <div class="w-full max-w-6xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Workbook: Grammar</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg">
@@ -572,11 +630,40 @@
                     </div>
                 </div>
             </div>
+            <a href="#slide-20" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+        
+        <!-- Slide 20: Workbook Tense Practice -->
+        <section id="slide-20" class="slide bg-gradient-to-br from-indigo-200 to-purple-200 text-slate-800">
+            <div class="w-full max-w-4xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Workbook: Tense Practice</h2>
+                <div class="bg-white/50 p-6 rounded-xl shadow-lg">
+                    <p class="text-center mb-4 font-semibold">Complete the text with a verb from the box in the correct tense – past simple or present perfect.</p>
+                     <div class="flex flex-wrap justify-center gap-2 mb-6 p-4 bg-indigo-50 rounded-lg">
+                        <span class="bg-indigo-200 text-indigo-800 px-3 py-1 rounded-full text-sm">be</span>
+                        <span class="bg-indigo-200 text-indigo-800 px-3 py-1 rounded-full text-sm">become</span>
+                        <span class="bg-indigo-200 text-indigo-800 px-3 py-1 rounded-full text-sm">decide</span>
+                        <span class="bg-indigo-200 text-indigo-800 px-3 py-1 rounded-full text-sm">do</span>
+                        <span class="bg-indigo-200 text-indigo-800 px-3 py-1 rounded-full text-sm">encourage</span>
+                        <span class="bg-indigo-200 text-indigo-800 px-3 py-1 rounded-full text-sm">move</span>
+                        <span class="bg-indigo-200 text-indigo-800 px-3 py-1 rounded-full text-sm">put</span>
+                        <span class="bg-indigo-200 text-indigo-800 px-3 py-1 rounded-full text-sm">spend</span>
+                        <span class="bg-indigo-200 text-indigo-800 px-3 py-1 rounded-full text-sm">work</span>
+                    </div>
+                    <div id="workbook-tenses-container" class="text-gray-700 leading-relaxed">
+                        <!-- Text with inputs injected by JS -->
+                    </div>
+                     <div class="text-center mt-6">
+                        <button id="check-workbook-tenses-btn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                    </div>
+                </div>
+            </div>
             <a href="#slide-1" class="arrow">
                 <i class="fas fa-chevron-up"></i>
             </a>
         </section>
-
 
     </div>
     
@@ -603,8 +690,11 @@
                 populateDeloitteActivity();
                 populateVocabFinder();
                 populateGrammarTenses();
+                populateGrammarCorrections();
+                populateGrammarDialogues();
                 populateWorkbookVocab();
                 populateGrammarAdjectives();
+                populateWorkbookTenses();
             }
 
             // --- NAVIGATION ---
@@ -641,8 +731,11 @@
                 if (e.target.matches('#check-deloitte-btn')) checkDeloitteAnswers();
                 if (e.target.matches('#check-vocab-finder-btn')) checkVocabFinderAnswers();
                 if (e.target.matches('#check-grammar-tenses-btn')) checkGrammarTensesAnswers();
+                if (e.target.matches('#check-grammar-corrections-btn')) checkGrammarCorrectionsAnswers();
+                if (e.target.matches('#check-grammar-dialogues-btn')) checkGrammarDialoguesAnswers();
                 if (e.target.matches('#check-workbook-vocab-btn')) checkWorkbookVocabAnswers();
                 if (e.target.matches('#check-grammar-adj-btn')) checkGrammarAdjectivesAnswers();
+                if (e.target.matches('#check-workbook-tenses-btn')) checkWorkbookTensesAnswers();
             });
 
             document.addEventListener('dragstart', (e) => {
@@ -723,7 +816,8 @@
                 vocabContainer.innerHTML = vocabSentences.map((item, index) => {
                     let sentenceHTML = item.text;
                     item.answers.forEach((ans, i) => {
-                        sentenceHTML = sentenceHTML.replace(`{${i+1}}`, `<input type="text" class="mx-1 p-1 rounded border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-32" data-answer="${ans.toLowerCase()}">`);
+                        // Use a global replace to handle repeated placeholders
+                        sentenceHTML = sentenceHTML.replace(new RegExp(`\\{${i+1}\\}`, 'g'), `<input type="text" class="mx-1 p-1 rounded border-gray-300 focus:ring-blue-500 focus:border-blue-500 w-32" data-answer="${ans.toLowerCase()}">`);
                     });
                     return `<p><span class="font-bold mr-2">${index + 1}.</span> ${sentenceHTML}</p>`;
                 }).join('');
@@ -788,12 +882,12 @@
             function populateMultipleChoice() {
                 const mcqContainer = document.getElementById('multiple-choice-container');
                 mcqContainer.innerHTML = mcqData.map((item, index) => `
-                    <div class="p-3 border-b border-pink-200">
-                        <p class="font-semibold mb-2">${item.question}</p>
-                        <div class="flex flex-wrap gap-2">
-                            ${item.options.map(option => `<label class="flex items-center space-x-2 cursor-pointer bg-white hover:bg-pink-100 px-2 py-1 rounded-lg transition text-sm"><input type="radio" name="mcq-${index}" value="${option}" class="form-radio text-pink-500"><span>${option}</span></label>`).join('')}
+                    <div class="p-4 bg-white/50 rounded-lg shadow">
+                        <p class="font-semibold mb-3">${item.question}</p>
+                        <div class="flex flex-wrap gap-4">
+                            ${item.options.map(option => `<label class="flex items-center space-x-2 cursor-pointer bg-white hover:bg-pink-100 px-4 py-2 rounded-lg shadow-sm transition text-sm border border-pink-100"><input type="radio" name="mcq-${index}" value="${option}" class="form-radio text-pink-500 focus:ring-pink-500"><span>${option}</span></label>`).join('')}
                         </div>
-                        <div class="feedback-text mt-2 text-xs font-medium"></div>
+                        <div class="feedback-text mt-3 text-xs font-medium h-4"></div>
                     </div>
                 `).join('');
             }
@@ -852,7 +946,7 @@
                 });
             }
 
-            // --- ACTIVITY 6: DELOITTE READING ---
+            // --- ALL DELOITTE DATA ---
             const deloitteSentences = [
                 { id: 'A', text: "At Deloitte, there's a national 'first time, every time' culture, which makes sense because the sooner you pass exams, the sooner you get down to real work." },
                 { id: 'B', text: "For example, there is a course I did quite early on in the job called Introduction to Client Services, which concentrated on presentation, interview, teamwork and writing skills." },
@@ -862,7 +956,55 @@
                 { id: 'F', text: "On their website, Deloitte talked about job satisfaction and giving employees the chance to grow and develop throughout their careers, so it seemed a company worth applying for." },
                 { id: 'G', text: "The firm has agreements with local training colleges, who provide many of the courses graduate trainees follow." }
             ];
+             const gappedDeloitteText = [
+                `I've been with for Deloitte for nearly two years now. I was originally attracted to this company in my final year at Cambridge. I was looking for a company which would put me in the fast lane to promotion and I realised that, in my case, this meant an organisation with a policy of on the job training and development. [... 1 ...] As I discovered at my first recruitment interview, they also place a lot of emphasis on getting professional qualifications, which really impressed me.`,
+                `Deloitte actually helps employees to reduce the conflict between work and study. In my case, this means I've always been allowed to give exam preparation priority over my client work. Right from the beginning, my boss, Neil, has gone out of his way to help and encourage me. [... 2 ...] I find it's a good moment to discuss solutions to any problems I have with him.`,
+                `Apart from professional qualifications, we're also given plenty of internal training. This includes courses intended to help develop one's organisational, delivery and leadership qualities. [... 3 ...] This gave me a really confident and practical start to my work with the firm, as so much of my work involves using exactly these skills.`,
+                `Another thing which attracted me to Deloitte was that you can choose your training method to suit your individual learning patterns. This is because they want us to pass our exams at the first attempt. [... 4 ...] Also, I think, when you've got your professional qualifications you're treated with much more respect by both your colleagues and your clients.`,
+                `When I arrived at Deloitte, we went through an initial three-day programme to develop our core skills and introduce us to the firm and our new colleagues. [... 5 ...] In the near future, I expect to be passing on the knowledge I have acquired to next year's intake of graduate trainees. We are given formal six-monthly appraisals and, what is more, we are given plenty of advice by peers, managers and partners.`,
+                `Fully funded study towards professional qualifications is a vital part of many careers in Deloitte, and at the moment I'm starting on a Masters degree in Business Management with the London School of Economics. [... 6 ...] On the other hand, we are provided with very generous study leave, and the firm has a great track record of success. I can see myself working here for many years to come, as they're providing me with all the opportunities I need.`
+            ];
 
+
+            // --- ACTIVITY 6: VOCABULARY FINDER (NEW SLIDE 10) ---
+            function populateVocabFinder() {
+                const textContainer = document.getElementById('deloitte-gapped-text');
+                const questionsContainer = document.getElementById('vocab-finder-container');
+
+                textContainer.innerHTML = gappedDeloitteText.map(p => `<p>${p}</p>`).join('');
+                
+                const questions = [
+                    { "definition": "getting a higher position in the company quickly (paragraph 1)", "answer": "in the fast lane to promotion" },
+                    { "definition": "training while you are working (paragraph 1)", "answer": "on the job training" },
+                    { "definition": "has made a special effort (paragraph 2)", "answer": "has gone out of his way" },
+                    { "definition": "supervises", "answer": "monitors" },
+                    { "definition": "training inside the company (paragraph 3)", "answer": "internal training" },
+                    { "definition": "essential basic skills (paragraph 5)", "answer": "core skills" },
+                    { "definition": "people who have studied at university and are learning the job (paragraph 5)", "answer": "graduate trainees" },
+                    { "definition": "assessments, evaluations (paragraph 5)", "answer": "appraisals" },
+                    { "definition": "people at the same level in the company as the writer (paragraph 5)", "answer": "peers" },
+                    { "definition": "completely paid for (paragraph 6)", "answer": "fully funded" },
+                    { "definition": "amount of work to do", "answer": "workload" }
+                ];
+
+                questionsContainer.innerHTML = questions.map((q, i) => `
+                    <div class="flex items-center gap-2 text-sm">
+                        <label for="vf-${i}" class="flex-shrink-0 w-2/5">${i+1}. ${q.definition}:</label>
+                        <input type="text" id="vf-${i}" class="p-1 rounded border-gray-300 w-3/5" data-answer="${q.answer.toLowerCase()}">
+                    </div>
+                `).join('');
+            }
+
+            function checkVocabFinderAnswers() {
+                document.querySelectorAll('#vocab-finder-container input').forEach(input => {
+                    const userAnswer = input.value.trim().toLowerCase();
+                    const correctAnswer = input.dataset.answer;
+                    input.classList.remove('feedback-correct', 'feedback-incorrect');
+                    input.classList.add(userAnswer === correctAnswer ? 'feedback-correct' : 'feedback-incorrect');
+                });
+            }
+
+            // --- ACTIVITY 7: DELOITTE GAP-FILL (NEW SLIDE 11) ---
             function populateDeloitteActivity() {
                 const articleContainer = document.getElementById('deloitte-article');
                 const sentencesContainer = document.getElementById('deloitte-sentences');
@@ -892,60 +1034,10 @@
                 });
             }
 
-            // --- ACTIVITY 7: VOCABULARY FINDER ---
-            function populateVocabFinder() {
-                const textContainer = document.getElementById('deloitte-full-text');
-                const questionsContainer = document.getElementById('vocab-finder-container');
-                
-                const sentencesMap = deloitteSentences.reduce((map, item) => {
-                    map[item.id] = item.text;
-                    return map;
-                }, {});
-
-                const fullText = [
-                    `I've been with for Deloitte for nearly two years now. I was originally attracted to this company in my final year at Cambridge. I was looking for a company which would put me in the fast lane to promotion and I realised that, in my case, this meant an organisation with a policy of on the job training and development. <strong>${sentencesMap['F']}</strong> As I discovered at my first recruitment interview, they also place a lot of emphasis on getting professional qualifications, which really impressed me.`,
-                    `Deloitte actually helps employees to reduce the conflict between work and study. In my case, this means I've always been allowed to give exam preparation priority over my client work. Right from the beginning, my boss, Neil, has gone out of his way to help and encourage me. <strong>${sentencesMap['C']}</strong> I find it's a good moment to discuss solutions to any problems I have with him.`,
-                    `Apart from professional qualifications, we're also given plenty of internal training. This includes courses intended to help develop one's organisational, delivery and leadership qualities. <strong>${sentencesMap['B']}</strong> This gave me a really confident and practical start to my work with the firm, as so much of my work involves using exactly these skills.`,
-                    `Another thing which attracted me to Deloitte was that you can choose your training method to suit your individual learning patterns. This is because they want us to pass our exams at the first attempt. <strong>${sentencesMap['A']}</strong> Also, I think, when you've got your professional qualifications you're treated with much more respect by both your colleagues and your clients.`,
-                    `When I arrived at Deloitte, we went through an initial three-day programme to develop our core skills and introduce us to the firm and our new colleagues. <strong>${sentencesMap['E']}</strong> In the near future, I expect to be passing on the knowledge I have acquired to next year's intake of graduate trainees. We are given formal six-monthly appraisals and, what is more, we are given plenty of advice by peers, managers and partners.`,
-                    `Fully funded study towards professional qualifications is a vital part of many careers in Deloitte, and at the moment I'm starting on a Masters degree in Business Management with the London School of Economics. <strong>${sentencesMap['D']}</strong> On the other hand, we are provided with very generous study leave, and the firm has a great track record of success. I can see myself working here for many years to come, as they're providing me with all the opportunities I need.`
-                ];
-                textContainer.innerHTML = fullText.map(p => `<p>${p}</p>`).join('');
-
-                const questions = [
-                    { "definition": "getting a higher position in the company quickly (paragraph 1)", "answer": "in the fast lane to promotion" },
-                    { "definition": "training while you are working (paragraph 1)", "answer": "on the job training" },
-                    { "definition": "has made a special effort (paragraph 2)", "answer": "has gone out of his way" },
-                    { "definition": "supervises (paragraph 2, sentence C)", "answer": "monitors" },
-                    { "definition": "training inside the company (paragraph 3)", "answer": "internal training" },
-                    { "definition": "essential basic skills (paragraph 5)", "answer": "core skills" },
-                    { "definition": "people who have studied at university and are learning the job (paragraph 5)", "answer": "graduate trainees" },
-                    { "definition": "assessments, evaluations (paragraph 5)", "answer": "appraisals" },
-                    { "definition": "people at the same level in the company as the writer (paragraph 5)", "answer": "peers" },
-                    { "definition": "completely paid for (paragraph 6)", "answer": "fully funded" },
-                    { "definition": "amount of work to do (paragraph 6, sentence D)", "answer": "workload" }
-                ];
-
-                questionsContainer.innerHTML = questions.map((q, i) => `
-                    <div class="flex items-center gap-2 text-sm">
-                        <label for="vf-${i}" class="flex-shrink-0 w-2/5">${i+1}. ${q.definition}:</label>
-                        <input type="text" id="vf-${i}" class="p-1 rounded border-gray-300 w-3/5" data-answer="${q.answer.toLowerCase()}">
-                    </div>
-                `).join('');
-            }
-
-            function checkVocabFinderAnswers() {
-                document.querySelectorAll('#vocab-finder-container input').forEach(input => {
-                    const userAnswer = input.value.trim().toLowerCase();
-                    const correctAnswer = input.dataset.answer;
-                    input.classList.remove('feedback-correct', 'feedback-incorrect');
-                    input.classList.add(userAnswer === correctAnswer ? 'feedback-correct' : 'feedback-incorrect');
-                });
-            }
-
-            // --- ACTIVITY 8: GRAMMAR TENSES ---
+            // --- ACTIVITY 8: GRAMMAR TENSES (NEW SLIDE 13)---
             function populateGrammarTenses() {
                 const container = document.getElementById('grammar-tenses-container');
+                 if (!container) return; // Guard clause
                 const questions = [
                     { sentence: "I've been with Deloitte for nearly two years now.", answer: "Present Perfect" },
                     { sentence: "I was originally attracted to this company in my final year at Cambridge.", answer: "Past Simple" },
@@ -989,8 +1081,87 @@
                 });
             }
 
+            // --- ACTIVITY 9: GRAMMAR CORRECTIONS (NEW SLIDE 14) ---
+            function populateGrammarCorrections() {
+                const container = document.getElementById('grammar-corrections-container');
+                 const questions = [
+                    { sentence: "He left quite early but he <span class='highlight'>yet hasn't arrived</span>.", answer: "hasn't arrived yet" },
+                    { sentence: "We <span class='highlight'>don't see each other</span> since we left school.", answer: "haven't seen each other" },
+                    { sentence: "Have you ever <span class='highlight'>wrote</span> a poem?", answer: "written" },
+                    { sentence: "She <span class='highlight'>have never been</span> to Istanbul.", answer: "has never been" },
+                    { sentence: "I <span class='highlight'>'ve lent</span> him €50 last week, but he hasn't paid me back yet.", answer: "lent" },
+                    { sentence: "I don't see them often but I<span class='highlight'>'ve known them since</span> ten years.", answer: "'ve known them for" },
+                    { sentence: "<span class='highlight'>What year have you left</span> school?", answer: "What year did you leave" },
+                    { sentence: "We're lost. We <span class='highlight'>already have been</span> down this road twice.", answer: "have already been" },
+                    { sentence: "I sent her an email last week, but she <span class='highlight'>doesn't reply yet</span>.", answer: "hasn't replied yet" },
+                    { sentence: "They <span class='highlight'>live in that house</span> since 1980.", answer: "have lived in that house" }
+                ];
 
-            // --- ACTIVITY 9: WORKBOOK VOCABULARY ---
+                container.innerHTML = questions.map((q, i) => `
+                    <div class="flex items-center gap-2 text-sm py-1">
+                        <label for="gc-${i}" class="flex-shrink-0 w-2/3">${i + 1}. ${q.sentence}</label>
+                        <input type="text" id="gc-${i}" class="p-1 rounded border-gray-300 w-1/3" data-answer="${q.answer.toLowerCase()}">
+                    </div>
+                `).join('');
+            }
+
+            function checkGrammarCorrectionsAnswers() {
+                document.querySelectorAll('#grammar-corrections-container input').forEach(input => {
+                    const userAnswer = input.value.trim().toLowerCase();
+                    const correctAnswer = input.dataset.answer;
+                    input.classList.remove('feedback-correct', 'feedback-incorrect');
+                    input.classList.add(userAnswer === correctAnswer ? 'feedback-correct' : 'feedback-incorrect');
+                });
+            }
+
+            // --- ACTIVITY 10: GRAMMAR DIALOGUES (NEW SLIDE 15) ---
+            function populateGrammarDialogues() {
+                const container = document.getElementById('grammar-dialogues-container');
+                const dialogues = [
+                    {
+                        lines: [
+                            "A: How long <input data-answer='have you been'> at university? (you / be)",
+                            "B: I <input data-answer='started'> two years ago. I'm in my third year now. (start)",
+                            "A: Do you live with your parents?",
+                            "B: I <input data-answer='lived'> with them for the first two years but then I <input data-answer='moved'> into a student hostel last September and I <input data-answer='have lived'> there since then. (live, move, live)"
+                        ]
+                    },
+                    {
+                        lines: [
+                            "A: <input data-answer='Has your brother found'> a job yet? (your brother / find)",
+                            "B: Yes, he <input data-answer='has just started'> work in a hotel. (just / start)"
+                        ]
+                    },
+                    {
+                        lines: [
+                           "A: <input data-answer='Have you ever been'> to Nobu – that new Japanese restaurant? (you / ever / be)",
+                           "B: Yes, we <input data-answer='went'> there for my birthday. (go)",
+                           "A: What was it like?",
+                           "B: The food <input data-answer='was'> fantastic but it <input data-answer='cost'> a fortune! (be, cost)"
+                        ]
+                    }
+                ];
+
+                container.innerHTML = dialogues.map((d, i) => `
+                    <div class="p-4 bg-cyan-50 rounded-lg">
+                        <p class="font-bold mb-2">Dialogue ${i + 1}</p>
+                        <div class="space-y-2">
+                           ${d.lines.map(line => `<p>${line.replace(/<input/g, '<input class="mx-1 p-1 rounded border-gray-300 w-36"')}</p>`).join('')}
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            function checkGrammarDialoguesAnswers() {
+                 document.querySelectorAll('#grammar-dialogues-container input').forEach(input => {
+                    const userAnswer = input.value.trim().toLowerCase();
+                    const correctAnswer = input.dataset.answer;
+                    input.classList.remove('feedback-correct', 'feedback-incorrect');
+                    input.classList.add(userAnswer === correctAnswer ? 'feedback-correct' : 'feedback-incorrect');
+                });
+            }
+
+            // --- ACTIVITY 11: WORKBOOK VOCABULARY ---
             function populateWorkbookVocab() {
                 const words = ['boss', 'careers', 'contracts', 'course', 'degree', 'employer', 'employs', 'profession', 'qualifications', 'recruit', 'skills'];
                 const boxContainer = document.getElementById('workbook-vocab-box');
@@ -1011,7 +1182,7 @@
                 });
             }
 
-            // --- ACTIVITY 10: WORKBOOK GRAMMAR ---
+            // --- ACTIVITY 12: WORKBOOK GRAMMAR ---
             function populateGrammarAdjectives() {
                 const container = document.getElementById('grammar-adjectives-container');
                 const answers = ["least useful", "more appropriate", "the most inconvenient", "busiest", "the most expensive", "fewer", "most", "less", "more costly", "largest", "more theoretical", "more hands-on"];
@@ -1027,6 +1198,23 @@
                     input.classList.add(userAnswer === correctAnswer ? 'feedback-correct' : 'feedback-incorrect');
                 });
             }
+            
+            // --- ACTIVITY 13: WORKBOOK TENSES (NEW SLIDE 20) ---
+             function populateWorkbookTenses() {
+                const container = document.getElementById('workbook-tenses-container');
+                const answers = ["did", "decided", "was", "put", "spent", "moved", "have worked", "have done", "was", "has encouraged", "did", "became"];
+                let text = `I joined BP as a graduate trainee four years ago - I (1) <input data-answer="${answers[0]}"> my degree in Mechanical Engineering at Leeds University - and they obviously (2) <input data-answer="${answers[1]}"> right at the beginning that I (3) <input data-answer="${answers[2]}"> someone they wanted to keep, so they (4) <input data-answer="${answers[3]}"> me on the fast track to promotion. This meant that I (5) <input data-answer="${answers[4]}"> just three months in the production department and then they (6) <input data-answer="${answers[5]}"> me to marketing. Since then, I (7) <input data-answer="${answers[6]}"> in three different divisions of the company and I (8) <input data-answer="${answers[7]}"> an overseas posting as well - I (9) <input data-answer="${answers[8]}"> assistant divisional manager in Venezuela for six months last year. The company (10) <input data-answer="${answers[9]}"> me to continue training, and last month I (11) <input data-answer="${answers[10]}"> my professional exams and (12) <input data-answer="${answers[11]}"> a member of the Institute of Chartered Engineers.`;
+                 container.innerHTML = `<p>${text.replace(/<input/g, '<input class="mx-1 p-1 rounded border-gray-300 w-28"')}</p>`;
+            }
+
+            function checkWorkbookTensesAnswers() {
+                document.querySelectorAll('#workbook-tenses-container input').forEach(input => {
+                    const userAnswer = input.value.trim().toLowerCase();
+                    const correctAnswer = input.dataset.answer;
+                    input.classList.remove('feedback-correct', 'feedback-incorrect');
+                    input.classList.add(userAnswer === correctAnswer ? 'feedback-correct' : 'feedback-incorrect');
+                });
+            }
 
 
             // --- RUN INITIALIZATION ---
@@ -1035,3 +1223,4 @@
     </script>
 </body>
 </html>
+
