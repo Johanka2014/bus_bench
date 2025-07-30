@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -179,7 +181,7 @@
                     <!-- Tile 1: -er / -est -->
                     <div class="bg-white/30 p-6 rounded-xl shadow-lg">
                         <h3 class="font-bold text-xl text-purple-800 mb-3">Use -er / -est</h3>
-                        <p class="font-semibold">For one-syllable adjectives and adverbs and two-syllable adjectives ending in -y.</p>
+                        <p class="font-semibold">For one-syllable adjectives/adverbs and two-syllable adjectives ending in -y.</p>
                         <ul class="list-disc list-inside mt-2 space-y-1 text-sm">
                             <li>quick → quicker → the quickest</li>
                             <li>easy → easier → the easiest</li>
@@ -245,16 +247,42 @@
             </a>
         </section>
         
-        <!-- Slide 6: Reading - Multiple Choice -->
-        <section id="slide-6" class="slide bg-gradient-to-br from-violet-200 to-pink-200 text-slate-800">
+        <!-- Slide 6: Reading - Expression Matching -->
+        <section id="slide-6" class="slide bg-gradient-to-br from-violet-200 to-pink-300 text-slate-800">
+            <div class="w-full max-w-4xl">
+                <h2 class="text-3xl font-bold mb-6 text-center">Reading: Match the Expressions</h2>
+                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg">
+                    <p class="text-center mb-6">Before you read the next text, match these expressions with their definitions by dragging the definitions from the right to the correct boxes on the left.</p>
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <!-- Drop Zones -->
+                        <div id="expression-phrases" class="md:w-1/2 space-y-3">
+                            <!-- Phrases (drop zones) will be injected by JS -->
+                        </div>
+                        <!-- Draggable Items -->
+                        <div id="expression-definitions" class="md:w-1/2 space-y-3 p-4 bg-violet-50 rounded-lg">
+                             <!-- Definitions (draggable) will be injected by JS -->
+                        </div>
+                    </div>
+                    <div class="text-center mt-8">
+                        <button id="check-expressions-btn" class="bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 px-6 rounded-full transition-transform transform hover:scale-105">Check Answers</button>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-7" class="arrow">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </section>
+
+        <!-- Slide 7: Reading - Multiple Choice -->
+        <section id="slide-7" class="slide bg-gradient-to-br from-pink-300 to-pink-200 text-slate-800">
             <div class="w-full max-w-5xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Reading Comprehension</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left">
                     <!-- Full Width Reading Text -->
                     <div>
-                        <h2 class="text-3xl font-bold mb-6 text-center">Go anywhere</h2>
+                        <h3 class="font-bold text-xl mb-4 text-center">Go anywhere</h3>
                         <div class="reading-text bg-white/50 p-4 rounded-lg mb-8">
-                            <h3 class="font-bold text-xl mb-4 text-center">Company background</h3>
+                            <p class="font-semibold mb-2">Company background</p>
                             <p class="text-sm mb-4">FLIGHT CENTRE Limited is one of the world's largest independent travel retailers, employing more than 5,500 people worldwide.</p>
                             <p class="text-sm leading-relaxed">
                                 We believe in giving you a lot of responsibility from day one - but that doesn't mean throwing you in at the deep end. One of our major priorities is to <strong>[1]</strong> you get the training and support you need to gain the skills which will allow you to succeed personally and professionally.
@@ -276,13 +304,13 @@
                     </div>
                 </div>
             </div>
-             <a href="#slide-7" class="arrow">
+             <a href="#slide-8" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 7: Talking Points -->
-        <section id="slide-7" class="slide bg-gradient-to-br from-pink-200 to-rose-200 text-slate-800">
+        <!-- Slide 8: Talking Points -->
+        <section id="slide-8" class="slide bg-gradient-to-br from-pink-200 to-rose-200 text-slate-800">
             <div class="w-full max-w-5xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Talking Points</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row items-center gap-8">
@@ -302,13 +330,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-8" class="arrow">
+            <a href="#slide-9" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 8: Listening Activity -->
-        <section id="slide-8" class="slide bg-gradient-to-br from-rose-200 to-orange-200 text-slate-800">
+        <!-- Slide 9: Listening Activity -->
+        <section id="slide-9" class="slide bg-gradient-to-br from-rose-200 to-orange-200 text-slate-800">
             <div class="w-full max-w-4xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Listening Activity</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg">
@@ -334,13 +362,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-9" class="arrow">
+            <a href="#slide-10" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
         
-        <!-- Slide 9: Listening Discussion -->
-        <section id="slide-9" class="slide bg-gradient-to-br from-orange-200 to-amber-200 text-slate-800">
+        <!-- Slide 10: Listening Discussion -->
+        <section id="slide-10" class="slide bg-gradient-to-br from-orange-200 to-amber-200 text-slate-800">
             <div class="w-full max-w-5xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Discuss with a Partner</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row items-center gap-8">
@@ -361,13 +389,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-10" class="arrow">
+            <a href="#slide-11" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 10: Vocabulary Finder -->
-        <section id="slide-10" class="slide bg-gradient-to-br from-lime-200 to-green-200 text-slate-800">
+        <!-- Slide 11: Vocabulary Finder -->
+        <section id="slide-11" class="slide bg-gradient-to-br from-lime-200 to-green-200 text-slate-800">
             <div class="w-full max-w-6xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Reading & Vocabulary</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg flex flex-col lg:flex-row gap-6">
@@ -390,13 +418,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-11" class="arrow">
+            <a href="#slide-12" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 11: Reading - Deloitte Gap-Fill -->
-        <section id="slide-11" class="slide bg-gradient-to-br from-amber-200 to-lime-200 text-slate-800">
+        <!-- Slide 12: Reading - Deloitte Gap-Fill -->
+        <section id="slide-12" class="slide bg-gradient-to-br from-amber-200 to-lime-200 text-slate-800">
             <div class="w-full max-w-6xl">
                  <h2 class="text-3xl font-bold mb-6 text-center">Reading: Fill the Gaps</h2>
                  <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg">
@@ -420,13 +448,13 @@
                     </div>
                  </div>
             </div>
-            <a href="#slide-12" class="arrow">
+            <a href="#slide-13" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 12: Grammar Tense Explanation -->
-        <section id="slide-12" class="slide bg-gradient-to-br from-green-200 to-emerald-300 text-slate-800">
+        <!-- Slide 13: Grammar Tense Explanation -->
+        <section id="slide-13" class="slide bg-gradient-to-br from-green-200 to-emerald-300 text-slate-800">
              <div class="w-full max-w-5xl">
                 <h2 class="text-3xl font-bold mb-8 text-center">Grammar Focus: Present Perfect & Past Simple</h2>
                 <div class="grid md:grid-cols-2 gap-6 text-left">
@@ -448,13 +476,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-13" class="arrow">
+            <a href="#slide-14" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 13: Grammar: Tense Identification -->
-        <section id="slide-13" class="slide bg-gradient-to-br from-emerald-300 to-emerald-200 text-slate-800">
+        <!-- Slide 14: Grammar: Tense Identification -->
+        <section id="slide-14" class="slide bg-gradient-to-br from-emerald-300 to-emerald-200 text-slate-800">
              <div class="w-full max-w-6xl">
                 <div class="bg-white/50 p-6 rounded-xl shadow-lg flex flex-col md:flex-row items-stretch gap-8">
                     <div class="md:w-1/2">
@@ -472,13 +500,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-14" class="arrow">
+            <a href="#slide-15" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 14: Grammar Practice - Correct Mistakes -->
-        <section id="slide-14" class="slide bg-gradient-to-br from-emerald-200 to-teal-200 text-slate-800">
+        <!-- Slide 15: Grammar Practice - Correct Mistakes -->
+        <section id="slide-15" class="slide bg-gradient-to-br from-emerald-200 to-teal-200 text-slate-800">
             <div class="w-full max-w-4xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Grammar: Correct the Mistakes</h2>
                 <div class="bg-white/50 p-6 rounded-xl shadow-lg">
@@ -491,13 +519,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-15" class="arrow">
+            <a href="#slide-16" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 15: Grammar Practice - Complete Dialogues -->
-        <section id="slide-15" class="slide bg-gradient-to-br from-teal-200 to-cyan-200 text-slate-800">
+        <!-- Slide 16: Grammar Practice - Complete Dialogues -->
+        <section id="slide-16" class="slide bg-gradient-to-br from-teal-200 to-cyan-200 text-slate-800">
             <div class="w-full max-w-4xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Grammar: Complete the Dialogues</h2>
                 <div class="bg-white/50 p-6 rounded-xl shadow-lg">
@@ -510,14 +538,14 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-16" class="arrow">
+            <a href="#slide-17" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
 
-        <!-- Slide 16: Staff Training Scheme Talking Points -->
-        <section id="slide-16" class="slide bg-gradient-to-br from-emerald-200 to-teal-200 text-slate-800">
+        <!-- Slide 17: Staff Training Scheme Talking Points -->
+        <section id="slide-17" class="slide bg-gradient-to-br from-emerald-200 to-teal-200 text-slate-800">
             <div class="w-full max-w-5xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Staff Training Scheme</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row items-center gap-8">
@@ -536,13 +564,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-17" class="arrow">
+            <a href="#slide-18" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 17: Workbook Vocabulary -->
-        <section id="slide-17" class="slide bg-gradient-to-br from-teal-200 to-cyan-200 text-slate-800">
+        <!-- Slide 18: Workbook Vocabulary -->
+        <section id="slide-18" class="slide bg-gradient-to-br from-teal-200 to-cyan-200 text-slate-800">
             <div class="w-full max-w-4xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Workbook: Vocabulary</h2>
                 <div class="bg-white/50 p-6 rounded-xl shadow-lg">
@@ -558,13 +586,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-18" class="arrow">
+            <a href="#slide-19" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 18: Workbook Writing Practice -->
-        <section id="slide-18" class="slide bg-gradient-to-br from-cyan-200 to-blue-200 text-slate-800">
+        <!-- Slide 19: Workbook Writing Practice -->
+        <section id="slide-19" class="slide bg-gradient-to-br from-cyan-200 to-blue-200 text-slate-800">
             <div class="w-full max-w-5xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Workbook: Writing Practice</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg text-left flex flex-col md:flex-row items-center gap-8">
@@ -582,13 +610,13 @@
                     </div>
                 </div>
             </div>
-            <a href="#slide-19" class="arrow">
+            <a href="#slide-20" class="arrow">
                 <i class="fas fa-chevron-down"></i>
             </a>
         </section>
 
-        <!-- Slide 19: Workbook Grammar -->
-        <section id="slide-19" class="slide bg-gradient-to-br from-blue-200 to-indigo-200 text-slate-800">
+        <!-- Slide 20: Workbook Grammar -->
+        <section id="slide-20" class="slide bg-gradient-to-br from-blue-200 to-indigo-200 text-slate-800">
             <div class="w-full max-w-6xl">
                 <h2 class="text-3xl font-bold mb-6 text-center">Workbook: Grammar</h2>
                 <div class="bg-white/60 p-6 md:p-8 rounded-xl shadow-lg">
@@ -662,6 +690,7 @@
                 populateRankingList();
                 populateVocabChallenge();
                 populateGrammarComparison();
+                populateExpressionMatching();
                 populateMultipleChoice();
                 populateListeningActivity();
                 populateDeloitteActivity();
@@ -702,6 +731,7 @@
             document.addEventListener('click', function(e) {
                 if (e.target.matches('#check-vocab-btn')) checkVocabAnswers();
                 if (e.target.matches('#check-grammar-comparison-btn')) checkGrammarComparisonAnswers();
+                if (e.target.matches('#check-expressions-btn')) checkExpressionMatchingAnswers();
                 if (e.target.matches('#check-mcq-btn')) checkMcqAnswers();
                 if (e.target.matches('#check-listening-btn')) checkListeningAnswers();
                 if (e.target.matches('#check-deloitte-btn')) checkDeloitteAnswers();
@@ -732,7 +762,7 @@
             document.addEventListener('drop', (e) => {
                 e.preventDefault();
                 const dropZone = e.target.closest('.drop-zone');
-                const draggableContainer = e.target.closest('#ranking-list, #listening-definitions, #deloitte-sentences');
+                const draggableContainer = e.target.closest('#ranking-list, #listening-definitions, #deloitte-sentences, #expression-definitions');
 
                 if (dropZone && appState.currentDraggable && !dropZone.hasChildNodes()) {
                     dropZone.appendChild(appState.currentDraggable);
@@ -843,7 +873,58 @@
                 });
             }
 
-            // --- ACTIVITY 4: MULTIPLE CHOICE ---
+            // --- ACTIVITY 4: EXPRESSION MATCHING ---
+            function populateExpressionMatching() {
+                const phrasesContainer = document.getElementById('expression-phrases');
+                const definitionsContainer = document.getElementById('expression-definitions');
+                const data = [
+                    { id: 'f', phrase: 'day one' },
+                    { id: 'c', phrase: 'throw you in at the deep end' },
+                    { id: 'd', phrase: 'promote from within' },
+                    { id: 'e', phrase: 'come through the ranks' },
+                    { id: 'a', phrase: 'become a high flier' },
+                    { id: 'b', phrase: 'shuffle up the ladder' },
+                ];
+                 const definitions = [
+                    { id: 'a', text: 'achieve great professional success' },
+                    { id: 'b', text: 'get promotion slowly' },
+                    { id: 'c', text: 'have to learn something difficult with little training or experience' },
+                    { id: 'd', text: 'move people inside a company to higher positions' },
+                    { id: 'e', text: 'rise to higher positions from the bottom of an organisation' },
+                    { id: 'f', text: 'your first day at work' },
+                ];
+
+                phrasesContainer.innerHTML = data.map((item, index) => `
+                    <div class="flex items-center gap-3">
+                        <span class="font-semibold w-48">${index + 1}. ${item.phrase}</span>
+                        <div class="drop-zone flex-grow p-3 rounded-lg bg-white" data-match-id="${item.id}"></div>
+                    </div>
+                `).join('');
+
+                definitions.sort(() => Math.random() - 0.5).forEach(item => {
+                    const defDiv = document.createElement('div');
+                    defDiv.className = 'draggable bg-white p-3 rounded-lg shadow cursor-move';
+                    defDiv.draggable = true;
+                    defDiv.textContent = item.text;
+                    defDiv.dataset.id = item.id;
+                    definitionsContainer.appendChild(defDiv);
+                });
+            }
+
+            function checkExpressionMatchingAnswers() {
+                document.querySelectorAll('#expression-phrases .drop-zone').forEach(zone => {
+                    zone.classList.remove('feedback-correct', 'feedback-incorrect');
+                    const droppedItem = zone.querySelector('.draggable');
+                    if (droppedItem) {
+                        zone.classList.add(zone.dataset.matchId === droppedItem.dataset.id ? 'feedback-correct' : 'feedback-incorrect');
+                    } else {
+                        zone.classList.add('feedback-incorrect');
+                    }
+                });
+            }
+
+
+            // --- ACTIVITY 5: MULTIPLE CHOICE ---
             const mcqData = [
                 { question: "Gap [1]", options: ["want", "make sure", "hope", "prepare"], answer: "make sure" },
                 { question: "Gap [2]", options: ["join", "recruit", "contract", "employ"], answer: "join" },
@@ -892,7 +973,7 @@
                 document.getElementById('mcq-score').textContent = `Your score: ${score} / ${mcqData.length}`;
             }
 
-            // --- ACTIVITY 5: LISTENING MATCHING ---
+            // --- ACTIVITY 6: LISTENING MATCHING ---
             function populateListeningActivity() {
                 const phrasesContainer = document.getElementById('listening-phrases');
                 const definitionsContainer = document.getElementById('listening-definitions');
@@ -941,7 +1022,7 @@
             ];
 
 
-            // --- ACTIVITY 6: VOCABULARY FINDER (NEW SLIDE 10) ---
+            // --- ACTIVITY 7: VOCABULARY FINDER (NEW SLIDE 10) ---
             function populateVocabFinder() {
                 const textContainer = document.getElementById('deloitte-gapped-text');
                 const questionsContainer = document.getElementById('vocab-finder-container');
@@ -979,7 +1060,7 @@
                 });
             }
 
-            // --- ACTIVITY 7: DELOITTE GAP-FILL (NEW SLIDE 11) ---
+            // --- ACTIVITY 8: DELOITTE GAP-FILL (NEW SLIDE 11) ---
             function populateDeloitteActivity() {
                 const articleContainer = document.getElementById('deloitte-article');
                 const sentencesContainer = document.getElementById('deloitte-sentences');
@@ -1009,7 +1090,7 @@
                 });
             }
 
-            // --- ACTIVITY 8: GRAMMAR TENSES (NEW SLIDE 13)---
+            // --- ACTIVITY 9: GRAMMAR TENSES (NEW SLIDE 13)---
             function populateGrammarTenses() {
                 const container = document.getElementById('grammar-tenses-container');
                  if (!container) return; // Guard clause
@@ -1056,7 +1137,7 @@
                 });
             }
 
-            // --- ACTIVITY 9: GRAMMAR CORRECTIONS (NEW SLIDE 14) ---
+            // --- ACTIVITY 10: GRAMMAR CORRECTIONS (NEW SLIDE 14) ---
             function populateGrammarCorrections() {
                 const container = document.getElementById('grammar-corrections-container');
                  const questions = [
@@ -1089,7 +1170,7 @@
                 });
             }
 
-            // --- ACTIVITY 10: GRAMMAR DIALOGUES (NEW SLIDE 15) ---
+            // --- ACTIVITY 11: GRAMMAR DIALOGUES (NEW SLIDE 15) ---
             function populateGrammarDialogues() {
                 const container = document.getElementById('grammar-dialogues-container');
                 const dialogues = [
@@ -1136,7 +1217,7 @@
                 });
             }
 
-            // --- ACTIVITY 11: WORKBOOK VOCABULARY ---
+            // --- ACTIVITY 12: WORKBOOK VOCABULARY ---
             function populateWorkbookVocab() {
                 const words = ['boss', 'careers', 'contracts', 'course', 'degree', 'employer', 'employs', 'profession', 'qualifications', 'recruit', 'skills'];
                 const boxContainer = document.getElementById('workbook-vocab-box');
@@ -1157,7 +1238,7 @@
                 });
             }
 
-            // --- ACTIVITY 12: WORKBOOK GRAMMAR ---
+            // --- ACTIVITY 13: WORKBOOK GRAMMAR ---
             function populateGrammarAdjectives() {
                 const container = document.getElementById('grammar-adjectives-container');
                 const answers = ["least useful", "more appropriate", "the most inconvenient", "busiest", "the most expensive", "fewer", "most", "less", "more costly", "largest", "more theoretical", "more hands-on"];
@@ -1181,5 +1262,3 @@
     </script>
 </body>
 </html>
-
-
