@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business English Flashcards - Unit 1</title>
+    <title>Business English Study App - Unit 1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff; /* Light sky blue background */
         }
-        /* --- Flip Card Animation --- */
+        /* --- General Transitions --- */
+        .app-view {
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* --- Flashcard Styles --- */
         .scene {
             perspective: 1000px;
         }
@@ -43,60 +49,106 @@
             color: #1f2937;
         }
         .card-face-back {
-            background-color: #4f46e5; /* This is the dark blue the user likes */
+            background-color: #4f46e5;
             color: white;
             transform: rotateY(180deg);
         }
+
+        /* --- Quiz Styles --- */
+        .quiz-option {
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+        .quiz-option.correct {
+            background-color: #22c55e !important; /* Green-500 */
+            color: white !important;
+            border-color: #16a34a !important;
+        }
+        .quiz-option.incorrect {
+            background-color: #ef4444 !important; /* Red-500 */
+            color: white !important;
+            border-color: #dc2626 !important;
+        }
+        .quiz-option:disabled {
+            cursor: not-allowed;
+        }
     </style>
 </head>
-<body class="bg-sky-50 flex flex-col items-center justify-center min-h-screen p-4">
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
 
-    <div class="w-full max-w-2xl mx-auto">
+    <!-- Flashcard View -->
+    <div id="flashcard-view" class="app-view w-full max-w-2xl mx-auto">
         <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Business Benchmark Upper Intermediate Vocabulary - Unit 1</h1>
-            <p class="text-gray-600 mt-2">Use these flashcards to study your terms.</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Study Flashcards - Unit 1</h1>
+            <p class="text-gray-600 mt-2">Flip the card to see the definition.</p>
         </header>
 
-        <!-- Flashcard Component -->
         <div class="scene h-80 w-full">
             <div id="flashcard" class="card">
-                <div id="card-front" class="card-face card-face-front">
+                <div class="card-face card-face-front">
                     <p class="text-gray-500 text-sm mb-2">Word</p>
                     <h2 id="card-word" class="text-3xl md:text-4xl font-bold text-center">Loading...</h2>
                 </div>
-                <div id="card-back" class="card-face card-face-back">
-                     <p class="text-indigo-200 text-sm mb-2">Definition</p>
-                    <p id="card-definition" class="text-lg md:text-xl text-center">Please wait, loading definitions.</p>
+                <div class="card-face card-face-back">
+                    <p class="text-indigo-200 text-sm mb-2">Definition</p>
+                    <p id="card-definition" class="text-lg md:text-xl text-center">Loading...</p>
                 </div>
             </div>
         </div>
 
-        <!-- Progress Indicator -->
-        <div id="progress-container" class="text-center text-gray-500 my-4 font-medium">
-            Card 1 / ...
-        </div>
+        <div id="flashcard-progress" class="text-center text-gray-500 my-4 font-medium">Card 1 / ...</div>
 
-        <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row justify-center items-center gap-3 mt-4 w-full">
             <button id="shuffle-btn" class="w-full sm:w-auto bg-sky-200 text-sky-800 font-semibold py-3 px-6 rounded-lg shadow-sm hover:bg-sky-300 transition-colors duration-200">Shuffle Deck</button>
             <button id="flip-btn" class="w-full sm:w-auto bg-indigo-600 text-white font-semibold py-3 px-10 rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200">Flip</button>
         </div>
         
-        <!-- Navigation -->
         <div class="flex justify-between items-center mt-6">
             <button id="prev-btn" class="bg-sky-200 text-sky-800 font-bold py-3 px-6 rounded-lg hover:bg-sky-300 transition-colors duration-200">&larr; Previous</button>
+            <button id="go-to-quiz-btn" class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition-colors duration-200">Take the Quiz &rarr;</button>
             <button id="next-btn" class="bg-sky-200 text-sky-800 font-bold py-3 px-6 rounded-lg hover:bg-sky-300 transition-colors duration-200">Next &rarr;</button>
         </div>
     </div>
 
+    <!-- Quiz View -->
+    <div id="quiz-view" class="app-view w-full max-w-2xl mx-auto hidden">
+        <!-- Quiz Questions -->
+        <div id="quiz-container" class="w-full bg-white p-6 sm:p-8 rounded-xl shadow-lg">
+            <header class="text-center mb-6 relative">
+                <button id="go-to-flashcards-btn" class="absolute left-0 top-1/2 -translate-y-1/2 text-sm bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300">&larr; Study</button>
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Unit 1 Vocabulary Quiz</h1>
+                <p id="progress-text" class="text-gray-600 mt-2">Question 1 of X</p>
+            </header>
+            <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                <p class="text-sm text-gray-500 mb-2">Definition:</p>
+                <p id="question-text" class="text-lg text-gray-900">Loading question...</p>
+            </div>
+            <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            <div class="mt-6 text-center">
+                <p id="feedback-text" class="h-6 text-lg font-medium">&nbsp;</p>
+                <button id="quiz-next-btn" class="mt-2 w-full sm:w-auto bg-indigo-600 text-white font-semibold py-3 px-10 rounded-lg shadow-md hover:bg-indigo-700 hidden">Next Question</button>
+            </div>
+        </div>
+
+        <!-- Quiz Results -->
+        <div id="results-container" class="w-full bg-white p-8 rounded-xl shadow-lg text-center hidden">
+            <h1 class="text-3xl font-bold text-gray-800">Quiz Complete!</h1>
+            <p class="text-lg text-gray-600 mt-4">Your final score is:</p>
+            <p id="final-score" class="text-5xl font-bold text-indigo-600 my-4">0 / 0</p>
+            <div class="flex justify-center gap-4 mt-6">
+                 <button id="go-to-flashcards-btn-results" class="bg-sky-500 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-sky-600">&larr; Study More</button>
+                <button id="restart-btn" class="bg-green-500 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-green-600">Restart Quiz</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // --- Embedded CSV Data ---
+        // --- SHARED DATA ---
         const csvData = `Unit,Word,Comment,Definition,Pronunciation,Page
 Unit 1,bonus,noun,"an amount of money given to an employee in addition to their salary as a reward for working well",ˈbəʊ.nəs,8.0
 Unit 1,committed,adjective,"loyal and willing to give your time and energy to something that you believe in",kəˈmɪt.ɪd ,11.0
-Unit 1,computer literate,adjective phrase,"able to use computers effectively",kəmˈpjuː.tə ˈlɪt.ər.ət,10.0
+Unit 1,computer literate R,adjective phrase,"able to use computers effectively",kəmˈpjuː.tə ˈlɪt.ər.ət,10.0
 Unit 1,consistent,adjective,"always behaving or happening in a similar, especially positive, way",kənˈsɪs.tənt,8.0
-Unit 1,core skill,noun phrase," a particular ability that you develop through training and experience and that is necessary to do a particular job",kɔː skɪl,10.0
+Unit 1,core skill R,noun phrase," a particular ability that you develop through training and experience and that is necessary to do a particular job",kɔː skɪl,10.0
 Unit 1,corporate culture,noun phrase,"the beliefs and ideas that a company has and the way in which they affect how it does business and how its employees behave",ˈkɔː.pər.ət ˈkʌl.tʃə,10.0
 Unit 1,dedicated,adjective,"used only for one particular purpose or job",ˈded.ɪ.keɪ.tɪd,8.0
 Unit 1,diverse,adjective,"varied or different",daɪˈvɜːs,8.0
@@ -105,11 +157,11 @@ Unit 1,dynamic,adjective,"continuously changing or developing",daɪˈnæm.ɪk,8.
 Unit 1,end-of-year bonus,noun phrase,"extra money paid to employees at the end of the year",end əv jɪə ˈbəʊ.nəs,11.0
 Unit 1,enthusiastic,adjective,"feeling or showing a lot of excitement and interest about somebody/something",ɪnˌθjuː.ziˈæs.tɪk,8.0
 Unit 1,expand,verb,"to become greater in size, number or importance",ɪkˈspænd,8.0
-Unit 1,fulfilling,adjective,"making you feel happy and satisfied",fʊlˈfɪl.ɪŋ,10.0
+Unit 1,fulfilling R,adjective,"making you feel happy and satisfied",fʊlˈfɪl.ɪŋ,10.0
 Unit 1,hands-on,adjective,"obtained by doing something, not by reading about it or watching it being done",hændz ɒn,10.0
 Unit 1,head up,phrasal verb,"to be in charge of a team, department, organisation, etc.",hed ʌp,8.0
 Unit 1,in-house,adjective,done, working or happening inside a company or organisation,ɪn haʊs,8.0
-Unit 1,motivating,adjective,"making you want to do something, especially something that involves hard work and effort",ˈməʊ.tɪ.veɪ.tɪŋ,10.0
+Unit 1,motivating R,adjective,"making you want to do something, especially something that involves hard work and effort",ˈməʊ.tɪ.veɪ.tɪŋ,10.0
 Unit 1,parent company,noun phrase,"a company that owns more than half the shares of another company",ˈpeə.rənt ˈkʌm.pə.ni,8.0
 Unit 1,performance-related bonus,noun phrase,"extra money paid to an employee as a reward for working well",pəˈfɔː.məns rɪˈleɪ.tɪd ˈbəʊ.nəs,11.0
 Unit 1,personnel,noun,"the people who are employed by a company or organisation",ˌpɜː.sənˈel,8.0
@@ -118,31 +170,38 @@ Unit 1,prospects,noun,"the possibility that something will happen",ˈprɒs.pekts
 Unit 1,provide,verb,"to give something to somebody or make it available for them to use",prəˈvaɪd,8.0
 Unit 1,reports,noun,"people who are employed by a company or organisation",rɪˈpɔːts,8.0
 Unit 1,revenue,noun,"the money that a government receives from taxes or that an organisation, etc. receives from its business",ˈrev.ən.juː,8.0
-Unit 1,rewarding,adjective,"worth doing; that makes you happy because you think it is useful or important",rɪˈwɔː.dɪŋ,10.0
+Unit 1,rewarding R,adjective,"worth doing; that makes you happy because you think it is useful or important",rɪˈwɔː.dɪŋ,10.0
 Unit 1,staff discount,noun phrase,"an amount of money that is taken off the usual cost of something for employees",stɑːf ˈdɪs.kaʊnt,11.0
 Unit 1,take on,phrasal verb,"to decide to do something",teɪk ɒn,8.0
 Unit 1,workforce,noun,"all the people who work for a particular company, organisation, etc.",ˈwɜːk.fɔːs,8.0`;
 
-        // --- DOM Elements ---
-        const card = document.getElementById('flashcard');
-        const cardWord = document.getElementById('card-word');
-        const cardDefinition = document.getElementById('card-definition');
-        const flipBtn = document.getElementById('flip-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const prevBtn = document.getElementById('prev-btn');
-        const shuffleBtn = document.getElementById('shuffle-btn');
-        const progressContainer = document.getElementById('progress-container');
+        // --- GLOBAL STATE & ELEMENTS ---
+        let allCards = [];
+        const flashcardView = document.getElementById('flashcard-view');
+        const quizView = document.getElementById('quiz-view');
 
-        // --- State ---
-        let cards = [];
-        let currentIndex = 0;
-        let isFlipped = false;
+        // --- NAVIGATION ---
+        const goToQuizBtn = document.getElementById('go-to-quiz-btn');
+        const goToFlashcardsBtn = document.getElementById('go-to-flashcards-btn');
+        const goToFlashcardsBtnResults = document.getElementById('go-to-flashcards-btn-results');
 
-        /**
-         * Parses CSV text into an array of objects, filtering for a specific unit.
-         * @param {string} csvText The raw CSV text data.
-         * @returns {Array<Object>} An array of card objects for Unit 1.
-         */
+        function showFlashcardView() {
+            quizView.classList.add('hidden');
+            flashcardView.classList.remove('hidden');
+            startFlashcards();
+        }
+
+        function showQuizView() {
+            flashcardView.classList.add('hidden');
+            quizView.classList.remove('hidden');
+            startQuiz();
+        }
+
+        goToQuizBtn.addEventListener('click', showQuizView);
+        goToFlashcardsBtn.addEventListener('click', showFlashcardView);
+        goToFlashcardsBtnResults.addEventListener('click', showFlashcardView);
+
+        // --- PARSING & UTILS ---
         function parseCSV(csvText) {
             const lines = csvText.trim().split('\n');
             const headers = lines[0].split(',').map(h => h.trim());
@@ -150,108 +209,175 @@ Unit 1,workforce,noun,"all the people who work for a particular company, organis
             const wordIndex = headers.indexOf('Word');
             const definitionIndex = headers.indexOf('Definition');
             const result = [];
-
-            if (unitIndex === -1 || wordIndex === -1 || definitionIndex === -1) {
-                console.error("CSV must contain 'Unit', 'Word', and 'Definition' headers.");
-                cardWord.textContent = "Error";
-                cardDefinition.textContent = "Could not find 'Unit', 'Word', and 'Definition' columns in the data.";
-                return [];
-            }
+            if (unitIndex === -1 || wordIndex === -1 || definitionIndex === -1) return [];
             
             for (let i = 1; i < lines.length; i++) {
                 if (lines[i].trim() === '') continue;
-
-                // This regex handles values that are quoted and may contain commas
                 const values = lines[i].match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
-                
-                if (values.length > Math.max(wordIndex, definitionIndex, unitIndex)) {
-                    // Filter for 'Unit 1'
-                    if (values[unitIndex] && values[unitIndex].trim() === 'Unit 1') {
-                        const word = (values[wordIndex] || '').replace(/"/g, '').trim();
-                        const definition = (values[definitionIndex] || '').replace(/"/g, '').trim();
-                        if (word && definition) {
-                            result.push({ word, definition });
-                        }
-                    }
+                if (values.length > Math.max(wordIndex, definitionIndex, unitIndex) && values[unitIndex].trim() === 'Unit 1') {
+                    const word = (values[wordIndex] || '').replace(/"/g, '').trim();
+                    const definition = (values[definitionIndex] || '').replace(/"/g, '').trim();
+                    if (word && definition) result.push({ word, definition });
                 }
             }
             return result;
         }
 
-        /**
-         * Loads card data from the embedded CSV string.
-         */
-        function loadCardData() {
-            try {
-                cards = parseCSV(csvData);
-                if (cards.length > 0) {
-                    displayCard();
-                } else {
-                    cardWord.textContent = 'No Cards';
-                    cardDefinition.textContent = 'No cards found for Unit 1 in the data.';
-                }
-            } catch (error) {
-                console.error('Error loading card data:', error);
-                cardWord.textContent = 'Error';
-                cardDefinition.textContent = 'Failed to parse the flashcard data.';
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
             }
         }
 
-        /**
-         * Displays the current card's content and updates progress.
-         */
-        function displayCard() {
-            if (cards.length === 0) return;
+        // --- FLASHCARD LOGIC ---
+        const flashcard = document.getElementById('flashcard');
+        const cardWord = document.getElementById('card-word');
+        const cardDefinition = document.getElementById('card-definition');
+        const flipBtn = document.getElementById('flip-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const shuffleBtn = document.getElementById('shuffle-btn');
+        const flashcardProgress = document.getElementById('flashcard-progress');
+        
+        let flashcardDeck = [];
+        let flash_currentIndex = 0;
+        let flash_isFlipped = false;
 
-            const currentCard = cards[currentIndex];
+        function startFlashcards() {
+            flashcardDeck = [...allCards];
+            flash_currentIndex = 0;
+            displayCard();
+        }
+
+        function displayCard() {
+            if (flashcardDeck.length === 0) return;
+            const currentCard = flashcardDeck[flash_currentIndex];
             cardWord.textContent = currentCard.word;
             cardDefinition.textContent = currentCard.definition;
-            progressContainer.textContent = `Card ${currentIndex + 1} / ${cards.length}`;
-            
-            // Reset flip state for the new card
-            if (isFlipped) {
-                card.classList.remove('is-flipped');
-                isFlipped = false;
+            flashcardProgress.textContent = `Card ${flash_currentIndex + 1} / ${flashcardDeck.length}`;
+            if (flash_isFlipped) {
+                flashcard.classList.remove('is-flipped');
+                flash_isFlipped = false;
             }
         }
 
-        /**
-         * Shuffles the cards array randomly.
-         * Fisher-Yates shuffle algorithm.
-         */
-        function shuffleCards() {
-            if (cards.length === 0) return;
-            for (let i = cards.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [cards[i], cards[j]] = [cards[j], cards[i]];
-            }
-            currentIndex = 0;
-            displayCard();
-        }
-
-        // --- Event Listeners ---
         flipBtn.addEventListener('click', () => {
-            isFlipped = !isFlipped;
-            card.classList.toggle('is-flipped');
+            flash_isFlipped = !flash_isFlipped;
+            flashcard.classList.toggle('is-flipped');
         });
-
         nextBtn.addEventListener('click', () => {
-            if (cards.length === 0) return;
-            currentIndex = (currentIndex + 1) % cards.length;
+            if (flashcardDeck.length === 0) return;
+            flash_currentIndex = (flash_currentIndex + 1) % flashcardDeck.length;
             displayCard();
         });
-
         prevBtn.addEventListener('click', () => {
-            if (cards.length === 0) return;
-            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+            if (flashcardDeck.length === 0) return;
+            flash_currentIndex = (flash_currentIndex - 1 + flashcardDeck.length) % flashcardDeck.length;
+            displayCard();
+        });
+        shuffleBtn.addEventListener('click', () => {
+            shuffleArray(flashcardDeck);
+            flash_currentIndex = 0;
             displayCard();
         });
 
-        shuffleBtn.addEventListener('click', shuffleCards);
+        // --- QUIZ LOGIC ---
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results-container');
+        const progressText = document.getElementById('progress-text');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackText = document.getElementById('feedback-text');
+        const quizNextBtn = document.getElementById('quiz-next-btn');
+        const finalScore = document.getElementById('final-score');
+        const restartBtn = document.getElementById('restart-btn');
 
-        // --- Initial Load ---
-        document.addEventListener('DOMContentLoaded', loadCardData);
+        let quizQuestions = [];
+        let quiz_currentIndex = 0;
+        let quiz_score = 0;
+
+        function startQuiz() {
+            quizQuestions = [...allCards];
+            shuffleArray(quizQuestions);
+            quiz_currentIndex = 0;
+            quiz_score = 0;
+            resultsContainer.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            optionsContainer.innerHTML = '';
+            feedbackText.innerHTML = '&nbsp;';
+            quizNextBtn.classList.add('hidden');
+
+            if (quiz_currentIndex >= quizQuestions.length) {
+                showResults();
+                return;
+            }
+
+            progressText.textContent = `Question ${quiz_currentIndex + 1} of ${quizQuestions.length}`;
+            const question = quizQuestions[quiz_currentIndex];
+            questionText.textContent = question.definition;
+
+            const correctAnswer = question.word;
+            const incorrectAnswers = allCards.filter(card => card.word !== correctAnswer).map(card => card.word);
+            shuffleArray(incorrectAnswers);
+            const options = [correctAnswer, ...incorrectAnswers.slice(0, 3)];
+            shuffleArray(options);
+
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.className = 'quiz-option w-full bg-white border-2 border-sky-200 text-sky-800 font-semibold p-4 rounded-lg hover:bg-sky-100 hover:border-sky-400';
+                button.onclick = () => checkAnswer(option, correctAnswer);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedOption, correctAnswer) {
+            const optionButtons = optionsContainer.querySelectorAll('.quiz-option');
+            optionButtons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === correctAnswer) btn.classList.add('correct');
+                else if (btn.textContent === selectedOption) btn.classList.add('incorrect');
+            });
+
+            if (selectedOption === correctAnswer) {
+                quiz_score++;
+                feedbackText.textContent = 'Correct!';
+                feedbackText.className = 'h-6 text-lg font-medium text-green-600';
+            } else {
+                feedbackText.textContent = 'Incorrect!';
+                feedbackText.className = 'h-6 text-lg font-medium text-red-600';
+            }
+            quizNextBtn.classList.remove('hidden');
+        }
+
+        function showResults() {
+            quizContainer.classList.add('hidden');
+            resultsContainer.classList.remove('hidden');
+            finalScore.textContent = `${quiz_score} / ${quizQuestions.length}`;
+        }
+
+        quizNextBtn.addEventListener('click', () => {
+            quiz_currentIndex++;
+            displayQuestion();
+        });
+        restartBtn.addEventListener('click', startQuiz);
+
+        // --- INITIAL LOAD ---
+        document.addEventListener('DOMContentLoaded', () => {
+            allCards = parseCSV(csvData);
+            if (allCards.length > 3) {
+                startFlashcards();
+            } else {
+                flashcardView.innerHTML = `<div class="text-center p-8 bg-white rounded-lg shadow-lg"><h1 class="text-2xl font-bold text-red-600">Loading Error</h1><p class="mt-2 text-gray-700">Not enough data to create activities. You need at least 4 words in the unit.</p></div>`;
+            }
+        });
     </script>
 </body>
 </html>
+
 
