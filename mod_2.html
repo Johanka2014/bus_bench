@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive English Activities</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            scroll-snap-align: start;
+            position: relative;
+            text-align: center;
+            transition: background-color 0.5s ease;
+        }
+        .container-snap {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        .draggable {
+            cursor: move;
+            user-select: none;
+        }
+        .dragging {
+            opacity: 0.5;
+            background-color: #cce7ff;
+        }
+        .drop-zone {
+            border: 2px dashed #9ca3af; /* gray-400 */
+            transition: background-color 0.3s, border-color 0.3s;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column; /* Allow stacking of item and text */
+        }
+        .drop-zone.over {
+            background-color: #e0f2fe; /* sky-100 */
+        }
+        .feedback-correct {
+            border: 2px solid #22c55e !important; /* green-500 */
+            background-color: #f0fdf4 !important; /* green-50 */
+        }
+        .feedback-incorrect {
+            border: 2px solid #ef4444 !important; /* red-500 */
+            background-color: #fef2f2 !important; /* red-50 */
+        }
+        .nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 10;
+        }
+        .nav-dots a {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .nav-dots a.active {
+            background-color: white;
+            transform: scale(1.4);
+        }
+        .arrow {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-15px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+        .highlight {
+            background-color: rgba(255, 192, 203, 0.5); /* Light pink highlight */
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+        /* Custom styles for the activities */
+        .activity-card {
+            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(10px); /* For Safari */
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 64rem; /* 1024px */
+        }
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(248, 250, 252, 0.8); /* Slightly transparent slate-50 */
+            border-radius: 0.5rem;
+        }
+        .word-item {
+            padding: 0.5rem 1rem;
+            background-color: white;
+            border: 1px solid #e2e8f0; /* slate-200 */
+            border-radius: 9999px; /* full */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .description-text {
+            margin-top: 0.5rem;
+            color: #475569; /* slate-600 */
+            font-size: 0.875rem;
+        }
+        .tf-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            background-color: white;
+            transition: all 0.2s;
+        }
+        .tf-btn.selected {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .tf-btn.correct {
+            background-color: #22c55e;
+            color: white;
+            border-color: #22c55e;
+        }
+        .tf-btn.incorrect {
+            background-color: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+
+    <div class="container-snap">
+        <!-- Navigation Dots -->
+        <nav class="nav-dots">
+            <a href="#slide-1" id="dot-1" class="active"></a>
+            <a href="#slide-2" id="dot-2"></a>
+            <a href="#slide-3" id="dot-3"></a>
+            <a href="#slide-4" id="dot-4"></a>
+            <a href="#slide-5" id="dot-5"></a>
+            <a href="#slide-6" id="dot-6"></a>
+            <a href="#slide-7" id="dot-7"></a>
+            <a href="#slide-8" id="dot-8"></a>
+            <a href="#slide-9" id="dot-9"></a>
+            <a href="#slide-10" id="dot-10"></a>
+            <a href="#slide-11" id="dot-11"></a>
+            <a href="#slide-12" id="dot-12"></a>
+            <a href="#slide-13" id="dot-13"></a>
+        </nav>
+
+        <!-- Slide 1: Welcome -->
+        <section id="slide-1" class="slide bg-gradient-to-br from-sky-200 to-cyan-200 text-slate-800">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4">Staff Development & Training</h1>
+            <p class="text-xl md:text-2xl opacity-80 mb-8">An Interactive Learning Module</p>
+            <p>Scroll down to begin</p>
+            <a href="#slide-2" class="arrow text-cyan-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 2: Job Title Match -->
+        <section id="slide-2" class="slide bg-gradient-to-br from-cyan-200 to-teal-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 1: Who Does What?</h2>
+                <p class="text-slate-600 mb-6">Drag the job title to match the description of their work.</p>
+                <div class="word-bank mb-8">
+                    <div draggable="true" class="draggable word-item" data-word="Finance Manager">Finance Manager</div>
+                    <div draggable="true" class="draggable word-item" data-word="Human Resources Manager">Human Resources Manager</div>
+                    <div draggable="true" class="draggable word-item" data-word="Chief Executive Officer / Managing Director">Chief Executive Officer / Managing Director</div>
+                    <div draggable="true" class="draggable word-item" data-word="Chief Information Officer">Chief Information Officer</div>
+                    <div draggable="true" class="draggable word-item" data-word="Director of Research and Development">Director of Research and Development</div>
+                    <div draggable="true" class="draggable word-item" data-word="Personal Assistant">Personal Assistant</div>
+                    <div draggable="true" class="draggable word-item" data-word="Marketing Consultant">Marketing Consultant</div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-left">
+                    <div class="drop-zone p-4 rounded-lg" data-answer="Chief Executive Officer / Managing Director"><span class="description-text">'I have to supervise and know about what's going on in all the different parts of the company...'</span></div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="Finance Manager"><span class="description-text">'I am a qualified accountant... I monitor my company's financial performance...'</span></div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="Human Resources Manager"><span class="description-text">'My job is around the development and training of the managers... and the recruitment of new staff.'</span></div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="Marketing Consultant"><span class="description-text">'I give advice about all sorts of different things connected with food, such as advice on how to market it...'</span></div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="Chief Information Officer"><span class="description-text">'My job? It's our computer systems and information technology (IT) in general...'</span></div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="Personal Assistant"><span class="description-text">'...I'm very involved in every aspect of her work, setting up meetings, organising her travel...'</span></div>
+                    <div class="drop-zone p-4 rounded-lg lg:col-span-2" data-answer="Director of Research and Development"><span class="description-text">'We've got a very big project on at the moment, for a new product, and I have to build up the project teams...'</span></div>
+                </div>
+            </div>
+            <a href="#slide-3" class="arrow text-teal-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 3: Find the Phrase -->
+        <section id="slide-3" class="slide bg-gradient-to-br from-teal-200 to-green-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 2: Find the Phrase</h2>
+                <p class="text-slate-600 mb-6">Drag the word or phrase to match its meaning.</p>
+                <div class="word-bank mb-8">
+                    <div draggable="true" class="draggable word-item" data-word="budgets">budgets</div>
+                    <div draggable="true" class="draggable word-item" data-word="launch">launch</div>
+                    <div draggable="true" class="draggable word-item" data-word="performance">performance</div>
+                    <div draggable="true" class="draggable word-item" data-word="recruitment">recruitment</div>
+                    <div draggable="true" class="draggable word-item" data-word="targets">targets</div>
+                    <div draggable="true" class="draggable word-item" data-word="easing">easing</div>
+                    <div draggable="true" class="draggable word-item" data-word="project teams">project teams</div>
+                    <div draggable="true" class="draggable word-item" data-word="meeting deadlines">meeting deadlines</div>
+                    <div draggable="true" class="draggable word-item" data-word="accountant">accountant</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="drop-zone p-3 rounded-lg" data-answer="performance"><span class="description-text">= how well parts of the company are doing</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="launch"><span class="description-text">= put new products on sale</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="recruitment"><span class="description-text">= finding new staff for the company</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="easing"><span class="description-text">= reducing, making easier</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="project teams"><span class="description-text">= groups of people who work together</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="targets"><span class="description-text">= objectives a company wants to reach</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="budgets"><span class="description-text">= money reserved for an activity</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="meeting deadlines"><span class="description-text">= doing things within the correct time</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="accountant"><span class="description-text">= person who looks after financial records</span></div>
+                </div>
+            </div>
+            <a href="#slide-4" class="arrow text-green-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 4: Listening Prep -->
+        <section id="slide-4" class="slide bg-gradient-to-br from-green-200 to-lime-200">
+            <div class="activity-card">
+                 <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="text-left">
+                        <h2 class="text-3xl font-bold text-slate-800 mb-2">What I like about my job</h2>
+                        <h3 class="text-xl font-semibold text-slate-600 mb-4">Listening</h3>
+                        <p class="text-slate-700 mb-4">Look at the following reasons why people might like their jobs.</p>
+                        <ul class="list-disc list-inside space-y-2 text-slate-700">
+                            <li>building customer relationships</li>
+                            <li>finding solutions for customers</li>
+                            <li>being my own boss</li>
+                            <li>learning from my job</li>
+                            <li>balancing working life with family life</li>
+                            <li>seeing the success of my company</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <img src="https://johanka2014.github.io/bus_bench/people.png" alt="Four people being interviewed" class="rounded-lg shadow-lg w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/600x400/f87171/ffffff?text=Image+Not+Found';">
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-5" class="arrow text-lime-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 5: Listening Activity -->
+        <section id="slide-5" class="slide bg-gradient-to-br from-lime-200 to-yellow-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 3: Listening Comprehension</h2>
+                <p class="text-slate-600 mb-4">Listen to the audio. Drag the reason to the person who mentions it.</p>
+                <audio controls class="w-full max-w-md mx-auto mb-6">
+                    <source src="https://johanka2014.github.io/bus_bench/03-Unit2%20-pg15.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="drop-zone p-4 rounded-lg" data-answer="balancing working life with family life"><span class="font-semibold text-slate-700">1. Jane Milton</span></div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="seeing the success of my company"><span class="font-semibold text-slate-700">2. Lewis Bronze</span></div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="being my own boss"><span class="font-semibold text-slate-700">3. Amanda Hamilton</span></div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="finding solutions for customers"><span class="font-semibold text-slate-700">4. Maxine Macpherson</span></div>
+                </div>
+                <div class="word-bank mt-6">
+                    <div draggable="true" class="draggable word-item" data-word="balancing working life with family life">balancing working life with family life</div>
+                    <div draggable="true" class="draggable word-item" data-word="being my own boss">being my own boss</div>
+                    <div draggable="true" class="draggable word-item" data-word="finding solutions for customers">finding solutions for customers</div>
+                    <div draggable="true" class="draggable word-item" data-word="seeing the success of my company">seeing the success of my company</div>
+                    <div draggable="true" class="draggable word-item" data-word="learning from my job">learning from my job</div>
+                </div>
+            </div>
+            <a href="#slide-6" class="arrow text-yellow-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+        
+        <!-- Slide 6: Reading Activity -->
+        <section id="slide-6" class="slide bg-gradient-to-br from-yellow-200 to-amber-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 4: Reading Comprehension</h2>
+                <p class="text-slate-600 mb-6">Match the job titles to their descriptions by dragging the title to the correct box.</p>
+                <div class="word-bank mb-8">
+                    <div draggable="true" class="draggable word-item" data-word="personal assistant (PA)">personal assistant (PA)</div>
+                    <div draggable="true" class="draggable word-item" data-word="office manager">office manager</div>
+                    <div draggable="true" class="draggable word-item" data-word="sales manager">sales manager</div>
+                    <div draggable="true" class="draggable word-item" data-word="market research executive">market research executive</div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-left">
+                    <div class="drop-zone p-4 rounded-lg" data-answer="market research executive">
+                        <h3 class="font-bold text-slate-700 mb-2">Job A</h3>
+                        <div class="description-text text-sm">
+                            <p class="mb-2">Helps organisations (including business, industry, government and voluntary groups) find out what people think, believe, want, need and do. The findings inform product development and influence the way that products are designed and marketed.</p>
+                            <p class="font-semibold">Typical work activities include:</p>
+                            <ul class="list-disc list-inside text-xs">
+                                <li>interpreting and developing a brief from a client</li>
+                                <li>designing and writing questionnaires to obtain relevant data</li>
+                                <li>deciding what sample groups, and what numbers, will give the necessary data</li>
+                                <li>calculating the cost of a given research project</li>
+                                <li>training teams of interviewers to carry out the research</li>
+                                <li>conducting and monitoring the progress of surveys</li>
+                                <li>producing written reports together with recommendations for clients.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="sales manager">
+                        <h3 class="font-bold text-slate-700 mb-2">Job B</h3>
+                        <div class="description-text text-sm">
+                            <p class="mb-2">Organises, motivates and leads teams. Responsible for the combined performance of the team and for making sure that everyone within the team reaches the targets.</p>
+                            <p class="font-semibold">Typical work activities include:</p>
+                            <ul class="list-disc list-inside text-xs">
+                                <li>recruiting and training staff</li>
+                                <li>supervising, motivating and monitoring the performance of the team</li>
+                                <li>setting budgets/targets</li>
+                                <li>liaising with other line managers</li>
+                                <li>reporting back to senior managers</li>
+                                <li>troubleshooting</li>
+                                <li>keeping abreast of what competitors are doing.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="office manager">
+                        <h3 class="font-bold text-slate-700 mb-2">Job C</h3>
+                        <div class="description-text text-sm">
+                           <p class="mb-2">Organises and supervises all of the administrative activities that facilitate the smooth running of an office.</p>
+                           <p class="font-semibold">Typical work activities include:</p>
+                           <ul class="list-disc list-inside text-xs">
+                               <li>arranging travel, meetings and appointments</li>
+                               <li>delegating work</li>
+                               <li>ordering stationery</li>
+                               <li>dealing with correspondence and writing reports</li>
+                               <li>supervising the work of clerical and secretarial staff</li>
+                               <li>monitoring the workload and work rate of clerical and secretarial staff</li>
+                               <li>controlling the office budget</li>
+                               <li>conducting appraisals.</li>
+                           </ul>
+                        </div>
+                    </div>
+                    <div class="drop-zone p-4 rounded-lg" data-answer="personal assistant (PA)">
+                        <h3 class="font-bold text-slate-700 mb-2">Job D</h3>
+                        <div class="description-text text-sm">
+                            <p class="mb-2">Works closely with a senior manager or executive to provide day-to-day administrative support. Helps the manager to make best use of his/her time by dealing with secretarial and administrative tasks.</p>
+                            <p class="font-semibold">Typical work activities include:</p>
+                            <ul class="list-disc list-inside text-xs">
+                                <li>screening telephone calls, enquiries and requests and handling them</li>
+                                <li>organising the manager's diary and making appointments</li>
+                                <li>dealing with incoming correspondence</li>
+                                <li>writing letters and reports</li>
+                                <li>liaising with clients, suppliers and other staff</li>
+                                <li>arranging travel and accommodation</li>
+                                <li>taking notes at meetings.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-7" class="arrow text-amber-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 7: Vocabulary -->
+        <section id="slide-7" class="slide bg-gradient-to-br from-amber-200 to-orange-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 5: Vocabulary</h2>
+                <p class="text-slate-600 mb-6">Find words or phrases in the job descriptions from the previous activity which mean the following.</p>
+                <div class="word-bank mb-8">
+                    <div draggable="true" class="draggable word-item" data-word="findings">findings</div>
+                    <div draggable="true" class="draggable word-item" data-word="brief">brief</div>
+                    <div draggable="true" class="draggable word-item" data-word="targets">targets</div>
+                    <div draggable="true" class="draggable word-item" data-word="liaising">liaising</div>
+                    <div draggable="true" class="draggable word-item" data-word="troubleshooting">troubleshooting</div>
+                    <div draggable="true" class="draggable word-item" data-word="keeping abreast of">keeping abreast of</div>
+                    <div draggable="true" class="draggable word-item" data-word="delegating work">delegating work</div>
+                    <div draggable="true" class="draggable word-item" data-word="stationery">stationery</div>
+                    <div draggable="true" class="draggable word-item" data-word="workload">workload</div>
+                    <div draggable="true" class="draggable word-item" data-word="work rate">work rate</div>
+                    <div draggable="true" class="draggable word-item" data-word="conducting appraisals">conducting appraisals</div>
+                    <div draggable="true" class="draggable word-item" data-word="screening telephone calls">screening telephone calls</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="drop-zone p-3 rounded-lg" data-answer="findings"><span class="description-text">= results of research</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="brief"><span class="description-text">= instructions (from a client)</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="targets"><span class="description-text">= objectives, e.g. volume of sales</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="liaising"><span class="description-text">= communicating with</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="troubleshooting"><span class="description-text">= problem solving</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="keeping abreast of"><span class="description-text">= keeping up to date with</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="delegating work"><span class="description-text">= giving work to other staff</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="stationery"><span class="description-text">= paper, pens, etc.</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="workload"><span class="description-text">= amount of work</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="work rate"><span class="description-text">= speed of work</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="conducting appraisals"><span class="description-text">= evaluating how well staff are doing</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="screening telephone calls"><span class="description-text">= deciding which calls a manager receives</span></div>
+                </div>
+            </div>
+            <a href="#slide-8" class="arrow text-orange-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+        
+        <!-- Slide 8: The Management Accountant -->
+        <section id="slide-8" class="slide bg-gradient-to-br from-orange-200 to-red-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 6: The Management Accountant</h2>
+                <p class="text-slate-600 mb-6">Write one word in each gap to complete the questions you might ask at a job interview.</p>
+                <div class="text-left text-lg space-y-4">
+                    <p>a) How hard do you have <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="to"> work?</p>
+                    <p>b) What <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="do"> you like <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="about"> your job?</p>
+                    <p>c) How long <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="have"> you <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="been"> in your present job?</p>
+                    <p>d) What <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="are"> your ambitions <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="for"> the future?</p>
+                    <p>e) What <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="does"> your job consist <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="of">?</p>
+                    <p>f) When <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="were"> you first attracted <input type="text" class="w-16 text-center border-b-2 mx-1 border-slate-400 bg-transparent focus:border-blue-500 outline-none" data-answer="to"> accountancy?</p>
+                </div>
+                 <button id="check-gaps-btn" class="mt-8 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
+            </div>
+            <a href="#slide-9" class="arrow text-red-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 9: The Interview -->
+        <section id="slide-9" class="slide bg-gradient-to-br from-red-200 to-rose-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 7: The Interview</h2>
+                <div class="grid lg:grid-cols-3 gap-6 text-left">
+                    <div class="lg:col-span-1 bg-blue-800 text-white p-6 rounded-lg flex flex-col justify-center">
+                        <h3 class="text-3xl font-bold leading-tight">FORGET THE STEREOTYPE OF ACCOUNTANTS: THEY ARE NOW AMBITIOUS, SMOOTH-TALKING BUSINESS STRATEGISTS</h3>
+                    </div>
+                    <div class="lg:col-span-2 text-sm space-y-3">
+                         <p class="text-slate-600 mb-4">Write each of the questions from the list into the correct gap in the interview.</p>
+                         <p class="mb-4 italic">We interviewed Gabriella Andrews, 29, a finance manager with IMI Norgren. Born in Hungary, she came to the UK at 18 to study English, but stayed on to study European Business and Technology with German at Warwick. Following her graduation, with a first-class BSc Honours degree, she joined IMI as a trainee accountant. After various jobs with the firm, she became a finance manager with the company in February. She passed the final accountancy examinations in July 2002.</p>
+                        <div>
+                            <p class="font-bold">Q1:</p>
+                            <input type="text" class="w-full border-b-2 p-1 border-slate-300 bg-transparent focus:border-blue-500 outline-none" data-answer="When were you first attracted to accountancy?">
+                            <p>A: I first became interested in finance... at school, where I was the class treasurer for four years.</p>
+                        </div>
+                        <div>
+                            <p class="font-bold">Q2:</p>
+                            <input type="text" class="w-full border-b-2 p-1 border-slate-300 bg-transparent focus:border-blue-500 outline-none" data-answer="What do you like about your job?">
+                            <p>A: I'm mainly interested in management accounting, so the accountancy qualification gives me the chance to work in other areas of the business and allows me to work in a more commercial environment. I like the interaction between various departments. And I get the opportunity to be involved in non-finance projects, too.</p>
+                        </div>
+                         <div>
+                            <p class="font-bold">Q3:</p>
+                            <input type="text" class="w-full border-b-2 p-1 border-slate-300 bg-transparent focus:border-blue-500 outline-none" data-answer="What does your job consist of?">
+                            <p>A: I have two divisional management accountants reporting to me. I'm a member of the local management team, so I get involved in regular discussions involving the performance of all three divisions. I have financial managerial responsibility for two of them. I'm involved in various other projects, as well as new product launches and new IT system introductions – both are high-profile projects within the Norgren Group. I produce reports and I supply financial information to all levels within the organisation, from local management to the board of directors.</p>
+                        </div>
+                         <div>
+                            <p class="font-bold">Q4: How hard do you have to work?</p>
+                            <p>A: The working hours vary in our area; our busiest periods in the year are the end of the financial year, plus auditing, forecasting and any project-work deadlines. We are expected to work longer hours than usual then, so there's never a good time to take holidays. We still manage it, though, and I think the extra work should be seen as something that comes with a managerial position, really.</p>
+                        </div>
+                         <div>
+                            <p class="font-bold">Q5:</p>
+                            <input type="text" class="w-full border-b-2 p-1 border-slate-300 bg-transparent focus:border-blue-500 outline-none" data-answer="What are your ambitions for the future?">
+                            <p>A: In the long term, I'd like to progress from a local office to a job at headquarters with responsibility for various offices. I would like to stay close to finance, but I'd consider a general business management role as well.</p>
+                        </div>
+                        <button id="check-interview-btn" class="mt-4 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-10" class="arrow text-rose-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 10: Company Intro -->
+        <section id="slide-10" class="slide bg-gradient-to-br from-rose-200 to-pink-200">
+            <div class="activity-card">
+                <img src="https://johanka2014.github.io/bus_bench/imi_norgen.png" alt="IMI Norgren company logo and information" class="rounded-lg shadow-lg w-full h-auto max-w-2xl mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/800x400/d1d5db/ffffff?text=Image+Not+Found';">
+            </div>
+            <a href="#slide-11" class="arrow text-pink-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 11: True or False -->
+        <section id="slide-11" class="slide bg-gradient-to-br from-pink-200 to-fuchsia-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 8: True or False?</h2>
+                <p class="text-slate-600 mb-6">Are these statements true or false? Correct the false ones.</p>
+                <div class="space-y-4 text-left">
+                    <div class="p-4 bg-slate-50 rounded-lg" data-answer="false">
+                        <p>1. Gabriella came to the UK in order to work.</p>
+                        <div class="mt-2 space-x-2">
+                            <button class="tf-btn">True</button>
+                            <button class="tf-btn">False</button>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg" data-answer="false">
+                        <p>2. She has always worked for the same company.</p>
+                        <div class="mt-2 space-x-2">
+                            <button class="tf-btn">True</button>
+                            <button class="tf-btn">False</button>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg" data-answer="true">
+                        <p>3. She looked after the financial affairs of her class at school.</p>
+                        <div class="mt-2 space-x-2">
+                            <button class="tf-btn">True</button>
+                            <button class="tf-btn">False</button>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg" data-answer="false">
+                        <p>4. She is only involved in the financial aspects of her company.</p>
+                        <div class="mt-2 space-x-2">
+                            <button class="tf-btn">True</button>
+                            <button class="tf-btn">False</button>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg" data-answer="true">
+                        <p>5. She has more junior staff working for her.</p>
+                        <div class="mt-2 space-x-2">
+                            <button class="tf-btn">True</button>
+                            <button class="tf-btn">False</button>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg" data-answer="true">
+                        <p>6. She gives financial information to the top level of management in her company.</p>
+                        <div class="mt-2 space-x-2">
+                            <button class="tf-btn">True</button>
+                            <button class="tf-btn">False</button>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg" data-answer="true">
+                        <p>7. She believes that sometimes she is asked to work too hard.</p>
+                        <div class="mt-2 space-x-2">
+                            <button class="tf-btn">True</button>
+                            <button class="tf-btn">False</button>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg" data-answer="false">
+                        <p>8. Her ambitions include going to work for a different organisation.</p>
+                        <div class="mt-2 space-x-2">
+                            <button class="tf-btn">True</button>
+                            <button class="tf-btn">False</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-12" class="arrow text-fuchsia-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 12: A Human Resources Manager -->
+        <section id="slide-12" class="slide bg-gradient-to-br from-fuchsia-200 to-purple-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 9: A Human Resources Manager</h2>
+                <p class="text-slate-600 mb-6">Match these words and phrases with their definitions.</p>
+                <div class="word-bank mb-8">
+                    <div draggable="true" class="draggable word-item" data-word="challenging">challenging</div>
+                    <div draggable="true" class="draggable word-item" data-word="firing">firing</div>
+                    <div draggable="true" class="draggable word-item" data-word="cashier">cashier</div>
+                    <div draggable="true" class="draggable word-item" data-word="customer service">customer service</div>
+                    <div draggable="true" class="draggable word-item" data-word="selling point">selling point</div>
+                    <div draggable="true" class="draggable word-item" data-word="part-time job">part-time job</div>
+                    <div draggable="true" class="draggable word-item" data-word="supervisor">supervisor</div>
+                    <div draggable="true" class="draggable word-item" data-word="pull the wool over someone's eyes">pull the wool over someone's eyes</div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="drop-zone p-3 rounded-lg" data-answer="pull the wool over someone's eyes"><span class="description-text">= a trick or deceive someone</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="selling point"><span class="description-text">= something which attracts customers</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="supervisor"><span class="description-text">= person who makes sure a job is done properly</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="part-time job"><span class="description-text">= job which is only for part of the working week</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="customer service"><span class="description-text">= giving customers good treatment</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="cashier"><span class="description-text">= employee who takes your money at a supermarket</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="firing"><span class="description-text">= dismissing someone from their job</span></div>
+                    <div class="drop-zone p-3 rounded-lg" data-answer="challenging"><span class="description-text">= difficult and demanding</span></div>
+                </div>
+            </div>
+            <a href="#slide-1" class="arrow text-purple-800"><i class="fas fa-chevron-up"></i></a>
+        </section>
+
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- SCOPE-WIDE VARIABLES & STATE ---
+        let draggedItem = null;
+        let observer = null;
+        let draggables, dropZones, sections, navDots, checkGapsBtn, gapInputs, checkInterviewBtn, interviewInputs, tfButtons;
+
+        // --- EVENT HANDLER FUNCTIONS ---
+        function handleDragStart(e) {
+            draggedItem = e.target;
+            setTimeout(() => e.target.classList.add('dragging'), 0);
+        }
+
+        function handleDragEnd(e) {
+            setTimeout(() => {
+                e.target.classList.remove('dragging');
+                draggedItem = null;
+            }, 0);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            if (!e.currentTarget.querySelector('.draggable') || e.currentTarget.querySelector('.draggable') === draggedItem) {
+                 e.currentTarget.classList.add('over');
+            }
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('over');
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('over');
+            if (!draggedItem) return;
+
+            const existingItem = e.currentTarget.querySelector('.draggable');
+            if (existingItem && existingItem !== draggedItem) {
+                const wordBank = e.currentTarget.closest('.activity-card').querySelector('.word-bank');
+                wordBank.appendChild(existingItem);
+            }
+            
+            e.currentTarget.prepend(draggedItem);
+            checkDragAndDropAnswer(e.currentTarget);
+        }
+
+        function checkDragAndDropAnswer(zone) {
+            const droppedItem = zone.querySelector('.draggable');
+            if (!droppedItem) return;
+
+            const droppedWord = droppedItem.dataset.word;
+            const correctAnswer = zone.dataset.answer;
+
+            zone.classList.remove('feedback-correct', 'feedback-incorrect');
+            
+            if (droppedWord === correctAnswer) {
+                zone.classList.add('feedback-correct');
+                droppedItem.draggable = false;
+                droppedItem.style.cursor = 'default';
+            } else {
+                zone.classList.add('feedback-incorrect');
+            }
+        }
+        
+        function handleCheckGaps() {
+            gapInputs.forEach(input => {
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                input.classList.remove('feedback-correct', 'feedback-incorrect');
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('feedback-correct');
+                } else {
+                    input.classList.add('feedback-incorrect');
+                }
+            });
+        }
+
+        function handleCheckInterview() {
+            interviewInputs.forEach(input => {
+                const userAnswer = input.value.trim().toLowerCase().replace(/[?]/g, '');
+                const correctAnswer = input.dataset.answer.toLowerCase().replace(/[?]/g, '');
+                input.classList.remove('feedback-correct', 'feedback-incorrect');
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('feedback-correct');
+                } else {
+                    input.classList.add('feedback-incorrect');
+                }
+            });
+        }
+
+        function handleTrueFalseClick(e) {
+            const button = e.target;
+            const parent = button.parentElement;
+            const buttons = parent.querySelectorAll('.tf-btn');
+            const correctAnswer = parent.parentElement.dataset.answer;
+            const userAnswer = button.innerText.toLowerCase();
+
+            buttons.forEach(btn => {
+                btn.classList.remove('selected', 'correct', 'incorrect');
+                btn.disabled = true;
+            });
+
+            button.classList.add('selected');
+
+            if (userAnswer === correctAnswer) {
+                button.classList.add('correct');
+            } else {
+                button.classList.add('incorrect');
+            }
+        }
+
+        function handleIntersection(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const currentSlideId = entry.target.id;
+                    navDots.forEach(dot => {
+                        dot.classList.remove('active');
+                        if (dot.getAttribute('href') === `#${currentSlideId}`) {
+                            dot.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        // --- SETUP AND CLEANUP ---
+        function setup() {
+            // Query for all elements
+            draggables = document.querySelectorAll('.draggable');
+            dropZones = document.querySelectorAll('.drop-zone');
+            sections = document.querySelectorAll('.slide');
+            navDots = document.querySelectorAll('.nav-dots a');
+            checkGapsBtn = document.getElementById('check-gaps-btn');
+            gapInputs = document.querySelectorAll('#slide-8 input[type="text"]');
+            checkInterviewBtn = document.getElementById('check-interview-btn');
+            interviewInputs = document.querySelectorAll('#slide-9 input[type="text"]');
+            tfButtons = document.querySelectorAll('.tf-btn');
+
+            // Setup Intersection Observer
+            const observerOptions = {
+                root: document.querySelector('.container-snap'),
+                rootMargin: '0px',
+                threshold: 0.6
+            };
+            observer = new IntersectionObserver(handleIntersection, observerOptions);
+            sections.forEach(section => observer.observe(section));
+
+            // Setup Drag and Drop Listeners
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', handleDragStart);
+                draggable.addEventListener('dragend', handleDragEnd);
+            });
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('dragleave', handleDragLeave);
+                zone.addEventListener('drop', handleDrop);
+            });
+
+            // Setup Button Click Listeners
+            if (checkGapsBtn) checkGapsBtn.addEventListener('click', handleCheckGaps);
+            if (checkInterviewBtn) checkInterviewBtn.addEventListener('click', handleCheckInterview);
+            tfButtons.forEach(button => button.addEventListener('click', handleTrueFalseClick));
+            
+            // Add cleanup listener for when the user leaves the page
+            window.addEventListener('beforeunload', cleanup);
+        }
+
+        function cleanup() {
+            // This function is called when the user navigates away.
+            // It removes all event listeners and nullifies variables to prevent memory leaks.
+            
+            // Remove Drag and Drop Listeners
+            draggables.forEach(draggable => {
+                draggable.removeEventListener('dragstart', handleDragStart);
+                draggable.removeEventListener('dragend', handleDragEnd);
+            });
+            dropZones.forEach(zone => {
+                zone.removeEventListener('dragover', handleDragOver);
+                zone.removeEventListener('dragleave', handleDragLeave);
+                zone.removeEventListener('drop', handleDrop);
+            });
+
+            // Remove Button Click Listeners
+            if (checkGapsBtn) checkGapsBtn.removeEventListener('click', handleCheckGaps);
+            if (checkInterviewBtn) checkInterviewBtn.removeEventListener('click', handleCheckInterview);
+            tfButtons.forEach(button => button.removeEventListener('click', handleTrueFalseClick));
+
+
+            // Disconnect the observer
+            if (observer) observer.disconnect();
+
+            // Nullify variables
+            draggedItem = null;
+            observer = null;
+            draggables = null;
+            dropZones = null;
+            sections = null;
+            navDots = null;
+            checkGapsBtn = null;
+            gapInputs = null;
+            checkInterviewBtn = null;
+            interviewInputs = null;
+            tfButtons = null;
+            
+            // Note: There are no requestAnimationFrame loops in this script,
+            // but if there were, you would call cancelAnimationFrame() here.
+
+            window.removeEventListener('beforeunload', cleanup);
+        }
+
+        // --- INITIALIZE THE SCRIPT ---
+        setup();
+    });
+    </script>
+</body>
+</html>
