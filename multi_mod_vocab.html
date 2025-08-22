@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business English Study App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff; /* Light sky blue background */
+        }
+        /* --- General Transitions --- */
+        .app-view {
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* --- Flashcard Styles --- */
+        .scene {
+            perspective: 1000px;
+        }
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .card.is-flipped {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-face-front {
+            background-color: white;
+            color: #1f2937;
+        }
+        .card-face-back {
+            background-color: #4f46e5;
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        /* --- Quiz Styles --- */
+        .quiz-option {
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+        .quiz-option.correct {
+            background-color: #22c55e !important; /* Green-500 */
+            color: white !important;
+            border-color: #16a34a !important;
+        }
+        .quiz-option.incorrect {
+            background-color: #ef4444 !important; /* Red-500 */
+            color: white !important;
+            border-color: #dc2626 !important;
+        }
+        .quiz-option:disabled {
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <!-- Unit Selection View -->
+    <div id="unit-selection-view" class="app-view w-full max-w-lg mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Select a Unit to Study</h1>
+            <p class="text-gray-600 mt-2">Choose a module from the dropdown below.</p>
+        </header>
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 bg-white p-8 rounded-xl shadow-lg">
+            <select id="unit-select" class="block w-full sm:w-auto flex-grow p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg">
+                <!-- Options will be dynamically inserted here -->
+            </select>
+            <button id="start-study-btn" class="w-full sm:w-auto bg-indigo-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 transition-colors duration-200 text-lg">Start</button>
+        </div>
+    </div>
+
+    <!-- Flashcard View -->
+    <div id="flashcard-view" class="app-view w-full max-w-2xl mx-auto hidden">
+        <header class="text-center mb-8 relative">
+             <button id="back-to-units-flashcard" class="absolute left-0 top-1/2 -translate-y-1/2 text-sm bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300">&larr; All Units</button>
+            <h1 id="flashcard-title" class="text-3xl md:text-4xl font-bold text-gray-800">Study Flashcards</h1>
+        </header>
+
+        <div class="scene h-80 w-full">
+            <div id="flashcard" class="card">
+                <div class="card-face card-face-front"><p class="text-gray-500 text-sm mb-2">Word</p><h2 id="card-word" class="text-3xl md:text-4xl font-bold text-center"></h2></div>
+                <div class="card-face card-face-back"><p class="text-indigo-200 text-sm mb-2">Definition</p><p id="card-definition" class="text-lg md:text-xl text-center"></p></div>
+            </div>
+        </div>
+
+        <div id="flashcard-progress" class="text-center text-gray-500 my-4 font-medium"></div>
+
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-3 mt-4 w-full">
+            <button id="shuffle-btn" class="w-full sm:w-auto bg-sky-200 text-sky-800 font-semibold py-3 px-6 rounded-lg shadow-sm hover:bg-sky-300">Shuffle Deck</button>
+            <button id="flip-btn" class="w-full sm:w-auto bg-indigo-600 text-white font-semibold py-3 px-10 rounded-lg shadow-md hover:bg-indigo-700">Flip</button>
+        </div>
+        
+        <div class="flex justify-between items-center mt-6">
+            <button id="prev-btn" class="bg-sky-200 text-sky-800 font-bold py-3 px-6 rounded-lg hover:bg-sky-300">&larr; Previous</button>
+            <button id="go-to-quiz-btn" class="bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600">Take the Quiz &rarr;</button>
+            <button id="next-btn" class="bg-sky-200 text-sky-800 font-bold py-3 px-6 rounded-lg hover:bg-sky-300">Next &rarr;</button>
+        </div>
+    </div>
+
+    <!-- Quiz View -->
+    <div id="quiz-view" class="app-view w-full max-w-2xl mx-auto hidden">
+        <div id="quiz-container" class="w-full bg-white p-6 sm:p-8 rounded-xl shadow-lg">
+            <header class="text-center mb-6 relative">
+                <button id="go-to-flashcards-btn" class="absolute left-0 top-1/2 -translate-y-1/2 text-sm bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300">&larr; Study</button>
+                <h1 id="quiz-title" class="text-2xl md:text-3xl font-bold text-gray-800">Vocabulary Quiz</h1>
+                <p id="progress-text" class="text-gray-600 mt-2"></p>
+            </header>
+            <div class="bg-gray-50 p-6 rounded-lg mb-6"><p class="text-sm text-gray-500 mb-2">Definition:</p><p id="question-text" class="text-lg text-gray-900"></p></div>
+            <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+            <div class="mt-6 text-center"><p id="feedback-text" class="h-6 text-lg font-medium">&nbsp;</p><button id="quiz-next-btn" class="mt-2 w-full sm:w-auto bg-indigo-600 text-white font-semibold py-3 px-10 rounded-lg shadow-md hover:bg-indigo-700 hidden">Next Question</button></div>
+        </div>
+        <div id="results-container" class="w-full bg-white p-8 rounded-xl shadow-lg text-center hidden">
+            <h1 class="text-3xl font-bold text-gray-800">Quiz Complete!</h1>
+            <p class="text-lg text-gray-600 mt-4">Your final score is:</p>
+            <p id="final-score" class="text-5xl font-bold text-indigo-600 my-4"></p>
+            <div class="flex justify-center gap-4 mt-6">
+                 <button id="go-to-flashcards-btn-results" class="bg-sky-500 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-sky-600">&larr; Study More</button>
+                <button id="restart-btn" class="bg-green-500 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-green-600">Restart Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- GLOBAL STATE & ELEMENTS ---
+        let cardsByUnit = {};
+        let allUnits = [];
+        let selectedUnit = null;
+        let currentDeck = [];
+
+        const unitSelectionView = document.getElementById('unit-selection-view');
+        const flashcardView = document.getElementById('flashcard-view');
+        const quizView = document.getElementById('quiz-view');
+
+        // --- NAVIGATION ---
+        function showUnitSelectionView() {
+            quizView.classList.add('hidden');
+            flashcardView.classList.add('hidden');
+            unitSelectionView.classList.remove('hidden');
+        }
+
+        function showFlashcardView() {
+            unitSelectionView.classList.add('hidden');
+            quizView.classList.add('hidden');
+            flashcardView.classList.remove('hidden');
+            startFlashcards();
+        }
+
+        function showQuizView() {
+            flashcardView.classList.add('hidden');
+            quizView.classList.remove('hidden');
+            startQuiz();
+        }
+        
+        document.getElementById('go-to-quiz-btn').addEventListener('click', showQuizView);
+        document.getElementById('go-to-flashcards-btn').addEventListener('click', showFlashcardView);
+        document.getElementById('go-to-flashcards-btn-results').addEventListener('click', showFlashcardView);
+        document.getElementById('back-to-units-flashcard').addEventListener('click', showUnitSelectionView);
+        document.getElementById('start-study-btn').addEventListener('click', () => {
+            const unitSelect = document.getElementById('unit-select');
+            selectedUnit = unitSelect.value;
+            if (selectedUnit) {
+                currentDeck = cardsByUnit[selectedUnit];
+                showFlashcardView();
+            }
+        });
+
+
+        // --- DATA PARSING & INITIALIZATION ---
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            const headers = lines[0].split(',').map(h => h.trim());
+            const unitIndex = headers.indexOf('Unit');
+            const wordIndex = headers.indexOf('Word');
+            const definitionIndex = headers.indexOf('Definition');
+            
+            if (unitIndex === -1 || wordIndex === -1 || definitionIndex === -1) return;
+
+            for (let i = 1; i < lines.length; i++) {
+                if (lines[i].trim() === '') continue;
+                const values = lines[i].match(/(".*?"|[^",\r\n]+)(?=\s*,|\s*$)/g) || [];
+                if (values.length > Math.max(wordIndex, definitionIndex, unitIndex)) {
+                    const unit = values[unitIndex].trim();
+                    const word = (values[wordIndex] || '').replace(/"/g, '').trim();
+                    const definition = (values[definitionIndex] || '').replace(/"/g, '').trim();
+                    
+                    if (unit && word && definition) {
+                        if (!cardsByUnit[unit]) {
+                            cardsByUnit[unit] = [];
+                        }
+                        cardsByUnit[unit].push({ word, definition });
+                    }
+                }
+            }
+            allUnits = Object.keys(cardsByUnit).sort((a, b) => {
+                const numA = parseInt(a.replace('Unit ', ''));
+                const numB = parseInt(b.replace('Unit ', ''));
+                return numA - numB;
+            });
+        }
+
+        function populateUnitSelection() {
+            const unitSelect = document.getElementById('unit-select');
+            unitSelect.innerHTML = '';
+            allUnits.forEach(unit => {
+                const option = document.createElement('option');
+                option.value = unit;
+                option.textContent = unit;
+                unitSelect.appendChild(option);
+            });
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        // --- FLASHCARD LOGIC ---
+        const flashcard = document.getElementById('flashcard');
+        const cardWord = document.getElementById('card-word');
+        const cardDefinition = document.getElementById('card-definition');
+        const flipBtn = document.getElementById('flip-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const shuffleBtn = document.getElementById('shuffle-btn');
+        const flashcardProgress = document.getElementById('flashcard-progress');
+        const flashcardTitle = document.getElementById('flashcard-title');
+        
+        let flash_currentIndex = 0;
+        let flash_isFlipped = false;
+
+        function startFlashcards() {
+            flashcardTitle.textContent = `Study Flashcards - ${selectedUnit}`;
+            flash_currentIndex = 0;
+            displayCard();
+        }
+
+        function displayCard() {
+            if (currentDeck.length === 0) return;
+            const card = currentDeck[flash_currentIndex];
+            cardWord.textContent = card.word;
+            cardDefinition.textContent = card.definition;
+            flashcardProgress.textContent = `Card ${flash_currentIndex + 1} / ${currentDeck.length}`;
+            if (flash_isFlipped) {
+                flashcard.classList.remove('is-flipped');
+                flash_isFlipped = false;
+            }
+        }
+
+        flipBtn.addEventListener('click', () => {
+            flash_isFlipped = !flash_isFlipped;
+            flashcard.classList.toggle('is-flipped');
+        });
+        nextBtn.addEventListener('click', () => {
+            if (currentDeck.length === 0) return;
+            flash_currentIndex = (flash_currentIndex + 1) % currentDeck.length;
+            displayCard();
+        });
+        prevBtn.addEventListener('click', () => {
+            if (currentDeck.length === 0) return;
+            flash_currentIndex = (flash_currentIndex - 1 + currentDeck.length) % currentDeck.length;
+            displayCard();
+        });
+        shuffleBtn.addEventListener('click', () => {
+            shuffleArray(currentDeck);
+            flash_currentIndex = 0;
+            displayCard();
+        });
+
+        // --- QUIZ LOGIC ---
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results-container');
+        const quizTitle = document.getElementById('quiz-title');
+        const progressText = document.getElementById('progress-text');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackText = document.getElementById('feedback-text');
+        const quizNextBtn = document.getElementById('quiz-next-btn');
+        const finalScore = document.getElementById('final-score');
+        const restartBtn = document.getElementById('restart-btn');
+
+        let quizQuestions = [];
+        let quiz_currentIndex = 0;
+        let quiz_score = 0;
+
+        function startQuiz() {
+            // This function restores the quiz HTML if it was replaced by an error message.
+            const restoreQuizHTML = () => {
+                const quizViewDiv = document.getElementById('quiz-view');
+                if (!document.getElementById('quiz-container')) {
+                    quizViewDiv.innerHTML = `<div id="quiz-container" class="w-full bg-white p-6 sm:p-8 rounded-xl shadow-lg"><header class="text-center mb-6 relative"><button id="go-to-flashcards-btn" class="absolute left-0 top-1/2 -translate-y-1/2 text-sm bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300">&larr; Study</button><h1 id="quiz-title" class="text-2xl md:text-3xl font-bold text-gray-800">Vocabulary Quiz</h1><p id="progress-text" class="text-gray-600 mt-2"></p></header><div class="bg-gray-50 p-6 rounded-lg mb-6"><p class="text-sm text-gray-500 mb-2">Definition:</p><p id="question-text" class="text-lg text-gray-900"></p></div><div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div><div class="mt-6 text-center"><p id="feedback-text" class="h-6 text-lg font-medium">&nbsp;</p><button id="quiz-next-btn" class="mt-2 w-full sm:w-auto bg-indigo-600 text-white font-semibold py-3 px-10 rounded-lg shadow-md hover:bg-indigo-700 hidden">Next Question</button></div></div><div id="results-container" class="w-full bg-white p-8 rounded-xl shadow-lg text-center hidden"><h1 class="text-3xl font-bold text-gray-800">Quiz Complete!</h1><p class="text-lg text-gray-600 mt-4">Your final score is:</p><p id="final-score" class="text-5xl font-bold text-indigo-600 my-4"></p><div class="flex justify-center gap-4 mt-6"><button id="go-to-flashcards-btn-results" class="bg-sky-500 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-sky-600">&larr; Study More</button><button id="restart-btn" class="bg-green-500 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-green-600">Restart Quiz</button></div></div>`;
+                    // Re-add event listeners for the newly created elements
+                    document.getElementById('go-to-flashcards-btn').addEventListener('click', showFlashcardView);
+                    document.getElementById('go-to-flashcards-btn-results').addEventListener('click', showFlashcardView);
+                    document.getElementById('restart-btn').addEventListener('click', startQuiz);
+                    document.getElementById('quiz-next-btn').addEventListener('click', () => { quiz_currentIndex++; displayQuestion(); });
+                }
+            };
+            restoreQuizHTML();
+            
+            if (currentDeck.length < 4) {
+                quizView.innerHTML = `<div class="text-center p-8 bg-white rounded-lg shadow-lg"><h1 class="text-2xl font-bold text-red-600">Quiz Error</h1><p class="mt-2 text-gray-700">Not enough words in this unit to create a quiz. You need at least 4.</p><button onclick="showFlashcardView()" class="mt-4 bg-sky-500 text-white font-semibold py-2 px-6 rounded-lg">&larr; Back to Study</button></div>`;
+                return;
+            }
+            
+            document.getElementById('quiz-title').textContent = `Vocabulary Quiz - ${selectedUnit}`;
+            quizQuestions = [...currentDeck];
+            shuffleArray(quizQuestions);
+            quiz_currentIndex = 0;
+            quiz_score = 0;
+            document.getElementById('results-container').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const optionsContainer = document.getElementById('options-container');
+            const feedbackText = document.getElementById('feedback-text');
+            const quizNextBtn = document.getElementById('quiz-next-btn');
+            
+            optionsContainer.innerHTML = '';
+            feedbackText.innerHTML = '&nbsp;';
+            quizNextBtn.classList.add('hidden');
+
+            if (quiz_currentIndex >= quizQuestions.length) {
+                showResults();
+                return;
+            }
+
+            document.getElementById('progress-text').textContent = `Question ${quiz_currentIndex + 1} of ${quizQuestions.length}`;
+            const question = quizQuestions[quiz_currentIndex];
+            document.getElementById('question-text').textContent = question.definition;
+
+            const correctAnswer = question.word;
+            const incorrectAnswers = currentDeck.filter(card => card.word !== correctAnswer).map(card => card.word);
+            shuffleArray(incorrectAnswers);
+            const options = [correctAnswer, ...incorrectAnswers.slice(0, 3)];
+            shuffleArray(options);
+
+            options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.className = 'quiz-option w-full bg-white border-2 border-sky-200 text-sky-800 font-semibold p-4 rounded-lg hover:bg-sky-100 hover:border-sky-400';
+                button.onclick = () => checkAnswer(option, correctAnswer);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedOption, correctAnswer) {
+            const optionButtons = document.getElementById('options-container').querySelectorAll('.quiz-option');
+            optionButtons.forEach(btn => {
+                btn.disabled = true;
+                if (btn.textContent === correctAnswer) btn.classList.add('correct');
+                else if (btn.textContent === selectedOption) btn.classList.add('incorrect');
+            });
+
+            if (selectedOption === correctAnswer) {
+                quiz_score++;
+                document.getElementById('feedback-text').textContent = 'Correct!';
+                document.getElementById('feedback-text').className = 'h-6 text-lg font-medium text-green-600';
+            } else {
+                document.getElementById('feedback-text').textContent = 'Incorrect!';
+                document.getElementById('feedback-text').className = 'h-6 text-lg font-medium text-red-600';
+            }
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('results-container').classList.remove('hidden');
+            document.getElementById('final-score').textContent = `${quiz_score} / ${quizQuestions.length}`;
+        }
+
+        // --- INITIAL LOAD ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const fullCsvData = `Unit,Word,Comment,Definition,Pronunciation,Page
+Unit 1,bonus,noun,"an amount of money given to an employee in addition to their salary as a reward for working well",ˈbəʊ.nəs,8.0
+Unit 1,committed,adjective,"loyal and willing to give your time and energy to something that you believe in",kəˈmɪt.ɪd ,11.0
+Unit 1,computer literate R,adjective phrase,"able to use computers effectively",kəmˈpjuː.tə ˈlɪt.ər.ət,10.0
+Unit 1,consistent,adjective,"always behaving or happening in a similar, especially positive, way",kənˈsɪs.tənt,8.0
+Unit 1,core skill R,noun phrase," a particular ability that you develop through training and experience and that is necessary to do a particular job",kɔː skɪl,10.0
+Unit 1,corporate culture,noun phrase,"the beliefs and ideas that a company has and the way in which they affect how it does business and how its employees behave",ˈkɔː.pər.ət ˈkʌl.tʃə,10.0
+Unit 1,dedicated,adjective,"used only for one particular purpose or job",ˈded.ɪ.keɪ.tɪd,8.0
+Unit 1,diverse,adjective,"varied or different",daɪˈvɜːs,8.0
+Unit 1,do overtime,verb phrase,"to work after the usual time needed or expected in a job",duː ˈəʊ.və.taɪm,11.0
+Unit 1,dynamic,adjective,"continuously changing or developing",daɪˈnæm.ɪk,8.0
+Unit 1,end-of-year bonus,noun phrase,"extra money paid to employees at the end of the year",end əv jɪə ˈbəʊ.nəs,11.0
+Unit 1,enthusiastic,adjective,"feeling or showing a lot of excitement and interest about somebody/something",ɪnˌθjuː.ziˈæs.tɪk,8.0
+Unit 1,expand,verb,"to become greater in size, number or importance",ɪkˈspænd,8.0
+Unit 1,fulfilling R,adjective,"making you feel happy and satisfied",fʊlˈfɪl.ɪŋ,10.0
+Unit 1,hands-on,adjective,"obtained by doing something, not by reading about it or watching it being done",hændz ɒn,10.0
+Unit 1,head up,phrasal verb,"to be in charge of a team, department, organisation, etc.",hed ʌp,8.0
+Unit 1,in-house,adjective,done, working or happening inside a company or organisation,ɪn haʊs,8.0
+Unit 1,motivating R,adjective,"making you want to do something, especially something that involves hard work and effort",ˈməʊ.tɪ.veɪ.tɪŋ,10.0
+Unit 1,parent company,noun phrase,"a company that owns more than half the shares of another company",ˈpeə.rənt ˈkʌm.pə.ni,8.0
+Unit 1,performance-related bonus,noun phrase,"extra money paid to an employee as a reward for working well",pəˈfɔː.məns rɪˈleɪ.tɪd ˈbəʊ.nəs,11.0
+Unit 1,personnel,noun,"the people who are employed by a company or organisation",ˌpɜː.sənˈel,8.0
+Unit 1,profit,noun,"money that you make in business or by selling things, especially after paying the costs involved",ˈprɒf.ɪt,8.0
+Unit 1,prospects,noun,"the possibility that something will happen",ˈprɒs.pekts,11.0
+Unit 1,provide,verb,"to give something to somebody or make it available for them to use",prəˈvaɪd,8.0
+Unit 1,reports,noun,"people who are employed by a company or organisation",rɪˈpɔːts,8.0
+Unit 1,revenue,noun,"the money that a government receives from taxes or that an organisation, etc. receives from its business",ˈrev.ən.juː,8.0
+Unit 1,rewarding R,adjective,"worth doing; that makes you happy because you think it is useful or important",rɪˈwɔː.dɪŋ,10.0
+Unit 1,staff discount,noun phrase,"an amount of money that is taken off the usual cost of something for employees",stɑːf ˈdɪs.kaʊnt,11.0
+Unit 1,take on,phrasal verb,"to decide to do something",teɪk ɒn,8.0
+Unit 1,workforce,noun,"all the people who work for a particular company, organisation, etc.",ˈwɜːk.fɔːs,8.0
+Unit 2,downsize,verb,"to reduce the number of people who work in a company, business, etc. in order to reduce costs",ˈdaʊn.saɪz,12.0
+Unit 2,decentralise,verb,"to give some of the power of a central government, organisation, etc. to smaller parts or organisations around the country",ˌdiːˈsen.trəl.aɪz,12.0
+Unit 2,deregulate,verb,"to remove national or local government controls or rules from a business or other activity",ˌdiːˈreɡ.jə.leɪt,12.0
+Unit 2,headquarters,noun,"the main office or centre of control of a company, organisation, etc.",ˌhedˈkwɔː.təz,12.0
+Unit 2,outsource,verb,"to arrange for somebody outside a company to do work or provide goods for that company",ˈaʊt.sɔːs,14.0
+Unit 2,streamline,verb,"to make a system, an organisation, etc. work better, especially in a way that saves money",ˈstriːm.laɪn,12.0
+Unit 2,headroom,noun,"the amount by which a figure could increase before it reaches a limit",ˈhed.ruːm,14.0
+Unit 2,knowledge base,noun phrase,"all the facts, information and skills that an organisation or a person has",ˈnɒl.ɪdʒ beɪs,14.0
+Unit 2,logistics,noun,"the practical organisation of something",ləˈdʒɪs.tɪks,18.0
+Unit 2,offshoring,noun,"the practice of basing a business or part of a business in a different country, usually because this involves paying less tax or other costs",ˌɒfˈʃɔː.rɪŋ,14.0
+Unit 2,rationalisation,noun,"the process of making a company, way of working, etc. more effective, usually by combining or stopping particular activities, or by getting rid of employees",ˌræʃ.ən.əl.aɪˈzeɪ.ʃən,12.0
+Unit 2,redundancy,noun,"the situation when somebody has to leave their job because there is no more work available for them",rɪˈdʌn.dən.si,12.0
+Unit 2,relocate,verb,"to move or to move somebody/something to a new place to work or operate",ˌriː.ləʊˈkeɪt,12.0
+Unit 2,restructuring,noun,"the act of organising a company, business, or system in a new way to make it operate more effectively",ˌriːˈstrʌk.tʃə.rɪŋ,12.0
+Unit 2,update,verb,"to give somebody the most recent information",ʌpˈdeɪt,12.0
+Unit 2,upgrade,verb,"to get something that is newer and better",ʌpˈɡreɪd,12.0
+Unit 2,reassess,verb,"to think again about something to decide if you need to change your opinion of it",ˌriː.əˈses,12.0
+Unit 2,redevelop,verb,"to change an area of a town by replacing old buildings, roads, etc. with new ones",ˌriː.dɪˈvel.əp,12.0
+Unit 2,relaunch,verb,"to start something again in a new way",ˌriːˈlɔːntʃ,12.0
+Unit 2,regenerate,verb,"to make something develop and grow strong again",rɪˈdʒen.ə.reɪt,12.0
+Unit 2,reorganise,verb,"to change the way in which something is organised",ˌriːˈɔː.ɡən.aɪz,12.0
+Unit 3,customs,noun,"the place at a port, airport or border where officials check goods or people coming into a country",ˈkʌs.təmz,18.0
+Unit 3,warehouse,noun,"a building where large quantities of goods are stored, especially before they are sent to shops/stores to be sold",ˈweə.haʊs,18.0
+Unit 3,logistics,noun,"the practical organisation of something",ləˈdʒɪs.tɪks,18.0
+Unit 3,procurement,noun,"the process of obtaining supplies of something, especially for a government or an organisation",prəˈkjʊə.mənt,18.0
+Unit 3,supplier,noun,"a person or company that provides goods",səˈplaɪ.ər,18.0
+Unit 3,supply chain,noun,"the series of processes involved in the production and supply of goods, from when they are first made, grown, etc. until they are bought or used",səˈplaɪ tʃeɪn,18.0
+Unit 3,bar code,noun,"a pattern of lines of different thicknesses on a product that a computer can read. It contains information such as the price.",ˈbɑː kəʊd,18.0
+Unit 3,distribution centre,noun,"a place where goods are stored and from which they are sent to shops/stores",ˌdɪs.trɪˈbjuː.ʃən ˈsen.tər,18.0
+Unit 3,inventory,noun,"a written list of all the objects, furniture, etc. in a particular building",ˈɪn.vən.tɔːr.i,18.0
+Unit 3,lead time,noun phrase,"the time between starting and completing a production process",ˈliːd ˌtaɪm,18.0
+Unit 3,purchase,verb,"to buy something",ˈpɜː.tʃəs,18.0
+Unit 3,retailer,noun,"a person or business that sells goods to the public",ˈriː.teɪ.lər,18.0
+Unit 3,shipment,noun,"the process of sending goods from one place to another",ˈʃɪp.mənt,18.0
+Unit 4,brief,noun,"a set of instructions or information",briːf,20.0
+Unit 4,deadline,noun,"a point in time by which something must be done",ˈded.laɪn,20.0
+Unit 4,involve,verb,"to include or affect someone or something",ɪnˈvɒlv,20.0
+Unit 4,milestone,noun,"a very important stage or event in the development of something",ˈmaɪl.stəʊn,20.0
+Unit 4,objective,noun,"something that you are trying to achieve",əbˈdʒek.tɪv,20.0
+Unit 4,schedule,noun,"a plan that lists all the work that you have to do and when you must do each thing",ˈʃedʒ.uːl,20.0
+Unit 4,scope,noun,"the range of things that a subject, an organisation, an activity, etc. deals with",skəʊp,20.0
+Unit 4,track,verb,"to find somebody/something by following marks, signs or information",træk,20.0
+Unit 4,budget,noun,"the money that is available to a person or an organisation and a plan of how it will be spent over a period of time",ˈbʌdʒ.ɪt,20.0
+Unit 4,constraint,noun,"something that limits or restricts something, or your freedom to do something",kənˈstreɪnt,20.0
+Unit 4,kick off,phrasal verb,"to start",kɪk ɒf,20.0
+Unit 4,on track,adjective phrase,"making progress and likely to succeed",ɒn træk,20.0
+Unit 4,run into,phrasal verb,"to experience difficulties, etc.",rʌn ˈɪn.tuː,20.0
+Unit 4,sign off,phrasal verb,"to give your formal approval to something, by signing your name",saɪn ɒf,20.0
+Unit 4,stay on track,verb phrase,"to continue to do the right thing in order to achieve a particular result",steɪ ɒn træk,20.0
+Unit 4,stay within budget,verb phrase,"to spend only the amount of money that has been given",steɪ wɪðˈɪn ˈbʌdʒ.ɪt,20.0
+Unit 4,tip,noun,"a piece of advice",tɪp,20.0
+Unit 4,trade-off,noun,"the act of balancing two things that are opposed to each other",ˈtreɪd.ɒf,20.0
+Unit 4,unforeseen,adjective,"that you did not expect to happen",ˌʌn.fɔːˈsiːn,20.0
+`;
+            parseCSV(fullCsvData);
+            populateUnitSelection();
+            showUnitSelectionView();
+        });
+    </script>
+</body>
+</html>
