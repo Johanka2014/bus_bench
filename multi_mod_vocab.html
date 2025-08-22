@@ -9,7 +9,8 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f9ff; /* Light sky blue background */
+            background-color: #f0f9ff; /* Fallback color */
+            background-image: linear-gradient(to bottom right, #f0f9ff, #e0e7ff); /* Gradient effect */
         }
         /* --- General Transitions --- */
         .app-view {
@@ -78,8 +79,8 @@
     <!-- Unit Selection View -->
     <div id="unit-selection-view" class="app-view w-full max-w-lg mx-auto">
         <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Select a Unit to Study</h1>
-            <p class="text-gray-600 mt-2">Choose a module from the dropdown below.</p>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Business Benchmark Upper Intermediate</h1>
+            <p class="text-gray-600 mt-2 text-xl">Vocabulary Practice</p>
         </header>
         <div class="flex flex-col sm:flex-row justify-center items-center gap-4 bg-white p-8 rounded-xl shadow-lg">
             <select id="unit-select" class="block w-full sm:w-auto flex-grow p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-lg">
