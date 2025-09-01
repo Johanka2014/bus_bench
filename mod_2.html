@@ -151,15 +151,82 @@
             color: white;
             border-color: #3b82f6;
         }
-        .tf-btn.correct {
-            background-color: #22c55e;
+        .tf-btn.correct, .odd-one-out-item.correct {
+            background-color: #22c55e !important;
+            color: white !important;
+            border-color: #22c55e !important;
+        }
+        .tf-btn.incorrect, .odd-one-out-item.incorrect {
+            background-color: #ef4444 !important;
+            color: white !important;
+            border-color: #ef4444 !important;
+        }
+        .odd-one-out-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        .odd-one-out-item {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .odd-one-out-item:hover {
+            background-color: #f1f5f9;
+        }
+        .drop-zone-inline {
+            display: inline-flex;
+            vertical-align: bottom;
+            border: 2px dashed #9ca3af;
+            border-radius: 0.5rem;
+            min-width: 120px;
+            min-height: 44px;
+            padding: 2px;
+            margin: 0 4px;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255,255,255,0.3);
+        }
+        .drop-zone-inline.over {
+            background-color: #e0f2fe; /* sky-100 */
+        }
+        .drop-zone-inline .word-item {
+            margin: 0 !important; /* Override default margin */
+        }
+        .compound-word-item {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .compound-word-item.selected {
+            background-color: #3b82f6;
             color: white;
+            border-color: #3b82f6;
+        }
+         .user-combination.correct {
+            background-color: #dcfce7;
             border-color: #22c55e;
         }
-        .tf-btn.incorrect {
-            background-color: #ef4444;
-            color: white;
+        .user-combination.incorrect {
+            background-color: #fee2e2;
             border-color: #ef4444;
+            text-decoration: line-through;
+        }
+        .word-order-container {
+            padding: 1rem;
+            border: 2px dashed #9ca3af;
+            border-radius: 0.5rem;
+            min-height: 60px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
     </style>
 </head>
@@ -182,6 +249,14 @@
             <a href="#slide-12" id="dot-12"></a>
             <a href="#slide-13" id="dot-13"></a>
             <a href="#slide-14" id="dot-14"></a>
+            <a href="#slide-15" id="dot-15"></a>
+            <a href="#slide-16" id="dot-16"></a>
+            <a href="#slide-17" id="dot-17"></a>
+            <a href="#slide-18" id="dot-18"></a>
+            <a href="#slide-19" id="dot-19"></a>
+            <a href="#slide-20" id="dot-20"></a>
+            <a href="#slide-21" id="dot-21"></a>
+            <a href="#slide-22" id="dot-22"></a>
         </nav>
 
         <!-- Slide 1: Welcome -->
@@ -580,22 +655,27 @@
 
         <!-- Slide 13: Tesco Intro -->
         <section id="slide-13" class="slide bg-gradient-to-br from-fuchsia-200 to-purple-200">
-             <a href="https://www.tescoplc.com/about/our-history" target="_blank" rel="noopener noreferrer" class="block w-full max-w-2xl">
-                <div class="activity-card">
-                    <img src="https://johanka2014.github.io/bus_bench/tesco.png" alt="Tesco company information" class="rounded-lg shadow-lg w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/800x400/d1d5db/ffffff?text=Image+Not+Found';">
+            <div class="activity-card">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch h-full">
+                    <a href="https://www.tescoplc.com/about/our-history" target="_blank" rel="noopener noreferrer" class="block h-full">
+                        <img src="https://johanka2014.github.io/bus_bench/tesco.png" alt="Tesco company information" class="rounded-lg shadow-lg w-full h-full object-contain" onerror="this.onerror=null;this.src='https://placehold.co/600x400/d1d5db/ffffff?text=Image+Not+Found';">
+                    </a>
+                    <div class="h-full">
+                         <img src="https://johanka2014.github.io/bus_bench/jack-cohen.png" alt="Jack Cohen, founder of Tesco" class="rounded-lg shadow-lg w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/d1d5db/ffffff?text=Image+Not+Found';">
+                    </div>
                 </div>
-            </a>
+            </div>
             <a href="#slide-14" class="arrow text-purple-800"><i class="fas fa-chevron-down"></i></a>
         </section>
+
 
         <!-- Slide 14: HR Manager Vocabulary -->
         <section id="slide-14" class="slide bg-gradient-to-br from-purple-200 to-indigo-200">
             <div class="activity-card">
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 9: A Human Resources Manager</h2>
                 <p class="text-slate-600 mb-4">Listen to Christina Bunt, a human resources manager for Tesco, talking about her job. Then match these words and phrases with their definitions.</p>
-                <!-- Placeholder for audio. If you have an audio file, replace the src="" with the URL. -->
                 <audio controls class="w-full max-w-md mx-auto mb-6">
-                    <source src="" type="audio/mpeg">
+                    <source src="https://johanka2014.github.io/bus_bench/04_Unit_2_pg_17.mp3" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>
                 <div class="word-bank mb-8">
@@ -619,8 +699,343 @@
                     <div class="drop-zone p-3 rounded-lg" data-answer="challenging"><span class="description-text">h. difficult and demanding</span></div>
                 </div>
             </div>
-            <a href="#slide-1" class="arrow text-indigo-800"><i class="fas fa-chevron-up"></i></a>
+            <a href="#slide-15" class="arrow text-indigo-800"><i class="fas fa-chevron-down"></i></a>
         </section>
+
+        <!-- Slide 15: Talking Point -->
+        <section id="slide-15" class="slide bg-gradient-to-br from-indigo-200 to-violet-200">
+            <div class="activity-card">
+                 <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="md:col-span-1">
+                        <img src="https://johanka2014.github.io/bus_bench/agreement.png" alt="Two people shaking hands in agreement" class="rounded-lg shadow-lg w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/600x400/818cf8/ffffff?text=Image+Not+Found';">
+                    </div>
+                    <div class="md:col-span-1 text-left">
+                        <h2 class="text-3xl font-bold text-slate-800 mb-4">Human Resources Talking Point</h2>
+                        <p class="text-slate-700 mb-4 font-semibold">1. Work in small groups. Discuss whether you agree with these opinions.</p>
+                        <ul class="list-disc list-inside space-y-3 text-slate-700 mb-6">
+                            <li>If you employ the right people, you don't have a problem managing them once they're in the workplace.</li>
+                            <li>If you try and teach people to be polite and to smile, it doesn't necessarily work.</li>
+                            <li>First impressions are really important ... be totally natural and don't try to put yourself forward as something you're not.</li>
+                        </ul>
+                        <p class="text-slate-700 font-semibold">2. What other interview advice would you give?</p>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-16" class="arrow text-violet-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 16: Odd One Out -->
+        <section id="slide-16" class="slide bg-gradient-to-br from-violet-200 to-purple-300">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 10: Vocabulary</h2>
+                <p class="text-slate-600 mb-6">Click the odd one out in each list. Check in the Word list if necessary.</p>
+                <div class="space-y-4 text-left text-lg" id="odd-one-out-container">
+                    <div class="p-4 bg-white rounded-lg odd-one-out-row" data-answer="IT">
+                        <span class="odd-one-out-item">CEO</span>
+                        <span class="odd-one-out-item">PA</span>
+                        <span class="odd-one-out-item">CIO</span>
+                        <span class="odd-one-out-item">IT</span>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg odd-one-out-row" data-answer="place">
+                        <span class="odd-one-out-item">post</span>
+                        <span class="odd-one-out-item">place</span>
+                        <span class="odd-one-out-item">job</span>
+                        <span class="odd-one-out-item">role</span>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg odd-one-out-row" data-answer="local">
+                        <span class="odd-one-out-item">local</span>
+                        <span class="odd-one-out-item">premises</span>
+                        <span class="odd-one-out-item">headquarters</span>
+                        <span class="odd-one-out-item">regional office</span>
+                    </div>
+                     <div class="p-4 bg-white rounded-lg odd-one-out-row" data-answer="client">
+                        <span class="odd-one-out-item">board member</span>
+                        <span class="odd-one-out-item">manager</span>
+                        <span class="odd-one-out-item">client</span>
+                        <span class="odd-one-out-item">director</span>
+                    </div>
+                     <div class="p-4 bg-white rounded-lg odd-one-out-row" data-answer="systems analyst">
+                        <span class="odd-one-out-item">accountant</span>
+                        <span class="odd-one-out-item">systems analyst</span>
+                        <span class="odd-one-out-item">auditor</span>
+                        <span class="odd-one-out-item">financial director</span>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg odd-one-out-row" data-answer="shop-floor worker">
+                        <span class="odd-one-out-item">white-collar worker</span>
+                        <span class="odd-one-out-item">office worker</span>
+                        <span class="odd-one-out-item">administrative officer</span>
+                        <span class="odd-one-out-item">shop-floor worker</span>
+                    </div>
+                     <div class="p-4 bg-white rounded-lg odd-one-out-row" data-answer="company secretary">
+                        <span class="odd-one-out-item">secretary</span>
+                        <span class="odd-one-out-item">personal assistant</span>
+                        <span class="odd-one-out-item">company secretary</span>
+                        <span class="odd-one-out-item">administrative assistant</span>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg odd-one-out-row" data-answer="human resources">
+                        <span class="odd-one-out-item">advertising</span>
+                        <span class="odd-one-out-item">public relations</span>
+                        <span class="odd-one-out-item">human resources</span>
+                        <span class="odd-one-out-item">marketing</span>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-17" class="arrow text-purple-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 17: Fill in the Blanks -->
+        <section id="slide-17" class="slide bg-gradient-to-br from-purple-300 to-pink-300">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 11: Complete the Text</h2>
+                <p class="text-slate-600 mb-6">Drag the words from the box on the right to complete the text.</p>
+                <div class="grid md:grid-cols-3 gap-6 items-start">
+                    <!-- Text with Gaps -->
+                    <div class="md:col-span-2 text-left text-lg leading-relaxed">
+                        <p>
+                            In my company, nearly all work is done in 1&nbsp;<span class="drop-zone-inline" data-answer="teams"></span>, and all our managers are 2&nbsp;<span class="drop-zone-inline" data-answer="team leaders"></span>. I found this quite easy to adapt to, because at Business School, we worked a lot together on 3&nbsp;<span class="drop-zone-inline" data-answer="projects"></span>, and this got me used to working towards goals or 4&nbsp;<span class="drop-zone-inline" data-answer="targets"></span> and meeting 5&nbsp;<span class="drop-zone-inline" data-answer="deadlines"></span>. I work in Research and Development of new products, and we get real satisfaction from taking new products through from the original idea to the 6&nbsp;<span class="drop-zone-inline" data-answer="launch"></span> perhaps one or two years later. I'm a financial manager, so a lot of my work involves ensuring high 7&nbsp;<span class="drop-zone-inline" data-answer="performance"></span> in our projects while they keep within their 8&nbsp;<span class="drop-zone-inline" data-answer="budgets"></span> - and that involves strict cost control.
+                        </p>
+                    </div>
+                    <!-- Word Bank -->
+                    <div class="word-bank flex-col !items-stretch !justify-start !mt-0">
+                        <div draggable="true" class="draggable word-item" data-word="budgets">budgets</div>
+                        <div draggable="true" class="draggable word-item" data-word="deadlines">deadlines</div>
+                        <div draggable="true" class="draggable word-item" data-word="launch">launch</div>
+                        <div draggable="true" class="draggable word-item" data-word="performance">performance</div>
+                        <div draggable="true" class="draggable word-item" data-word="projects">projects</div>
+                        <div draggable="true" class="draggable word-item" data-word="targets">targets</div>
+                        <div draggable="true" class="draggable word-item" data-word="team leaders">team leaders</div>
+                        <div draggable="true" class="draggable word-item" data-word="teams">teams</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-18" class="arrow text-pink-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 18: Compound Nouns -->
+        <section id="slide-18" class="slide bg-gradient-to-br from-pink-300 to-rose-300">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 12: Compound Nouns</h2>
+                <p class="text-slate-600 mb-6">How many compound nouns can you make by combining a word from box A with one from box B? Click a word from each box to combine them, then check your answers.</p>
+                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                    <!-- Box A -->
+                    <div>
+                        <h3 class="font-bold text-center mb-2">Box A</h3>
+                        <div id="boxA" class="flex flex-wrap gap-2 justify-center p-4 bg-slate-100 rounded-lg">
+                            <span class="compound-word-item">finance</span>
+                            <span class="compound-word-item">job</span>
+                            <span class="compound-word-item">team</span>
+                            <span class="compound-word-item">product</span>
+                            <span class="compound-word-item">advertising</span>
+                            <span class="compound-word-item">office</span>
+                            <span class="compound-word-item">sales</span>
+                            <span class="compound-word-item">work</span>
+                        </div>
+                    </div>
+                    <!-- Box B -->
+                    <div>
+                        <h3 class="font-bold text-center mb-2">Box B</h3>
+                        <div id="boxB" class="flex flex-wrap gap-2 justify-center p-4 bg-slate-100 rounded-lg">
+                            <span class="compound-word-item">budget</span>
+                            <span class="compound-word-item">development</span>
+                            <span class="compound-word-item">forecast</span>
+                            <span class="compound-word-item">manager</span>
+                            <span class="compound-word-item">satisfaction</span>
+                            <span class="compound-word-item">work</span>
+                            <span class="compound-word-item">place</span>
+                            <span class="compound-word-item">worker</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- User's answers -->
+                <div class="mt-6 text-left">
+                     <h3 class="font-bold">Your combinations:</h3>
+                     <div id="user-combinations" class="mt-2 p-4 bg-white rounded-lg min-h-[100px] flex flex-wrap gap-2 items-start"></div>
+                </div>
+                <button id="check-compounds-btn" class="mt-6 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
+                <!-- Feedback -->
+                <div id="compound-feedback" class="mt-4 text-left"></div>
+            </div>
+            <a href="#slide-19" class="arrow text-rose-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 19: Grammar - Question Words -->
+        <section id="slide-19" class="slide bg-gradient-to-br from-rose-300 to-orange-300">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 13: Grammar Questions</h2>
+                <p class="text-slate-600 mb-6">Complete these questions with the question words/phrases in the box.</p>
+                 <div class="grid md:grid-cols-3 gap-6 items-start">
+                    <div class="md:col-span-2 text-left text-lg leading-relaxed space-y-3">
+                       <p>1. <span class="drop-zone-inline" data-answer="Who"></span> is your boss? Ms Jones?</p>
+                       <p>2. <span class="drop-zone-inline" data-answer="How long"></span> have you worked for this company?</p>
+                       <p>3. <span class="drop-zone-inline" data-answer="Which"></span> office would you prefer to work in: company headquarters or a regional office?</p>
+                       <p>4. <span class="drop-zone-inline" data-answer="Where"></span> did you go to school - in this country or abroad?</p>
+                       <p>5. <span class="drop-zone-inline" data-answer="How often"></span> does your HR department carry out formal appraisals - every six months, or more often?</p>
+                       <p>6. <span class="drop-zone-inline" data-answer="What"></span> job would you like to be doing in ten years' time?</p>
+                       <p>7. <span class="drop-zone-inline" data-answer="How many"></span> people work in your office?</p>
+                       <p>8. <span class="drop-zone-inline" data-answer="How much"></span> does your boss earn?</p>
+                    </div>
+                     <div class="word-bank flex-col !items-stretch !justify-start !mt-0">
+                        <div draggable="true" class="draggable word-item" data-word="how">how</div>
+                        <div draggable="true" class="draggable word-item" data-word="how long">how long</div>
+                        <div draggable="true" class="draggable word-item" data-word="how many">how many</div>
+                        <div draggable="true" class="draggable word-item" data-word="how much">how much</div>
+                        <div draggable="true" class="draggable word-item" data-word="how often">how often</div>
+                        <div draggable="true" class="draggable word-item" data-word="what">what</div>
+                        <div draggable="true" class="draggable word-item" data-word="when">when</div>
+                        <div draggable="true" class="draggable word-item" data-word="where">where</div>
+                        <div draggable="true" class="draggable word-item" data-word="which">which</div>
+                        <div draggable="true" class="draggable word-item" data-word="who">who</div>
+                        <div draggable="true" class="draggable word-item" data-word="why">why</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-20" class="arrow text-orange-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 20: Grammar - Word Order -->
+        <section id="slide-20" class="slide bg-gradient-to-br from-orange-300 to-yellow-300">
+            <div class="activity-card">
+                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 14: Word Order</h2>
+                 <p class="text-slate-600 mb-6">Put the words into the correct order to form questions by dragging them.</p>
+                 <div class="space-y-4 text-left" id="word-order-container">
+                    <div data-answer="What do you enjoy most about your job?">
+                        <div class="word-order-container">
+                            <span class="draggable word-item" draggable="true">enjoy</span><span class="draggable word-item" draggable="true">job</span><span class="draggable word-item" draggable="true">do</span><span class="draggable word-item" draggable="true">about</span><span class="draggable word-item" draggable="true">What</span><span class="draggable word-item" draggable="true">your</span><span class="draggable word-item" draggable="true">most</span><span class="draggable word-item" draggable="true">you?</span>
+                        </div>
+                    </div>
+                     <div data-answer="Is there anything you dislike about your job?">
+                        <div class="word-order-container">
+                             <span class="draggable word-item" draggable="true">your</span><span class="draggable word-item" draggable="true">there</span><span class="draggable word-item" draggable="true">about</span><span class="draggable word-item" draggable="true">you</span><span class="draggable word-item" draggable="true">job</span><span class="draggable word-item" draggable="true">anything</span><span class="draggable word-item" draggable="true">Is</span><span class="draggable word-item" draggable="true">dislike?</span>
+                        </div>
+                    </div>
+                    <div data-answer="How often do you have to discipline workers?">
+                        <div class="word-order-container">
+                            <span class="draggable word-item" draggable="true">How</span><span class="draggable word-item" draggable="true">discipline</span><span class="draggable word-item" draggable="true">you</span><span class="draggable word-item" draggable="true">to</span><span class="draggable word-item" draggable="true">often</span><span class="draggable word-item" draggable="true">workers</span><span class="draggable word-item" draggable="true">have</span><span class="draggable word-item" draggable="true">do?</span>
+                        </div>
+                    </div>
+                    <div data-answer="How many people are there in your store?">
+                        <div class="word-order-container">
+                            <span class="draggable word-item" draggable="true">many</span><span class="draggable word-item" draggable="true">are</span><span class="draggable word-item" draggable="true">your</span><span class="draggable word-item" draggable="true">people</span><span class="draggable word-item" draggable="true">there</span><span class="draggable word-item" draggable="true">How</span><span class="draggable word-item" draggable="true">store</span><span class="draggable word-item" draggable="true">in?</span>
+                        </div>
+                    </div>
+                    <div data-answer="How did you get into this line of work?">
+                        <div class="word-order-container">
+                           <span class="draggable word-item" draggable="true">work</span><span class="draggable word-item" draggable="true">of</span><span class="draggable word-item" draggable="true">line</span><span class="draggable word-item" draggable="true">this</span><span class="draggable word-item" draggable="true">into</span><span class="draggable word-item" draggable="true">get</span><span class="draggable word-item" draggable="true">you</span><span class="draggable word-item" draggable="true">did</span><span class="draggable word-item" draggable="true">How?</span>
+                        </div>
+                    </div>
+                    <div data-answer="What do you think you will be doing in ten years' time?">
+                        <div class="word-order-container">
+                            <span class="draggable word-item" draggable="true">What</span><span class="draggable word-item" draggable="true">think</span><span class="draggable word-item" draggable="true">years'</span><span class="draggable word-item" draggable="true">you</span><span class="draggable word-item" draggable="true">time</span><span class="draggable word-item" draggable="true">you</span><span class="draggable word-item" draggable="true">in</span><span class="draggable word-item" draggable="true">will</span><span class="draggable word-item" draggable="true">be</span><span class="draggable word-item" draggable="true">do</span><span class="draggable word-item" draggable="true">doing</span><span class="draggable word-item" draggable="true">ten?</span>
+                        </div>
+                    </div>
+                 </div>
+                 <button id="check-word-order-btn" class="mt-6 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
+            </div>
+            <a href="#slide-21" class="arrow text-yellow-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+        
+        <!-- Slide 21: Grammar - Correct the Mistake -->
+        <section id="slide-21" class="slide bg-gradient-to-br from-yellow-300 to-lime-300">
+            <div class="activity-card">
+                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 15: Correct the Mistake</h2>
+                 <p class="text-slate-600 mb-6">Each of these questions has a mistake. Correct them.</p>
+                 <div class="space-y-4 text-left" id="mistake-corrector">
+                    <div data-answer="How long have you worked for this company?">
+                        <p>1. How long you have worked for this company?</p>
+                        <input type="text" class="w-full p-2 border border-slate-300 rounded-md mt-1">
+                    </div>
+                     <div data-answer="When did you leave school?">
+                        <p>2. When you left school?</p>
+                        <input type="text" class="w-full p-2 border border-slate-300 rounded-md mt-1">
+                    </div>
+                    <div data-answer="How much do you earn in your present job?">
+                        <p>3. How much are you earn in your present job?</p>
+                        <input type="text" class="w-full p-2 border border-slate-300 rounded-md mt-1">
+                    </div>
+                     <div data-answer="If we give you the job, when can you start?">
+                        <p>4. If we give you the job, when you can to start?</p>
+                        <input type="text" class="w-full p-2 border border-slate-300 rounded-md mt-1">
+                    </div>
+                    <div data-answer="What did you study at university?">
+                        <p>5. What studied you at university?</p>
+                        <input type="text" class="w-full p-2 border border-slate-300 rounded-md mt-1">
+                    </div>
+                    <div data-answer="How long do you expect to stay with us?">
+                        <p>6. How long you expect to stay with us?</p>
+                        <input type="text" class="w-full p-2 border border-slate-300 rounded-md mt-1">
+                    </div>
+                    <div data-answer="Do you need to speak English in your present job?">
+                        <p>7. Are you need to speak English in your present job?</p>
+                        <input type="text" class="w-full p-2 border border-slate-300 rounded-md mt-1">
+                    </div>
+                    <div data-answer="What do you find most challenging in your job?">
+                        <p>8. What you find most challenging in your job?</p>
+                        <input type="text" class="w-full p-2 border border-slate-300 rounded-md mt-1">
+                    </div>
+                 </div>
+                 <button id="check-mistakes-btn" class="mt-6 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
+            </div>
+             <a href="#slide-22" class="arrow text-lime-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 22: Vocabulary Table -->
+        <section id="slide-22" class="slide bg-gradient-to-br from-lime-300 to-green-300">
+             <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 16: Complete the Table</h2>
+                <p class="text-slate-600 mb-6">Complete the following table with the correct word forms.</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse" id="vocab-table">
+                        <thead>
+                            <tr class="bg-slate-200">
+                                <th class="p-3 border border-slate-300">Verb</th>
+                                <th class="p-3 border border-slate-300">Noun</th>
+                                <th class="p-3 border border-slate-300">Adjective</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="satisfy"></td>
+                                <td class="p-2 border border-slate-300 bg-slate-100">satisfaction</td>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="satisfactory"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border border-slate-300 bg-slate-100">develop</td>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="development"></td>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="developing"></td>
+                            </tr>
+                             <tr>
+                                <td class="p-2 border border-slate-300 bg-slate-100">supervise</td>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="supervision"></td>
+                                <td class="p-2 border border-slate-300 bg-gray-300"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border border-slate-300 bg-slate-100">manage</td>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="management"></td>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="managerial"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border border-slate-300 bg-slate-100">introduce</td>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="introduction"></td>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="introductory"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border border-slate-300 bg-slate-100">recruit</td>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="recruitment"></td>
+                                 <td class="p-2 border border-slate-300 bg-gray-300"></td>
+                            </tr>
+                             <tr>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="challenge"></td>
+                                <td class="p-2 border border-slate-300"><input type="text" class="w-full p-1 bg-transparent" data-answer="challenge"></td>
+                                <td class="p-2 border border-slate-300 bg-slate-100">challenging</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button id="check-vocab-table-btn" class="mt-6 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
+            </div>
+            <a href="#slide-1" class="arrow text-green-800"><i class="fas fa-chevron-up"></i></a>
+        </section>
+
 
     </div>
 
@@ -630,50 +1045,61 @@
         // --- SCOPE-WIDE VARIABLES & STATE ---
         let draggedItem = null;
         let observer = null;
-        let draggables, dropZones, sections, navDots, checkGapsBtn, gapInputs, checkInterviewBtn, interviewInputs, tfButtons;
+        let draggables, dropZones, sections, navDots, checkGapsBtn, gapInputs, checkInterviewBtn, interviewInputs, tfButtons, oddOneOutContainer, boxA, boxB, userCombinations, checkCompoundsBtn, compoundFeedback, checkWordOrderBtn, mistakeCorrector, checkMistakesBtn, vocabTable, checkVocabTableBtn;
+        let selectedWordA = null;
+        let selectedWordB = null;
 
         // --- UTILITY FUNCTIONS ---
-        /**
-         * Shuffles the child elements of a given parent node in place.
-         * @param {HTMLElement} parent The parent element whose children will be shuffled.
-         */
         function shuffleChildren(parent) {
-            // Convert the live NodeList to an array to safely manipulate it
             let children = Array.from(parent.children);
-
-            // Fisher-Yates shuffle algorithm
             for (let i = children.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                // Swap elements in the array
                 [children[i], children[j]] = [children[j], children[i]];
             }
-
-            // Clear the parent element of its current children
             parent.innerHTML = '';
-
-            // Append the shuffled children back to the parent
             children.forEach(child => parent.appendChild(child));
         }
 
-
         // --- EVENT HANDLER FUNCTIONS ---
         function handleDragStart(e) {
+            if (!e.target.classList.contains('draggable')) return;
             draggedItem = e.target;
             setTimeout(() => e.target.classList.add('dragging'), 0);
         }
 
         function handleDragEnd(e) {
             setTimeout(() => {
-                e.target.classList.remove('dragging');
+                if(e.target) e.target.classList.remove('dragging');
                 draggedItem = null;
             }, 0);
         }
 
         function handleDragOver(e) {
             e.preventDefault();
-            if (!e.currentTarget.querySelector('.draggable') || e.currentTarget.querySelector('.draggable') === draggedItem) {
-                 e.currentTarget.classList.add('over');
+            const target = e.currentTarget;
+            if(target.classList.contains('word-order-container')){
+                const afterElement = getDragAfterElement(target, e.clientX);
+                if (afterElement == null) {
+                    target.appendChild(draggedItem);
+                } else {
+                    target.insertBefore(draggedItem, afterElement);
+                }
+            } else if (!target.querySelector('.draggable') || target.querySelector('.draggable') === draggedItem) {
+                 target.classList.add('over');
             }
+        }
+        
+        function getDragAfterElement(container, x) {
+            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = x - box.left - box.width / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
         }
 
         function handleDragLeave(e) {
@@ -683,12 +1109,12 @@
         function handleDrop(e) {
             e.preventDefault();
             e.currentTarget.classList.remove('over');
-            if (!draggedItem) return;
+            if (!draggedItem || e.currentTarget.classList.contains('word-order-container')) return;
 
             const existingItem = e.currentTarget.querySelector('.draggable');
             if (existingItem && existingItem !== draggedItem) {
                 const wordBank = e.currentTarget.closest('.activity-card').querySelector('.word-bank');
-                wordBank.appendChild(existingItem);
+                if (wordBank) wordBank.appendChild(existingItem);
             }
             
             e.currentTarget.prepend(draggedItem);
@@ -698,13 +1124,10 @@
         function checkDragAndDropAnswer(zone) {
             const droppedItem = zone.querySelector('.draggable');
             if (!droppedItem) return;
-
             const droppedWord = droppedItem.dataset.word;
             const correctAnswer = zone.dataset.answer;
-
             zone.classList.remove('feedback-correct', 'feedback-incorrect');
-            
-            if (droppedWord === correctAnswer) {
+            if (droppedWord.toLowerCase() === correctAnswer.toLowerCase()) {
                 zone.classList.add('feedback-correct');
                 droppedItem.draggable = false;
                 droppedItem.style.cursor = 'default';
@@ -745,20 +1168,146 @@
             const buttons = parent.querySelectorAll('.tf-btn');
             const correctAnswer = parent.parentElement.dataset.answer;
             const userAnswer = button.innerText.toLowerCase();
-
             buttons.forEach(btn => {
                 btn.classList.remove('selected', 'correct', 'incorrect');
                 btn.disabled = true;
             });
-
             button.classList.add('selected');
-
             if (userAnswer === correctAnswer) {
                 button.classList.add('correct');
             } else {
                 button.classList.add('incorrect');
             }
         }
+
+        function handleOddOneOutClick(e) {
+            const clickedItem = e.target;
+            if (!clickedItem.classList.contains('odd-one-out-item')) return;
+            const row = clickedItem.parentElement;
+            if (row.classList.contains('answered')) return;
+            const correctAnswer = row.dataset.answer;
+            const userAnswer = clickedItem.innerText;
+            row.classList.add('answered');
+            const itemsInRow = row.querySelectorAll('.odd-one-out-item');
+            if (userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+                clickedItem.classList.add('correct');
+            } else {
+                clickedItem.classList.add('incorrect');
+                itemsInRow.forEach(item => {
+                    if (item.innerText.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+                        item.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function handleCompoundWordClick(e) {
+            const target = e.target;
+            if (!target.classList.contains('compound-word-item')) return;
+            
+            const parentBox = target.parentElement;
+            
+            if (parentBox.id === 'boxA') {
+                if (selectedWordA) selectedWordA.classList.remove('selected');
+                selectedWordA = target;
+                selectedWordA.classList.add('selected');
+            } else if (parentBox.id === 'boxB') {
+                if (selectedWordB) selectedWordB.classList.remove('selected');
+                selectedWordB = target;
+                selectedWordB.classList.add('selected');
+            }
+
+            if (selectedWordA && selectedWordB) {
+                const newCombination = `${selectedWordA.innerText} ${selectedWordB.innerText}`;
+                const newPill = document.createElement('span');
+                newPill.className = 'user-combination p-2 bg-gray-200 rounded-full text-sm';
+                newPill.innerText = newCombination;
+                userCombinations.appendChild(newPill);
+
+                selectedWordA.classList.remove('selected');
+                selectedWordB.classList.remove('selected');
+                selectedWordA = null;
+                selectedWordB = null;
+            }
+        }
+
+        function handleCheckCompounds() {
+            const correctAnswers = [
+                "finance manager", "job satisfaction", "team work", "team worker",
+                "product development", "product manager", "advertising manager",
+                "office work", "office worker", "office manager", "sales manager", "work place"
+            ];
+            
+            const userAnswers = Array.from(userCombinations.children).map(el => el.innerText.toLowerCase());
+            let correctCount = 0;
+
+            userAnswers.forEach((answer, index) => {
+                const element = userCombinations.children[index];
+                if (correctAnswers.includes(answer)) {
+                    element.classList.add('correct');
+                    correctCount++;
+                } else {
+                    element.classList.add('incorrect');
+                }
+            });
+            
+            const missedAnswers = correctAnswers.filter(ans => !userAnswers.includes(ans));
+            
+            let feedbackHTML = `<h4 class="font-bold">Results</h4><p>You found ${correctCount} out of ${correctAnswers.length} possible combinations.</p>`;
+            if (missedAnswers.length > 0) {
+                feedbackHTML += `<p class="mt-2 font-semibold">Here are some you missed:</p><ul class="list-disc list-inside">`;
+                missedAnswers.forEach(ans => feedbackHTML += `<li>${ans}</li>`);
+                feedbackHTML += `</ul>`;
+            }
+            compoundFeedback.innerHTML = feedbackHTML;
+            checkCompoundsBtn.disabled = true;
+        }
+
+        function handleCheckWordOrder() {
+            const containers = document.querySelectorAll('#word-order-container > div');
+            containers.forEach(container => {
+                const correctAnswer = container.dataset.answer;
+                const wordOrderContainer = container.querySelector('.word-order-container');
+                const words = Array.from(wordOrderContainer.children).map(w => w.innerText).join(' ');
+                
+                wordOrderContainer.classList.remove('feedback-correct', 'feedback-incorrect');
+                if (words.replace(/\s\?/g,'?') === correctAnswer) {
+                    wordOrderContainer.classList.add('feedback-correct');
+                } else {
+                    wordOrderContainer.classList.add('feedback-incorrect');
+                }
+            });
+        }
+
+        function handleCheckMistakes() {
+            const questions = mistakeCorrector.querySelectorAll('div');
+            questions.forEach(q => {
+                const input = q.querySelector('input');
+                const userAnswer = input.value.trim().replace(/\s\?/g, '?');
+                const correctAnswer = q.dataset.answer;
+                input.classList.remove('feedback-correct', 'feedback-incorrect');
+                if(userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                    input.classList.add('feedback-correct');
+                } else {
+                     input.classList.add('feedback-incorrect');
+                }
+            });
+        }
+
+        function handleCheckVocabTable() {
+             const inputs = vocabTable.querySelectorAll('input[type="text"]');
+             inputs.forEach(input => {
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                 input.classList.remove('feedback-correct', 'feedback-incorrect');
+                 if(userAnswer === correctAnswer) {
+                    input.classList.add('feedback-correct');
+                 } else {
+                     input.classList.add('feedback-incorrect');
+                 }
+             });
+        }
+
 
         function handleIntersection(entries) {
             entries.forEach(entry => {
@@ -778,14 +1327,26 @@
         function setup() {
             // Query for all elements
             draggables = document.querySelectorAll('.draggable');
-            dropZones = document.querySelectorAll('.drop-zone');
+            dropZones = document.querySelectorAll('.drop-zone, .drop-zone-inline, .word-order-container');
             sections = document.querySelectorAll('.slide');
             navDots = document.querySelectorAll('.nav-dots a');
             checkGapsBtn = document.getElementById('check-gaps-btn');
             gapInputs = document.querySelectorAll('#slide-9 input[type="text"]');
             checkInterviewBtn = document.getElementById('check-interview-btn');
-            interviewInputs = document.querySelectorAll('#slide-11 input[type="text"]'); // Updated selector
+            interviewInputs = document.querySelectorAll('#slide-11 input[type="text"]');
             tfButtons = document.querySelectorAll('.tf-btn');
+            oddOneOutContainer = document.getElementById('odd-one-out-container');
+            boxA = document.getElementById('boxA');
+            boxB = document.getElementById('boxB');
+            userCombinations = document.getElementById('user-combinations');
+            checkCompoundsBtn = document.getElementById('check-compounds-btn');
+            compoundFeedback = document.getElementById('compound-feedback');
+            checkWordOrderBtn = document.getElementById('check-word-order-btn');
+            mistakeCorrector = document.getElementById('mistake-corrector');
+            checkMistakesBtn = document.getElementById('check-mistakes-btn');
+            vocabTable = document.getElementById('vocab-table');
+            checkVocabTableBtn = document.getElementById('check-vocab-table-btn');
+
 
             // --- SHUFFLE ACTIVITY 5 (SLIDE 8) ---
             const activity5WordBank = document.querySelector('#slide-8 .word-bank');
@@ -798,7 +1359,7 @@
             const observerOptions = {
                 root: document.querySelector('.container-snap'),
                 rootMargin: '0px',
-                threshold: 0.5 /* Adjusted from 0.6 to fix highlighting issue */
+                threshold: 0.5
             };
             observer = new IntersectionObserver(handleIntersection, observerOptions);
             sections.forEach(section => observer.observe(section));
@@ -817,6 +1378,13 @@
             // Setup Button Click Listeners
             if (checkGapsBtn) checkGapsBtn.addEventListener('click', handleCheckGaps);
             if (checkInterviewBtn) checkInterviewBtn.addEventListener('click', handleCheckInterview);
+            if (oddOneOutContainer) oddOneOutContainer.addEventListener('click', handleOddOneOutClick);
+            if (boxA) boxA.addEventListener('click', handleCompoundWordClick);
+            if (boxB) boxB.addEventListener('click', handleCompoundWordClick);
+            if (checkCompoundsBtn) checkCompoundsBtn.addEventListener('click', handleCheckCompounds);
+            if (checkWordOrderBtn) checkWordOrderBtn.addEventListener('click', handleCheckWordOrder);
+            if (checkMistakesBtn) checkMistakesBtn.addEventListener('click', handleCheckMistakes);
+            if (checkVocabTableBtn) checkVocabTableBtn.addEventListener('click', handleCheckVocabTable);
             tfButtons.forEach(button => button.addEventListener('click', handleTrueFalseClick));
             
             // Add cleanup listener for when the user leaves the page
@@ -824,10 +1392,6 @@
         }
 
         function cleanup() {
-            // This function is called when the user navigates away.
-            // It removes all event listeners and nullifies variables to prevent memory leaks.
-            
-            // Remove Drag and Drop Listeners
             draggables.forEach(draggable => {
                 draggable.removeEventListener('dragstart', handleDragStart);
                 draggable.removeEventListener('dragend', handleDragEnd);
@@ -838,31 +1402,22 @@
                 zone.removeEventListener('drop', handleDrop);
             });
 
-            // Remove Button Click Listeners
             if (checkGapsBtn) checkGapsBtn.removeEventListener('click', handleCheckGaps);
             if (checkInterviewBtn) checkInterviewBtn.removeEventListener('click', handleCheckInterview);
+            if (oddOneOutContainer) oddOneOutContainer.removeEventListener('click', handleOddOneOutClick);
+            if (boxA) boxA.removeEventListener('click', handleCompoundWordClick);
+            if (boxB) boxB.removeEventListener('click', handleCompoundWordClick);
+            if (checkCompoundsBtn) checkCompoundsBtn.removeEventListener('click', handleCheckCompounds);
+            if (checkWordOrderBtn) checkWordOrderBtn.removeEventListener('click', handleCheckWordOrder);
+            if (checkMistakesBtn) checkMistakesBtn.removeEventListener('click', handleCheckMistakes);
+            if (checkVocabTableBtn) checkVocabTableBtn.removeEventListener('click', handleCheckVocabTable);
+
             tfButtons.forEach(button => button.removeEventListener('click', handleTrueFalseClick));
 
-
-            // Disconnect the observer
             if (observer) observer.disconnect();
-
-            // Nullify variables
-            draggedItem = null;
-            observer = null;
-            draggables = null;
-            dropZones = null;
-            sections = null;
-            navDots = null;
-            checkGapsBtn = null;
-            gapInputs = null;
-            checkInterviewBtn = null;
-            interviewInputs = null;
-            tfButtons = null;
             
-            // Note: There are no requestAnimationFrame loops in this script,
-            // but if there were, you would call cancelAnimationFrame() here.
-
+            draggedItem = observer = draggables = dropZones = sections = navDots = checkGapsBtn = gapInputs = checkInterviewBtn = interviewInputs = tfButtons = oddOneOutContainer = boxA = boxB = userCombinations = checkCompoundsBtn = compoundFeedback = selectedWordA = selectedWordB = checkWordOrderBtn = mistakeCorrector = checkMistakesBtn = vocabTable = checkVocabTableBtn = null;
+            
             window.removeEventListener('beforeunload', cleanup);
         }
 
@@ -872,3 +1427,4 @@
     </script>
 </body>
 </html>
+
