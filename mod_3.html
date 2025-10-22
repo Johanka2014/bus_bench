@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letters of enquiry and applications</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            scroll-snap-align: start;
+            position: relative;
+            text-align: center;
+            transition: background-color 0.5s ease;
+        }
+        .container-snap {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        .draggable {
+            cursor: move;
+            user-select: none;
+        }
+        .dragging {
+            opacity: 0.5;
+            background-color: #cce7ff;
+        }
+        .drop-zone {
+            border: 2px dashed #9ca3af; /* gray-400 */
+            transition: background-color 0.3s, border-color 0.3s;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column; /* Allow stacking of item and text */
+        }
+        .drop-zone.over {
+            background-color: #e0f2fe; /* sky-100 */
+        }
+        .feedback-correct {
+            border: 2px solid #22c55e !important; /* green-500 */
+            background-color: #f0fdf4 !important; /* green-50 */
+        }
+        .feedback-incorrect {
+            border: 2px solid #ef4444 !important; /* red-500 */
+            background-color: #fef2f2 !important; /* red-50 */
+        }
+        .nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 10;
+        }
+        .nav-dots a {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .nav-dots a.active {
+            background-color: white;
+            transform: scale(1.4);
+        }
+        .arrow {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-15px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+        .highlight {
+            background-color: rgba(255, 192, 203, 0.5); /* Light pink highlight */
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+        /* Custom styles for the activities */
+        .activity-card {
+            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(10px); /* For Safari */
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Subtle border */
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 80rem; /* Increased max-width */
+        }
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(248, 250, 252, 0.8); /* Slightly transparent slate-50 */
+            border-radius: 0.5rem;
+        }
+        .word-item {
+            padding: 0.5rem 1rem;
+            background-color: white;
+            border: 1px solid #e2e8f0; /* slate-200 */
+            border-radius: 9999px; /* full */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        .description-text {
+            margin-top: 0.5rem;
+            color: #475569; /* slate-600 */
+            font-size: 0.875rem;
+        }
+        .tf-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            background-color: white;
+            transition: all 0.2s;
+        }
+        .tf-btn.selected {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .tf-btn.correct, .odd-one-out-item.correct, .formal-choice.correct {
+            background-color: #22c55e !important;
+            color: white !important;
+            border-color: #22c55e !important;
+        }
+        .tf-btn.incorrect, .odd-one-out-item.incorrect, .formal-choice.incorrect {
+            background-color: #ef4444 !important;
+            color: white !important;
+            border-color: #ef4444 !important;
+        }
+        .odd-one-out-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        .odd-one-out-item {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .odd-one-out-item:hover {
+            background-color: #f1f5f9;
+        }
+        .drop-zone-inline {
+            display: inline-flex;
+            vertical-align: bottom;
+            border: 2px dashed #9ca3af;
+            border-radius: 0.5rem;
+            min-width: 120px;
+            min-height: 44px;
+            padding: 2px;
+            margin: 0 4px;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255,255,255,0.3);
+        }
+        .drop-zone-inline.over {
+            background-color: #e0f2fe; /* sky-100 */
+        }
+        .drop-zone-inline .word-item {
+            margin: 0 !important; /* Override default margin */
+        }
+        .compound-word-item {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .compound-word-item.selected {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+         .user-combination.correct {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+        }
+        .user-combination.incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            text-decoration: line-through;
+        }
+        .word-order-container {
+            padding: 1rem;
+            border: 2px dashed #9ca3af;
+            border-radius: 0.5rem;
+            min-height: 60px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .formal-choice {
+            cursor: pointer;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+        }
+        .formal-choice:hover {
+            background-color: #f0f9ff;
+        }
+        .choice-pair.answered .formal-choice {
+            cursor: default;
+             text-decoration: none;
+        }
+        .paragraph-select {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 4px;
+        }
+        .extra-word-line {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: center;
+        }
+        .extra-word-input {
+            width: 100px;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .correct-tick {
+            width: 100px;
+            text-align: center;
+        }
+        .correct-tick input:checked + label {
+            color: #22c55e;
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+
+    <div class="container-snap">
+        <!-- Navigation Dots -->
+        <nav class="nav-dots">
+            <a href="#slide-1" id="dot-1" class="active"></a>
+            <a href="#slide-2" id="dot-2"></a>
+            <a href="#slide-3" id="dot-3"></a>
+            <a href="#slide-4" id="dot-4"></a>
+            <a href="#slide-5" id="dot-5"></a>
+            <a href="#slide-6" id="dot-6"></a>
+            <a href="#slide-7" id="dot-7"></a>
+            <a href="#slide-8" id="dot-8"></a>
+            <a href="#slide-9" id="dot-9"></a>
+            <a href="#slide-10" id="dot-10"></a>
+            <a href="#slide-11" id="dot-11"></a>
+            <a href="#slide-12" id="dot-12"></a>
+            <a href="#slide-13" id="dot-13"></a>
+            <a href="#slide-14" id="dot-14"></a>
+            <a href="#slide-15" id="dot-15"></a>
+        </nav>
+
+        <!-- Slide 1: Welcome -->
+        <section id="slide-1" class="slide bg-gradient-to-br from-sky-200 to-cyan-200 text-slate-800">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4">Letters of enquiry and applications</h1>
+            <p class="text-xl md:text-2xl opacity-80 mb-8">An Interactive Learning Module</p>
+            <p>Scroll down to begin</p>
+            <a href="#slide-2" class="arrow text-cyan-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 2: Getting Started -->
+        <section id="slide-2" class="slide bg-gradient-to-br from-cyan-200 to-teal-200">
+            <div class="activity-card">
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="text-left">
+                        <h2 class="text-3xl font-bold text-slate-800 mb-4">Getting Started</h2>
+                        <p class="text-slate-700 mb-4">Work in small groups and discuss the following.</p>
+                        <p class="text-slate-700 font-semibold mb-4">What, for you, would make a company or organisation a great place to work?</p>
+                        <p class="text-slate-700 mb-2">You can consider these points:</p>
+                        <ul class="list-disc list-inside space-y-2 text-slate-700">
+                            <li>working in teams</li>
+                            <li>challenging work</li>
+                            <li>friendly colleagues</li>
+                            <li>company's reputation</li>
+                            <li>good working atmosphere</li>
+                            <li>level of responsibility</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <img src="https://johanka2014.github.io/bus_bench/mod_3/water_cooler.png" alt="Colleagues talking by a water cooler" class="rounded-lg shadow-lg w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/600x400/38bdf8/ffffff?text=Image+Not+Found';">
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-3" class="arrow text-teal-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+
+        <!-- Slide 3: Job satisfaction at EMI -->
+        <section id="slide-3" class="slide bg-gradient-to-br from-teal-200 to-green-200">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Job satisfaction at EMI</h2>
+                <h3 class="text-xl font-semibold text-slate-600 mb-4">Reading</h3>
+                <p class="text-slate-700 mb-6">You are going to read what four different employees say about job satisfaction at EMI Music.</p>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="md:col-span-2">
+                        <h4 class="text-2xl font-bold text-slate-800 mb-2">Company background</h4>
+                        <a href="https://www.musicgateway.com/blog/music-news/emi-records-who-are-they-and-what-happened" target="_blank" rel="noopener noreferrer">
+                            <div class="flex items-center mb-4 p-4 rounded-lg hover:bg-slate-100 transition">
+                                <img src="https://johanka2014.github.io/bus_bench/mod_3/emi_logo.png" alt="EMI Music UK and Ireland Logo" class="h-12 mr-4" onerror="this.onerror=null;this.src='https://placehold.co/100x50/d1d5db/ffffff?text=EMI';">
+                                <p class="text-slate-700">EMI Music is the world's largest independent music company and also the oldest record company in the world, dating back to 1897.</p>
+                            </div>
+                        </a>
+                        <h4 class="text-xl font-bold text-slate-800 mt-6 mb-2">Discussion</h4>
+                        <p class="text-slate-700">Before you read, discuss with a partner what you think would be the main satisfactions of working for a record company.</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <h4 class="text-lg font-bold text-slate-700 mb-2">Useful language</h4>
+                        <p class="font-semibold text-slate-600 mb-3">Talking about importance</p>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li>I really like ...</li>
+                            <li>For me, ...... is very important because ........</li>
+                            <li>One of the things I think is essential is ...... because ........</li>
+                            <li>I don't think ...... is so important because ........</li>
+                        </ul>
+                         <ul class="list-disc list-inside space-y-2 text-slate-700 mt-6">
+                            <li>opportunities for promotion</li>
+                            <li>perks/benefits</li>
+                            <li>salary</li>
+                            <li>opportunities to travel</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-4" class="arrow text-green-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 4: Careers at EMI -->
+        <section id="slide-4" class="slide bg-gradient-to-br from-green-200 to-lime-200">
+            <div class="activity-card">
+                 <h2 class="text-3xl font-bold text-slate-800 mb-4">Careers at EMI</h2>
+                 <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- Left side: Testimonials -->
+                    <div class="text-left space-y-4 text-sm">
+                        <div>
+                            <h3 class="font-bold text-blue-800">Mark, Area Sales & Promotions Manager</h3>
+                            <p>The great thing about my job is just the music. I get CDs constantly pushed into my hand, and I go to loads of gigs, so if you love music, there are plenty of added bonuses. Although if you're a nine-to-five kind of person, then this isn't for you, as I say, I never really break out of work mode. There's no one standing over me, and nobody there to take over, so it all rests with me. As I say, though, that's what I love about it!</p>
+                        </div>
+                         <div>
+                            <h3 class="font-bold text-blue-800">Helen, Business Affairs Director</h3>
+                            <p>The best thing about my job is the people. I feel really comfortable and I can be myself. It's such an interesting environment because I'm working in-house, so I work closely with the music and the artists. You see things from the beginning when you sign the contract right to the release and the success. I worked on the original contract for Blue, and they've done really well, so that's really great for me to feel part of it.</p>
+                        </div>
+                         <div>
+                            <h3 class="font-bold text-blue-800">Sally, IT Business Systems Manager</h3>
+                            <p>I find it in the music industry a really interesting area to work in, as there are lots of new developments in areas like digital music kiosks and online distribution. I love music, too, and it's just nice being at work and being surrounded by music. Another really nice thing about EMI is the people; everyone is really open and receptive of each other's ideas.</p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-blue-800">Deby, Touring & Production Manager</h3>
+                            <p>The great thing about my job is that it's really diverse, so one day we could be doing a classical show, and the next, a full-on rock show. Usually there are loads of projects going on at once, so I have to work closely with my colleagues, the venues and the artists. It's all about learning, and you have to work hard, but there are loads of opportunities for development. EMI allows its employees to grow and develop themselves, so it is a great place to come in at entry level.</p>
+                        </div>
+                        <img src="https://johanka2014.github.io/bus_bench/mod_3/blue-the-band.webp" alt="The band Blue" class="rounded-lg shadow-lg w-2/3 mx-auto h-auto mt-4" >
+                    </div>
+                    <!-- Right side: Activities -->
+                    <div class="text-left">
+                        <h3 class="text-xl font-bold mb-2">2. Who said what?</h3>
+                        <p class="mb-4">Drag the statements below to match them with the person who said them.</p>
+                        <div class="word-bank mb-6 flex-col !items-start">
+                            <div draggable="true" class="draggable word-item !rounded-md" data-word="Helen">1. I share the artists' achievements.</div>
+                            <div draggable="true" class="draggable word-item !rounded-md" data-word="Deby">2. You get plenty of chances to do new things.</div>
+                            <div draggable="true" class="draggable word-item !rounded-md" data-word="Deby">3. The job has so much variety.</div>
+                            <div draggable="true" class="draggable word-item !rounded-md" data-word="Sally">4. My colleagues are ready to listen to my suggestions.</div>
+                            <div draggable="true" class="draggable word-item !rounded-md" data-word="Mark">5. I have a lot of responsibility.</div>
+                            <div draggable="true" class="draggable word-item !rounded-md" data-word="Sally">6. I find the innovations fascinating.</div>
+                            <div draggable="true" class="draggable word-item !rounded-md" data-word="Mark">7. I don't work to a fixed timetable.</div>
+                            <div draggable="true" class="draggable word-item !rounded-md" data-word="Helen">8. I deal with musicians from when they are new to when they are famous.</div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="drop-zone p-2 rounded-lg" data-answer="Mark"><span class="font-semibold">Mark</span></div>
+                            <div class="drop-zone p-2 rounded-lg" data-answer="Helen"><span class="font-semibold">Helen</span></div>
+                            <div class="drop-zone p-2 rounded-lg" data-answer="Sally"><span class="font-semibold">Sally</span></div>
+                            <div class="drop-zone p-2 rounded-lg" data-answer="Deby"><span class="font-semibold">Deby</span></div>
+                        </div>
+
+                        <h3 class="text-xl font-bold mt-8 mb-2">3. Discussion</h3>
+                        <p>Discuss the following with a partner:</p>
+                        <ul class="list-disc list-inside mt-2 space-y-2">
+                            <li>Which of the things mentioned by the four employees do you think are most attractive?</li>
+                            <li>Which of the four jobs would most interest you?</li>
+                        </ul>
+                    </div>
+                 </div>
+            </div>
+            <a href="#slide-5" class="arrow text-lime-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 5: Vocabulary Activity -->
+        <section id="slide-5" class="slide bg-gradient-to-br from-lime-200 to-yellow-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Vocabulary</h2>
+                <p class="text-slate-600 mb-6">Find words or phrases in the text on the previous page which mean the following. Drag the correct phrase to its definition.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Definitions -->
+                    <div class="space-y-3 text-left">
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>1.</span><div class="drop-zone p-2 rounded-lg" data-answer="in-house"></div><span>= inside the company (Helen)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>2.</span><div class="drop-zone p-2 rounded-lg" data-answer="added bonuses"></div><span>= pleasant additional things (Mark)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>3.</span><div class="drop-zone p-2 rounded-lg" data-answer="nine-to-five kind of person"></div><span>= person who likes work that begins at nine and finishes at five (Mark)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>4.</span><div class="drop-zone p-2 rounded-lg" data-answer="standing over me"></div><span>= supervising (Mark)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>5.</span><div class="drop-zone p-2 rounded-lg" data-answer="take over"></div><span>= start doing a job that another person did before (Mark)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>6.</span><div class="drop-zone p-2 rounded-lg" data-answer="loads of"></div><span>= lots of (Deby)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>7.</span><div class="drop-zone p-2 rounded-lg" data-answer="venues"></div><span>= places where public events happen (Deby)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>8.</span><div class="drop-zone p-2 rounded-lg" data-answer="entry level"></div><span>= the lowest level of an organisation (Deby)</span></div>
+                    </div>
+                    <!-- Word Bank -->
+                     <div class="word-bank flex-col !items-stretch !justify-start !mt-0">
+                        <div draggable="true" class="draggable word-item" data-word="in-house">in-house</div>
+                        <div draggable="true" class="draggable word-item" data-word="added bonuses">added bonuses</div>
+                        <div draggable="true" class="draggable word-item" data-word="nine-to-five kind of person">nine-to-five kind of person</div>
+                        <div draggable="true" class="draggable word-item" data-word="standing over me">standing over me</div>
+                        <div draggable="true" class="draggable word-item" data-word="take over">take over</div>
+                        <div draggable="true" class="draggable word-item" data-word="loads of">loads of</div>
+                        <div draggable="true" class="draggable word-item" data-word="venues">venues</div>
+                        <div draggable="true" class="draggable word-item" data-word="entry level">entry level</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-6" class="arrow text-yellow-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+        
+        <!-- Slide 6: A Letter of Enquiry -->
+        <section id="slide-6" class="slide bg-gradient-to-br from-yellow-200 to-amber-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">A Letter of Enquiry</h2>
+                <h3 class="text-xl font-semibold text-slate-600 mb-6">Writing</h3>
+                <div class="grid md:grid-cols-2 gap-8 text-left">
+                    <div>
+                        <h4 class="font-bold mb-2">1. Imagine you are writing to EMI Music to enquire about opportunities to work for their company.</h4>
+                        <p class="mb-4">In what order would you do each of these things in your letter or email? Drag and drop the items into the correct order in the box below.</p>
+                        <div id="letter-items-source" class="space-y-2">
+                             <div class="draggable p-2 bg-white border rounded-md cursor-move" draggable="true" data-id="a">a) Ask for information about how to apply</div>
+                             <div class="draggable p-2 bg-white border rounded-md cursor-move" draggable="true" data-id="b">b) Ask for information about opportunities in the company</div>
+                             <div class="draggable p-2 bg-white border rounded-md cursor-move" draggable="true" data-id="c">c) Explain in more detail your qualifications and background</div>
+                             <div class="draggable p-2 bg-white border rounded-md cursor-move" draggable="true" data-id="d">d) Say briefly who you are</div>
+                             <div class="draggable p-2 bg-white border rounded-md cursor-move" draggable="true" data-id="e">e) Say where you have heard about the company</div>
+                             <div class="draggable p-2 bg-white border rounded-md cursor-move" draggable="true" data-id="f">f) Say why you are interested in working for them</div>
+                             <div class="draggable p-2 bg-white border rounded-md cursor-move" draggable="true" data-id="g">g) Say why you are writing</div>
+                        </div>
+                         <div id="letter-items-dropzone" class="mt-4 p-4 border-2 border-dashed rounded-lg min-h-[28rem]" data-answer="d,g,e,f,c,b,a"></div>
+                         <button id="check-letter-order-btn" class="mt-4 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Order</button>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-2">2. Read this sample letter.</h4>
+                        <p class="mb-4">In what order do the items from the list on the left appear?</p>
+                        <div class="bg-white p-6 rounded-lg shadow-inner text-sm border">
+                            <p class="mb-4">Dear Sir or Madam,</p>
+                            <p class="mb-4">I am a 22-year-old student of Business Administration from the University of Fribourg in Switzerland and I am writing to enquire about career opportunities within your company. I have visited your website and I see that people working in your company combine an interest in business with a love of music. I am in my final year of a four-year course of studies and am interested in working for a multinational company like yours because you combine a range of business challenges with scope for the innovative promotion of music, which is what I have been studying as my special research project.</p>
+                            <p class="mb-4">My particular specialisation has been the promotion of young classical musicians, both through live concerts and using the Internet.</p>
+                            <p class="mb-4">I would be most grateful if you could send me information about what opportunities exist in EMI Music, either as a management trainee or a marketing assistant, in a year's time. Could you also tell me how I should apply?</p>
+                            <p class="mb-4">Thanking you in advance.</p>
+                            <p class="mb-2">Yours faithfully,</p>
+                            <p>Pierre Schneider</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-7" class="arrow text-amber-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+        
+        <!-- Slide 7: Asking for information -->
+        <section id="slide-7" class="slide bg-gradient-to-br from-amber-200 to-orange-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Asking for information</h2>
+                <p class="text-slate-600 mb-6">Complete these ways of asking for information by putting the words in brackets in the correct order.</p>
+                <div class="space-y-6 text-left text-lg" id="asking-info-container">
+                    <!-- Question 1 -->
+                    <div data-answer="whether I have the right qualifications.">
+                        <p>1. I would like to know...</p>
+                        <div class="word-order-container mt-2">
+                             <span class="draggable word-item !rounded-md" draggable="true">qualifications</span><span class="draggable word-item !rounded-md" draggable="true">I</span><span class="draggable word-item !rounded-md" draggable="true">the</span><span class="draggable word-item !rounded-md" draggable="true">whether</span><span class="draggable word-item !rounded-md" draggable="true">right</span><span class="draggable word-item !rounded-md" draggable="true">have</span>
+                        </div>
+                    </div>
+                    <!-- Question 2 -->
+                    <div data-answer="if you could send me information about what opportunities exist in EMI Music.">
+                        <p>2. I would be most grateful...</p>
+                        <div class="word-order-container mt-2">
+                             <span class="draggable word-item !rounded-md" draggable="true">you</span><span class="draggable word-item !rounded-md" draggable="true">information</span><span class="draggable word-item !rounded-md" draggable="true">me</span><span class="draggable word-item !rounded-md" draggable="true">about</span><span class="draggable word-item !rounded-md" draggable="true">opportunities</span><span class="draggable word-item !rounded-md" draggable="true">could</span><span class="draggable word-item !rounded-md" draggable="true">exist</span><span class="draggable word-item !rounded-md" draggable="true">if</span><span class="draggable word-item !rounded-md" draggable="true">in</span><span class="draggable word-item !rounded-md" draggable="true">what</span><span class="draggable word-item !rounded-md" draggable="true">EMI</span><span class="draggable word-item !rounded-md" draggable="true">Music</span><span class="draggable word-item !rounded-md" draggable="true">send</span>
+                        </div>
+                    </div>
+                    <!-- Question 3 -->
+                    <div data-answer="how I should apply?">
+                        <p>3. Could you also tell me...?</p>
+                        <div class="word-order-container mt-2">
+                            <span class="draggable word-item !rounded-md" draggable="true">apply</span><span class="draggable word-item !rounded-md" draggable="true">should</span><span class="draggable word-item !rounded-md" draggable="true">I</span><span class="draggable word-item !rounded-md" draggable="true">how</span>
+                        </div>
+                    </div>
+                     <!-- Question 4 -->
+                    <div data-answer="when the final date for applications is.">
+                        <p>4. I'd be interested to know...</p>
+                        <div class="word-order-container mt-2">
+                             <span class="draggable word-item !rounded-md" draggable="true">applications</span><span class="draggable word-item !rounded-md" draggable="true">final</span><span class="draggable word-item !rounded-md" draggable="true">for</span><span class="draggable word-item !rounded-md" draggable="true">the</span><span class="draggable word-item !rounded-md" draggable="true">when</span><span class="draggable word-item !rounded-md" draggable="true">is</span><span class="draggable word-item !rounded-md" draggable="true">date</span>
+                        </div>
+                    </div>
+                </div>
+                <button id="check-asking-info-btn" class="mt-6 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
+            </div>
+            <a href="#slide-8" class="arrow text-orange-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 8: Complex Questions -->
+        <section id="slide-8" class="slide bg-gradient-to-br from-orange-200 to-red-200">
+            <div class="activity-card">
+                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 5: Complex Questions</h2>
+                 <div class="grid md:grid-cols-2 gap-8 text-left">
+                     <!-- Grammar Explanation -->
+                     <div class="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                          <h3 class="font-bold mb-2">Look at what happens to the word order of questions when you put a short phrase before them:</h3>
+                          <div class="space-y-4 text-sm">
+                            <p>How long <strong>have you</strong> worked for Carrefour? <br>→ <em>Can you tell me</em> how long <strong>you have</strong> worked for Carrefour?</p>
+                            <p>When <strong>did you graduate</strong> from university? <br>→ <em>I'd like you to tell me</em> when <strong>you graduated</strong> from university.</p>
+                            <p>What <strong>do you like</strong> about your present job? <br>→ <em>I wonder</em> what <strong>you like</strong> about your present job.</p>
+                            <p><strong>Would</strong> your present employer <strong>be prepared</strong> to give you a reference? <br>→ <em>Do you know if</em> your present employer <strong>would be prepared</strong> to give you a reference?</p>
+                            <p class="mt-4">Can you see when to use question marks (?) and when not?</p>
+                          </div>
+                     </div>
+                     <!-- Exercises -->
+                     <div id="complex-questions-container">
+                         <h3 class="font-bold mb-2">1. Rewrite these questions, starting with the words given.</h3>
+                         <div class="space-y-3">
+                            <div data-answer="how long you have been a product manager">
+                                <p class="text-sm">1. How long have you been a product manager?</p>
+                                <p>Could you tell me <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">?</p>
+                            </div>
+                            <div data-answer="if you have studied abroad">
+                                <p class="text-sm">2. Have you studied abroad?</p>
+                                <p>I'd like to know <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">.</p>
+                            </div>
+                             <div data-answer="when you first became interested in this profession">
+                                <p class="text-sm">3. When did you first become interested in this profession?</p>
+                                <p>I wonder <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">.</p>
+                            </div>
+                             <div data-answer="what you enjoy doing in your free time">
+                                <p class="text-sm">4. What do you enjoy doing in your free time?</p>
+                                <p>I'd like you to tell me <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">.</p>
+                            </div>
+                            <div data-answer="what you will be doing in ten years' time">
+                                <p class="text-sm">5. What will you be doing in ten years' time?</p>
+                                <p>Can you predict <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">?</p>
+                            </div>
+                         </div>
+                         <h3 class="font-bold mt-6 mb-2">2. Work with a partner.</h3>
+                         <p>Ask these or similar questions about your partner's job/studies starting with <em>Could you tell me ..., I'd like to know ..., I wonder when ..., Do you know ..., I'd like you to tell me ..., etc.</em></p>
+                     </div>
+                 </div>
+                 <button id="check-complex-questions-btn" class="mt-6 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
+            </div>
+            <a href="#slide-9" class="arrow text-red-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+        
+        <!-- Slide 9: Talking Point -->
+        <section id="slide-9" class="slide bg-gradient-to-br from-red-200 to-rose-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Talking Point</h2>
+                <p class="text-slate-600 mb-6">Discuss these questions in pairs.</p>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="text-left text-lg space-y-3">
+                        <ol class="list-decimal list-inside">
+                            <li>When you apply for a job, is it better to send a letter or an email?</li>
+                            <li>How many pages should your application be?</li>
+                            <li>What things should you mention in your application?</li>
+                            <li>Should you write your application in a formal or an informal style?</li>
+                            <li>How many pages should your curriculum vitae (CV) have?</li>
+                            <li>Should you send a photograph as well?</li>
+                        </ol>
+                    </div>
+                    <div>
+                        <img src="https://johanka2014.github.io/bus_bench/mod_3/man_at_desk.png" alt="Man writing at a desk" class="rounded-lg shadow-lg w-full h-auto" onerror="this.onerror=null;this.src='https://placehold.co/600x400/ef4444/ffffff?text=Image+Not+Found';">
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-10" class="arrow text-rose-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 10: Advice on Job Applications -->
+        <section id="slide-10" class="slide bg-gradient-to-br from-pink-200 to-fuchsia-200">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Advice on job applications</h2>
+                <h3 class="text-xl font-semibold text-slate-600 mb-4">Listening</h3>
+                <div id="advice-container">
+                    <h4 class="font-bold mb-2">1. Work with a partner. Read the following pieces of advice about applying for a job. Rewrite each one, giving a reason for the advice.</h4>
+                    <div class="space-y-4 text-sm">
+                        <div class="p-2 bg-slate-50 rounded-lg">
+                           <p>a. Include a photograph with your application.</p>
+                           <input type="text" class="w-full mt-1 p-1 border-b-2 border-slate-300 bg-transparent" placeholder="Attach a picture to your letter or email so...">
+                        </div>
+                        <div class="p-2 bg-slate-50 rounded-lg">
+                           <p>b. Send your application by email.</p>
+                           <input type="text" class="w-full mt-1 p-1 border-b-2 border-slate-300 bg-transparent" placeholder="Send it by email because...">
+                        </div>
+                         <div class="p-2 bg-slate-50 rounded-lg">
+                           <p>c. Your letter of application should not be longer than one page.</p>
+                           <input type="text" class="w-full mt-1 p-1 border-b-2 border-slate-300 bg-transparent" placeholder="Keep it to one page in order to...">
+                        </div>
+                         <div class="p-2 bg-slate-50 rounded-lg">
+                           <p>d. Mention your hobbies and interests.</p>
+                           <input type="text" class="w-full mt-1 p-1 border-b-2 border-slate-300 bg-transparent" placeholder="You should mention hobbies so that...">
+                        </div>
+                         <div class="p-2 bg-slate-50 rounded-lg">
+                           <p>e. Ask someone to check your application before sending it.</p>
+                           <input type="text" class="w-full mt-1 p-1 border-b-2 border-slate-300 bg-transparent" placeholder="Get it checked to ensure...">
+                        </div>
+                        <div class="p-2 bg-slate-50 rounded-lg">
+                           <p>f. Follow your application with a phone call.</p>
+                           <input type="text" class="w-full mt-1 p-1 border-b-2 border-slate-300 bg-transparent" placeholder="Make a phone call to show...">
+                        </div>
+                         <div class="p-2 bg-slate-50 rounded-lg">
+                           <p>g. Tell the truth about yourself in your application.</p>
+                           <input type="text" class="w-full mt-1 p-1 border-b-2 border-slate-300 bg-transparent" placeholder="Be truthful because...">
+                        </div>
+                         <div class="p-2 bg-slate-50 rounded-lg">
+                           <p>h. Include names, addresses and telephone numbers of referees.</p>
+                           <input type="text" class="w-full mt-1 p-1 border-b-2 border-slate-300 bg-transparent" placeholder="Include referees so that...">
+                        </div>
+                    </div>
+                     <h4 class="font-bold mt-6 mb-2">2. Say which pieces of advice you agree with, and which you disagree with.</h4>
+                </div>
+            </div>
+            <a href="#slide-11" class="arrow text-fuchsia-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 11: Listening - Advice from HR -->
+        <section id="slide-11" class="slide bg-gradient-to-br from-rose-200 to-pink-200">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 7: Advice from HR Officers</h2>
+                <p class="text-slate-600 mb-4">You are going to hear an extract from a television programme in which five human resources officers give advice about applying for jobs. For each speaker, decide what advice from the previous activity is being given. Drag the advice to the correct speaker.</p>
+                <audio controls class="w-full max-w-md mx-auto mb-6">
+                    <source src="https://johanka2014.github.io/bus_bench/mod_3/05%20Unit%203.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Advice Word Bank -->
+                    <div class="word-bank flex-col !items-stretch !justify-start !mt-0 text-left">
+                        <div draggable="true" class="draggable word-item !rounded-md" data-word="a">a. Include a photograph with your application.</div>
+                        <div draggable="true" class="draggable word-item !rounded-md" data-word="b">b. Send your application by email.</div>
+                        <div draggable="true" class="draggable word-item !rounded-md" data-word="c">c. Your letter of application should not be longer than one page.</div>
+                        <div draggable="true" class="draggable word-item !rounded-md" data-word="d">d. Mention your hobbies and interests.</div>
+                        <div draggable="true" class="draggable word-item !rounded-md" data-word="e">e. Ask someone to check your application before sending it.</div>
+                        <div draggable="true" class="draggable word-item !rounded-md" data-word="f">f. Follow your application with a phone call.</div>
+                        <div draggable="true" class="draggable word-item !rounded-md" data-word="g">g. Tell the truth about yourself in your application.</div>
+                        <div draggable="true" class="draggable word-item !rounded-md" data-word="h">h. Include names, addresses and telephone numbers of referees.</div>
+                    </div>
+                    <!-- Speakers Drop Zones -->
+                    <div class="space-y-4 mt-6">
+                        <div class="flex items-center gap-4">
+                            <span class="font-semibold w-24 text-left">1. Samuel</span>
+                            <div class="drop-zone flex-1 p-2" data-answer="e"></div>
+                        </div>
+                         <div class="flex items-center gap-4">
+                            <span class="font-semibold w-24 text-left">2. Marta</span>
+                            <div class="drop-zone flex-1 p-2" data-answer="c"></div>
+                        </div>
+                         <div class="flex items-center gap-4">
+                            <span class="font-semibold w-24 text-left">3. Salim</span>
+                            <div class="drop-zone flex-1 p-2" data-answer="g"></div>
+                        </div>
+                         <div class="flex items-center gap-4">
+                            <span class="font-semibold w-24 text-left">4. Yukari</span>
+                            <div class="drop-zone flex-1 p-2" data-answer="f"></div>
+                        </div>
+                         <div class="flex items-center gap-4">
+                            <span class="font-semibold w-24 text-left">5. Ivan</span>
+                            <div class="drop-zone flex-1 p-2" data-answer="d"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="#slide-12" class="arrow text-pink-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 12: An email of application -->
+        <section id="slide-12" class="slide bg-gradient-to-br from-rose-200 to-pink-200">
+            <div class="activity-card">
+                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 8: An email of application</h2>
+                 <h3 class="text-xl font-semibold text-slate-600 mb-6">Writing</h3>
+                 <div class="grid md:grid-cols-2 gap-8 text-left">
+                    <div>
+                        <p>1. Emails are often less formal than letters. However, when applying for a job, your application should normally be formal, whichever way you send it. Read the email of application on the right and choose the more formal phrase in each pair of words in italics.</p>
+                        <div class="mt-4 bg-sky-50 p-4 rounded-lg border border-sky-200 text-sm">
+                            <h4 class="text-lg font-bold text-slate-700 mb-2">Useful language</h4>
+                            <h5 class="font-semibold mb-2">Informal and formal language</h5>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><span class="font-bold">Informal</span><br>Contractions<br>Short words<br>Common words<br>Phrasal verbs<br>Verbs<br>I'm looking forward<br>Abbreviations (e.g. Sept.)</div>
+                                <div><span class="font-bold">Formal</span><br>No contractions<br>Long words<br>Less common words<br>Other types of verb<br>Preposition + noun<br>I look forward<br>No abbreviations (e.g. September)</div>
+                            </div>
+                        </div>
+                    </div>
+                     <div id="email-application-container" class="bg-white p-4 rounded-lg shadow-lg border">
+                        <div class="border-b pb-2 mb-2 text-sm text-gray-500">
+                            <p><b>To:</b> Christa Schmidt &lt;christaschmidt@fastmail.com&gt;</p>
+                        </div>
+                        <p class="mb-4">Dear Sir or Madam,</p>
+                        <p class="mb-4">
+                            1 <span class="choice-pair">(<span class="formal-choice">I am writing</span> / <span class="formal-choice" data-answer="correct">I write</span>)</span>
+                            2 <span class="choice-pair">(<span class="formal-choice">to apply</span> / <span class="formal-choice" data-answer="correct">for applying</span>)</span> for the
+                            3 <span class="choice-pair">(<span class="formal-choice">job</span> / <span class="formal-choice" data-answer="correct">post</span>)</span> of North-Western Area Sales Manager, as
+                            4 <span class="choice-pair">(<span class="formal-choice">currently advertised</span> / <span class="formal-choice" data-answer="correct">I have seen advertised</span>)</span> on your website.
+                        </p>
+                         <p class="mb-4">
+                            As you will see from my attached CV, I am a 28-year-old graduate in Business and Marketing from Hamburg University, with five years of experience in marketing and sales with Audi AGF based in Bremen. My 5 <span class="choice-pair">(<span class="formal-choice">present job</span> / <span class="formal-choice" data-answer="correct">current position</span>)</span> is Assistant Sales Manager for the Bremen and Niedersachsen region.
+                         </p>
+                        <p class="mb-4">
+                            Since leaving university, apart from 6 <span class="choice-pair">(<span class="formal-choice">working</span> / <span class="formal-choice" data-answer="correct">practical experience</span>)</span> in the various posts I have 7 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">held</span> / <span class="formal-choice">worked in</span>)</span>, I have studied 8 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">a lot</span> / <span class="formal-choice">extensively</span>)</span> at night school, 9 <span class="choice-pair">(<span class="formal-choice">going on</span> / <span class="formal-choice" data-answer="correct">attending</span>)</span> courses in Negotiating Skills, Personnel Management and Marketing. I have also 10 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">attended</span> / <span class="formal-choice">gone on</span>)</span> various internal courses in the same areas in the companies I have worked for.
+                        </p>
+                         <p class="mb-4">
+                            11 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">I am</span> / <span class="formal-choice">I'm</span>)</span> interested in the post advertised because it seems to me to 12 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">represent</span> / <span class="formal-choice">be</span>)</span> the type of opportunity I am 13 <span class="choice-pair">(<span class="formal-choice">looking for</span> / <span class="formal-choice" data-answer="correct">seeking</span>)</span>: to move into a large international producer of consumer products and to 14 <span class="choice-pair">(<span class="formal-choice">have the experience of managing</span> / <span class="formal-choice" data-answer="correct">be a</span>)</span> regional sales manager myself.
+                        </p>
+                         <p class="mb-4">
+                            I hope my application and my 15 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">curriculum vitae</span> / <span class="formal-choice">CV</span>)</span> will be of interest to you. I am 16 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">ready</span> / <span class="formal-choice">available</span>)</span> to come to an interview at any time, and my 17 <span class="choice-pair">(<span class="formal-choice">present employers</span> / <span class="formal-choice" data-answer="correct">boss</span>)</span> would be happy to 18 <span class="choice-pair">(<span class="formal-choice">give</span> / <span class="formal-choice" data-answer="correct">supply</span>)</span> a reference.
+                        </p>
+                         <p class="mb-4">
+                             I 19 <span class="choice-pair">(<span class="formal-choice">look forward</span> / <span class="formal-choice" data-answer="correct">am looking forward</span>)</span> to hearing from you.
+                         </p>
+                        <p class="mb-2">Yours faithfully,</p>
+                        <p>Christa Schmidt</p>
+                     </div>
+                 </div>
+            </div>
+            <a href="#slide-13" class="arrow text-pink-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 13: Making Questions Formal -->
+        <section id="slide-13" class="slide bg-gradient-to-br from-fuchsia-200 to-purple-200">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Making Questions More Formal</h2>
+                <p class="text-slate-600 mb-6">Make these direct questions more formal by starting them with the words given.</p>
+                <div id="formal-questions-container" class="space-y-4">
+                     <div data-answer="when you will be holding interviews">
+                        <p>1. When will you be holding interviews?</p>
+                        <p>Could you tell me <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">?</p>
+                    </div>
+                     <div data-answer="how long the annual holidays are">
+                        <p>2. How long are the annual holidays?</p>
+                        <p>I would also like to know <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">.</p>
+                    </div>
+                     <div data-answer="what the working conditions are">
+                        <p>3. What are the working conditions?</p>
+                        <p>I would be grateful if you could give me information on <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">.</p>
+                    </div>
+                     <div data-answer="when I should apply">
+                        <p>4. When should I apply?</p>
+                        <p>Please let me know <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">.</p>
+                    </div>
+                     <div data-answer="if there is a graduate trainee programme">
+                        <p>5. Is there a graduate trainee programme?</p>
+                        <p>I would like to know <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">.</p>
+                    </div>
+                     <div data-answer="if you offer internships for undergraduates">
+                        <p>6. Do you offer internships for undergraduates?</p>
+                        <p>Could you tell me <input type="text" class="w-full border-b-2 p-1 bg-transparent focus:border-blue-500 outline-none">?</p>
+                    </div>
+                </div>
+                 <button id="check-formal-questions-btn" class="mt-6 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
+            </div>
+            <a href="#slide-14" class="arrow text-purple-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+
+        <!-- Slide 14: Reading - Extra Word -->
+         <section id="slide-14" class="slide bg-gradient-to-br from-purple-200 to-indigo-200">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 9: Reading</h2>
+                 <p class="text-slate-600 mb-6">Read the following letter of application. In most lines, there is one extra word. It is either grammatically incorrect or does not fit in with the meaning of the text. Some lines, however, are correct. If a line is correct, put a tick (✓). If there is an extra word in the line, write it in the box.</p>
+                <div id="extra-word-container" class="space-y-2">
+                    <div class="extra-word-line" data-answer="for"><p>1. I am writing <strong>for</strong> to apply for the post of manager in your new branch</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="correct"><p>2. to be opened in Lewisham, as advertised in the Daily Gazette of</p><div class="correct-tick"><input type="checkbox" id="line2"><label for="line2"> ✓</label></div></div>
+                    <div class="extra-word-line" data-answer="correct"><p>3. 5 November.</p><div class="correct-tick"><input type="checkbox" id="line3"><label for="line3"> ✓</label></div></div>
+                    <div class="extra-word-line" data-answer="now"><p>4. As you will <strong>now</strong> see from my enclosed curriculum vitae, I am a</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="qualification"><p>5. 33-year-old graduate <strong>qualification</strong> in social sciences from the</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="of"><p>6. University of Bristol, with eight years' <strong>of</strong> experience in management</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="being"><p>7. posts within the retail trade, my current position is <strong>being</strong> that of</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="correct"><p>8. assistant manager at a branch of Dixons in Southampton.</p><div class="correct-tick"><input type="checkbox" id="line8"><label for="line8"> ✓</label></div></div>
+                    <div class="extra-word-line" data-answer="my"><p>9. Since <strong>my</strong> leaving university, apart from practical experience in the</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="correct"><p>10. various posts I have held, although I have studied extensively at</p><div class="correct-tick"><input type="checkbox" id="line10"><label for="line10"> ✓</label></div></div>
+                    <div class="extra-word-line" data-answer="correct"><p>11. night school, attending courses in Negotiating Skills, Personnel</p><div class="correct-tick"><input type="checkbox" id="line11"><label for="line11"> ✓</label></div></div>
+                    <div class="extra-word-line" data-answer="for"><p>12. Management and Marketing. Dixons have also sent <strong>for</strong> me on</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="of"><p>13. various <strong>of</strong> internal courses in the same areas.</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="so"><p>14. I am <strong>so</strong> interested in the post advertised because it seems to me</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="correct"><p>15. to represent the type of opportunity I am looking for - to move into a</p><div class="correct-tick"><input type="checkbox" id="line15"><label for="line15"> ✓</label></div></div>
+                    <div class="extra-word-line" data-answer="going"><p>16. large international retailing organisation and <strong>going</strong> to have the</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="correct"><p>17. experience of setting up a new store from the start.</p><div class="correct-tick"><input type="checkbox" id="line17"><label for="line17"> ✓</label></div></div>
+                    <div class="extra-word-line" data-answer="for"><p>18. I hope <strong>for</strong> my application and my curriculum vitae will be of</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="other"><p>19. interest to you. I am available for interview at any <strong>other</strong> time, and</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="correct"><p>20. my present employers would be happy to supply you a reference.</p><div class="correct-tick"><input type="checkbox" id="line20"><label for="line20"> ✓</label></div></div>
+                    <div class="extra-word-line" data-answer="am"><p>I <strong>am</strong> look forward to hearing from you.</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="correct"><p>Yours faithfully,</p><div class="correct-tick"><input type="checkbox" id="line22"><label for="line22"> ✓</label></div></div>
+                </div>
+                <button id="check-extra-word-btn" class="mt-6 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
+            </div>
+            <a href="#slide-15" class="arrow text-indigo-800"><i class="fas fa-chevron-down"></i></a>
+        </section>
+
+        <!-- Slide 15: Vocabulary -->
+        <section id="slide-15" class="slide bg-gradient-to-br from-indigo-200 to-violet-200">
+           <div class="activity-card">
+                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Vocabulary</h2>
+                 <p class="text-slate-600 mb-6">Match the words with their definitions by dragging the words from the box to the correct definitions below.</p>
+                 <div class="word-bank">
+                    <div draggable="true" class="draggable word-item !rounded-md" data-word="challenging">1. challenging</div>
+                    <div draggable="true" class="draggable word-item !rounded-md" data-word="reputation">2. reputation</div>
+                    <div draggable="true" class="draggable word-item !rounded-md" data-word="atmosphere">3. atmosphere</div>
+                    <div draggable="true" class="draggable word-item !rounded-md" data-word="promotion">4. promotion</div>
+                    <div draggable="true" class="draggable word-item !rounded-md" data-word="benefits">5. benefits</div>
+                    <div draggable="true" class="draggable word-item !rounded-md" data-word="scope">6. scope</div>
+                </div>
+                <div class="mt-8 grid grid-cols-[250px_1fr] gap-4 items-center max-w-4xl mx-auto w-full text-left">
+                    <div class="drop-zone p-2 h-full" data-answer="challenging"></div>
+                    <p>a. difficult, in a way that tests your ability</p>
+                    
+                    <div class="drop-zone p-2 h-full" data-answer="benefits"></div>
+                    <p>b. things you get because of your job that are additional to your pay but are not money</p>
+
+                    <div class="drop-zone p-2 h-full" data-answer="atmosphere"></div>
+                    <p>c. the character or feeling of a place</p>
+
+                    <div class="drop-zone p-2 h-full" data-answer="reputation"></div>
+                    <p>d. the opinion that people in general have about someone or something</p>
+
+                    <div class="drop-zone p-2 h-full" data-answer="scope"></div>
+                    <p>e. the opportunity for doing something</p>
+
+                    <div class="drop-zone p-2 h-full" data-answer="promotion"></div>
+                    <p>f. when someone is raised to a higher position</p>
+                </div>
+            </div>
+            <a href="#slide-1" class="arrow text-violet-800"><i class="fas fa-chevron-up"></i></a>
+        </section>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- SCOPE-WIDE VARIABLES & STATE ---
+        let draggedItem = null;
+        let observer = null;
+        let draggables, dropZones, sections, navDots, checkGapsBtn, gapInputs, checkInterviewBtn, interviewInputs, tfButtons, oddOneOutContainer, boxA, boxB, userCombinations, checkCompoundsBtn, compoundFeedback, checkWordOrderBtn, mistakeCorrector, checkMistakesBtn, vocabTable, checkVocabTableBtn, checkAskingInfoBtn, checkComplexQuestionsBtn, emailApplicationContainer, checkParagraphsBtn, checkFormalQuestionsBtn, checkPrepositionsBtn, checkExtraWordBtn;
+        let selectedWordA = null;
+        let selectedWordB = null;
+
+        // --- UTILITY FUNCTIONS ---
+        function shuffleChildren(parent) {
+            let children = Array.from(parent.children);
+            for (let i = children.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [children[i], children[j]] = [children[j], children[i]];
+            }
+            parent.innerHTML = '';
+            children.forEach(child => parent.appendChild(child));
+        }
+
+        // --- EVENT HANDLER FUNCTIONS ---
+        function handleDragStart(e) {
+            if (!e.target.classList.contains('draggable')) return;
+            draggedItem = e.target;
+            setTimeout(() => e.target.classList.add('dragging'), 0);
+        }
+
+        function handleDragEnd(e) {
+            setTimeout(() => {
+                if(e.target) e.target.classList.remove('dragging');
+                draggedItem = null;
+            }, 0);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            const target = e.currentTarget;
+            if(target.classList.contains('word-order-container') || target.id === 'letter-items-dropzone'){
+                const afterElement = getDragAfterElement(target, e.clientY);
+                if (afterElement == null) {
+                    target.appendChild(draggedItem);
+                } else {
+                    target.insertBefore(draggedItem, afterElement);
+                }
+            } else if (!target.querySelector('.draggable') || target.querySelector('.draggable') === draggedItem) {
+                 target.classList.add('over');
+            }
+        }
+        
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('over');
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('over');
+            if (!draggedItem || e.currentTarget.classList.contains('word-order-container')) return;
+
+            const target = e.currentTarget;
+            if(target.id === 'letter-items-dropzone' || (target.parentElement && target.parentElement.id === 'letter-items-source')) {
+                 if (target.id === 'letter-items-dropzone') target.appendChild(draggedItem);
+                 return;
+            }
+
+            const existingItem = target.querySelector('.draggable');
+            if (existingItem && existingItem !== draggedItem) {
+                let wordBank = e.currentTarget.closest('.activity-card').querySelector('.word-bank');
+                if(!wordBank) wordBank = e.currentTarget.closest('.activity-card').querySelector('#letter-items-source');
+                if (wordBank) wordBank.appendChild(existingItem);
+            }
+            
+            if(!target.classList.contains('word-order-container')) {
+                 target.prepend(draggedItem);
+                 checkDragAndDropAnswer(target);
+            }
+           
+        }
+
+        function checkDragAndDropAnswer(zone) {
+            const droppedItem = zone.querySelector('.draggable');
+            if (!droppedItem) return;
+            const droppedWord = droppedItem.dataset.word;
+            const correctAnswer = zone.dataset.answer;
+            zone.classList.remove('feedback-correct', 'feedback-incorrect');
+            if (droppedWord.toLowerCase() === correctAnswer.toLowerCase()) {
+                zone.classList.add('feedback-correct');
+                droppedItem.draggable = false;
+                droppedItem.style.cursor = 'default';
+            } else {
+                zone.classList.add('feedback-incorrect');
+            }
+        }
+        
+        function handleCheckGaps(containerId, button) {
+             const container = document.getElementById(containerId);
+             if(!container) return;
+             const inputs = container.querySelectorAll('input[type="text"]');
+             inputs.forEach(input => {
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                input.classList.remove('feedback-correct', 'feedback-incorrect');
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('feedback-correct');
+                } else {
+                    input.classList.add('feedback-incorrect');
+                }
+            });
+            if(button) button.disabled = true;
+        }
+
+        function handleCheckInterview() {
+            interviewInputs.forEach(input => {
+                const userAnswer = input.value.trim().toLowerCase().replace(/[?]/g, '');
+                const correctAnswer = input.dataset.answer.toLowerCase().replace(/[?]/g, '');
+                input.classList.remove('feedback-correct', 'feedback-incorrect');
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('feedback-correct');
+                } else {
+                    input.classList.add('feedback-incorrect');
+                }
+            });
+        }
+
+        function handleTrueFalseClick(e) {
+            const button = e.target;
+            const parent = button.parentElement;
+            const buttons = parent.querySelectorAll('.tf-btn');
+            const correctAnswer = parent.parentElement.dataset.answer;
+            const userAnswer = button.innerText.toLowerCase();
+            buttons.forEach(btn => {
+                btn.classList.remove('selected', 'correct', 'incorrect');
+                btn.disabled = true;
+            });
+            button.classList.add('selected');
+            if (userAnswer === correctAnswer) {
+                button.classList.add('correct');
+            } else {
+                button.classList.add('incorrect');
+            }
+        }
+
+        function handleOddOneOutClick(e) {
+            const clickedItem = e.target;
+            if (!clickedItem.classList.contains('odd-one-out-item')) return;
+            const row = clickedItem.parentElement;
+            if (row.classList.contains('answered')) return;
+            const correctAnswer = row.dataset.answer;
+            const userAnswer = clickedItem.innerText;
+            row.classList.add('answered');
+            const itemsInRow = row.querySelectorAll('.odd-one-out-item');
+            if (userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+                clickedItem.classList.add('correct');
+            } else {
+                clickedItem.classList.add('incorrect');
+                itemsInRow.forEach(item => {
+                    if (item.innerText.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+                        item.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        function handleCompoundWordClick(e) {
+            const target = e.target;
+            if (!target.classList.contains('compound-word-item')) return;
+            
+            const parentBox = target.parentElement;
+            
+            if (parentBox.id === 'boxA') {
+                if (selectedWordA) selectedWordA.classList.remove('selected');
+                selectedWordA = target;
+                selectedWordA.classList.add('selected');
+            } else if (parentBox.id === 'boxB') {
+                if (selectedWordB) selectedWordB.classList.remove('selected');
+                selectedWordB = target;
+                selectedWordB.classList.add('selected');
+            }
+
+            if (selectedWordA && selectedWordB) {
+                const newCombination = `${selectedWordA.innerText} ${selectedWordB.innerText}`;
+                const newPill = document.createElement('span');
+                newPill.className = 'user-combination p-2 bg-gray-200 rounded-full text-sm';
+                newPill.innerText = newCombination;
+                userCombinations.appendChild(newPill);
+
+                selectedWordA.classList.remove('selected');
+                selectedWordB.classList.remove('selected');
+                selectedWordA = null;
+                selectedWordB = null;
+            }
+        }
+
+        function handleCheckCompounds() {
+            const correctAnswers = [
+                "finance manager", "job satisfaction", "team work", "team worker",
+                "product development", "product manager", "advertising manager",
+                "office work", "office worker", "office manager", "sales manager", "work place"
+            ];
+            
+            const userAnswers = Array.from(userCombinations.children).map(el => el.innerText.toLowerCase());
+            let correctCount = 0;
+
+            userAnswers.forEach((answer, index) => {
+                const element = userCombinations.children[index];
+                if (correctAnswers.includes(answer)) {
+                    element.classList.add('correct');
+                    correctCount++;
+                } else {
+                    element.classList.add('incorrect');
+                }
+            });
+            
+            const missedAnswers = correctAnswers.filter(ans => !userAnswers.includes(ans));
+            
+            let feedbackHTML = `<h4 class="font-bold">Results</h4><p>You found ${correctCount} out of ${correctAnswers.length} possible combinations.</p>`;
+            if (missedAnswers.length > 0) {
+                feedbackHTML += `<p class="mt-2 font-semibold">Here are some you missed:</p><ul class="list-disc list-inside">`;
+                missedAnswers.forEach(ans => feedbackHTML += `<li>${ans}</li>`);
+                feedbackHTML += `</ul>`;
+            }
+            compoundFeedback.innerHTML = feedbackHTML;
+            checkCompoundsBtn.disabled = true;
+        }
+
+        function handleCheckWordOrder(containerId, button) {
+            const containers = document.querySelectorAll(`#${containerId} > div`);
+            containers.forEach(container => {
+                const correctAnswer = container.dataset.answer;
+                const wordOrderContainer = container.querySelector('.word-order-container');
+                const words = Array.from(wordOrderContainer.children).map(w => w.innerText).join(' ');
+                
+                wordOrderContainer.classList.remove('feedback-correct', 'feedback-incorrect');
+                if (words.replace(/[.?]/g, '').trim() === correctAnswer.replace(/[.?]/g, '').trim()) {
+                    wordOrderContainer.classList.add('feedback-correct');
+                } else {
+                    wordOrderContainer.classList.add('feedback-incorrect');
+                }
+            });
+            if(button) button.disabled = true;
+        }
+        
+        function handleCheckLetterOrder(){
+            const dropzone = document.getElementById('letter-items-dropzone');
+            const correctAnswer = dropzone.dataset.answer;
+            const userOrder = Array.from(dropzone.children).map(item => item.dataset.id).join(',');
+            dropzone.classList.remove('feedback-correct', 'feedback-incorrect');
+            if(userOrder === correctAnswer){
+                dropzone.classList.add('feedback-correct');
+            } else {
+                dropzone.classList.add('feedback-incorrect');
+            }
+            document.getElementById('check-letter-order-btn').disabled = true;
+        }
+        
+        function handleCheckComplexQuestions() {
+            const questions = document.querySelectorAll('#complex-questions-container > div > div');
+             questions.forEach(q => {
+                const input = q.querySelector('input');
+                const userAnswer = input.value.trim().replace(/[.?]/g, '');
+                const correctAnswer = q.parentElement.dataset.answer.replace(/[.?]/g, '');
+                input.classList.remove('feedback-correct', 'feedback-incorrect');
+                if(userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                    input.classList.add('feedback-correct');
+                } else {
+                     input.classList.add('feedback-incorrect');
+                }
+            });
+            checkComplexQuestionsBtn.disabled = true;
+        }
+
+
+        function handleCheckMistakes() {
+            const questions = mistakeCorrector.querySelectorAll('div');
+            questions.forEach(q => {
+                const input = q.querySelector('input');
+                const userAnswer = input.value.trim().replace(/\s\?/g, '?');
+                const correctAnswer = q.dataset.answer;
+                input.classList.remove('feedback-correct', 'feedback-incorrect');
+                if(userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                    input.classList.add('feedback-correct');
+                } else {
+                     input.classList.add('feedback-incorrect');
+                }
+            });
+        }
+        
+        function handleFormalChoice(e) {
+            const target = e.target;
+            if(!target.classList.contains('formal-choice')) return;
+            
+            const parent = target.parentElement;
+            if(parent.classList.contains('answered')) return;
+            parent.classList.add('answered');
+            
+            const isCorrect = target.hasAttribute('data-answer');
+            
+            if(isCorrect) {
+                target.classList.add('correct');
+            } else {
+                target.classList.add('incorrect');
+                const correctChoice = parent.querySelector('[data-answer="correct"]');
+                if(correctChoice) correctChoice.classList.add('correct');
+            }
+        }
+        
+        function handleCheckParagraphs(){
+             const selects = document.querySelectorAll('#paragraph-matcher select');
+             selects.forEach(select => {
+                const userAnswer = select.value;
+                const correctAnswer = select.dataset.answer;
+                select.classList.remove('feedback-correct', 'feedback-incorrect');
+                if(userAnswer === correctAnswer){
+                    select.classList.add('feedback-correct');
+                } else {
+                     select.classList.add('feedback-incorrect');
+                }
+             });
+             checkParagraphsBtn.disabled = true;
+        }
+        
+         function handleCheckFormalQuestions() {
+            const questions = document.querySelectorAll('#formal-questions-container > div');
+            questions.forEach(q => {
+                const input = q.querySelector('input');
+                const userAnswer = input.value.trim().replace(/[.?]/g, '');
+                const correctAnswer = q.dataset.answer;
+                input.classList.remove('feedback-correct', 'feedback-incorrect');
+                if(userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                    input.classList.add('feedback-correct');
+                } else {
+                     input.classList.add('feedback-incorrect');
+                }
+            });
+            document.getElementById('check-formal-questions-btn').disabled = true;
+        }
+
+        function handleCheckVocabTable() {
+             const inputs = vocabTable.querySelectorAll('input[type="text"]');
+             inputs.forEach(input => {
+                const userAnswer = input.value.trim().toLowerCase();
+                const correctAnswer = input.dataset.answer.toLowerCase();
+                 input.classList.remove('feedback-correct', 'feedback-incorrect');
+                 if(userAnswer === correctAnswer) {
+                    input.classList.add('feedback-correct');
+                 } else {
+                     input.classList.add('feedback-incorrect');
+                 }
+             });
+        }
+
+
+        function handleIntersection(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const currentSlideId = entry.target.id;
+                    navDots.forEach(dot => {
+                        dot.classList.remove('active');
+                        if (dot.getAttribute('href') === `#${currentSlideId}`) {
+                            dot.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        // --- SETUP AND CLEANUP ---
+        function setup() {
+            // Query for all elements
+            draggables = document.querySelectorAll('.draggable');
+            dropZones = document.querySelectorAll('.drop-zone, .drop-zone-inline, .word-order-container, #letter-items-dropzone, #letter-items-source');
+            sections = document.querySelectorAll('.slide');
+            navDots = document.querySelectorAll('.nav-dots a');
+            checkGapsBtn = document.getElementById('check-gaps-btn');
+            gapInputs = document.querySelectorAll('#slide-9 input[type="text"]');
+            checkInterviewBtn = document.getElementById('check-interview-btn');
+            interviewInputs = document.querySelectorAll('#slide-11 input[type="text"]');
+            tfButtons = document.querySelectorAll('.tf-btn');
+            oddOneOutContainer = document.getElementById('odd-one-out-container');
+            boxA = document.getElementById('boxA');
+            boxB = document.getElementById('boxB');
+            userCombinations = document.getElementById('user-combinations');
+            checkCompoundsBtn = document.getElementById('check-compounds-btn');
+            compoundFeedback = document.getElementById('compound-feedback');
+            checkWordOrderBtn = document.getElementById('check-word-order-btn');
+            mistakeCorrector = document.getElementById('mistake-corrector');
+            checkMistakesBtn = document.getElementById('check-mistakes-btn');
+            vocabTable = document.getElementById('vocab-table');
+            checkVocabTableBtn = document.getElementById('check-vocab-table-btn');
+            checkAskingInfoBtn = document.getElementById('check-asking-info-btn');
+            const checkLetterOrderBtn = document.getElementById('check-letter-order-btn');
+            checkComplexQuestionsBtn = document.getElementById('check-complex-questions-btn');
+            emailApplicationContainer = document.getElementById('email-application-container');
+            checkParagraphsBtn = document.getElementById('check-paragraphs-btn');
+            const checkFormalQuestionsBtn = document.getElementById('check-formal-questions-btn');
+            const checkPrepositionsBtn = document.getElementById('check-prepositions-btn');
+            const checkExtraWordBtn = document.getElementById('check-extra-word-btn');
+
+
+            // --- SHUFFLE ACTIVITY 5 (SLIDE 8) ---
+            const activity5WordBank = document.querySelector('#slide-8 .word-bank');
+            const activity5Definitions = document.querySelector('#slide-8 .grid');
+            if (activity5WordBank) shuffleChildren(activity5WordBank);
+            if (activity5Definitions) shuffleChildren(activity5Definitions);
+            // --- END SHUFFLE ---
+
+            // Setup Intersection Observer
+            const observerOptions = {
+                root: document.querySelector('.container-snap'),
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+            observer = new IntersectionObserver(handleIntersection, observerOptions);
+            sections.forEach(section => observer.observe(section));
+
+            // Setup Drag and Drop Listeners
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', handleDragStart);
+                draggable.addEventListener('dragend', handleDragEnd);
+            });
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('dragleave', handleDragLeave);
+                zone.addEventListener('drop', handleDrop);
+            });
+
+            // Setup Button Click Listeners
+            if (checkGapsBtn) checkGapsBtn.addEventListener('click', () => handleCheckGaps('preposition-exercise', checkGapsBtn));
+            if (checkInterviewBtn) checkInterviewBtn.addEventListener('click', handleCheckInterview);
+            if (oddOneOutContainer) oddOneOutContainer.addEventListener('click', handleOddOneOutClick);
+            if (boxA) boxA.addEventListener('click', handleCompoundWordClick);
+            if (boxB) boxB.addEventListener('click', handleCompoundWordClick);
+            if (checkCompoundsBtn) checkCompoundsBtn.addEventListener('click', handleCheckCompounds);
+            if (checkWordOrderBtn) checkWordOrderBtn.addEventListener('click', () => handleCheckWordOrder('word-order-container', checkWordOrderBtn));
+            if (checkAskingInfoBtn) checkAskingInfoBtn.addEventListener('click', () => handleCheckWordOrder('asking-info-container', checkAskingInfoBtn));
+            if (checkMistakesBtn) checkMistakesBtn.addEventListener('click', handleCheckMistakes);
+            if (checkVocabTableBtn) checkVocabTableBtn.addEventListener('click', handleCheckVocabTable);
+            if (checkLetterOrderBtn) checkLetterOrderBtn.addEventListener('click', handleCheckLetterOrder);
+            if (checkComplexQuestionsBtn) checkComplexQuestionsBtn.addEventListener('click', handleCheckComplexQuestions);
+            if (emailApplicationContainer) emailApplicationContainer.addEventListener('click', handleFormalChoice);
+            if (checkParagraphsBtn) checkParagraphsBtn.addEventListener('click', handleCheckParagraphs);
+            if(checkFormalQuestionsBtn) checkFormalQuestionsBtn.addEventListener('click', handleCheckFormalQuestions);
+            if(checkPrepositionsBtn) checkPrepositionsBtn.addEventListener('click', () => handleCheckGaps('preposition-exercise', checkPrepositionsBtn));
+            if(checkExtraWordBtn) checkExtraWordBtn.addEventListener('click', () => {
+                const lines = document.querySelectorAll('#extra-word-container .extra-word-line');
+                lines.forEach(line => {
+                    const answer = line.dataset.answer;
+                    const input = line.querySelector('input[type="text"]');
+                    const checkbox = line.querySelector('input[type="checkbox"]');
+                    
+                    if(input) {
+                        const userAnswer = input.value.trim().toLowerCase();
+                        input.classList.remove('feedback-correct', 'feedback-incorrect');
+                        if(userAnswer === answer) {
+                            input.classList.add('feedback-correct');
+                        } else {
+                            input.classList.add('feedback-incorrect');
+                        }
+                    } else if (checkbox) {
+                        checkbox.parentElement.classList.remove('feedback-correct', 'feedback-incorrect');
+                        if(checkbox.checked && answer === 'correct') {
+                             checkbox.parentElement.classList.add('feedback-correct');
+                        } else if (!checkbox.checked && answer !== 'correct'){
+                            checkbox.parentElement.classList.add('feedback-correct');
+                        } else {
+                            checkbox.parentElement.classList.add('feedback-incorrect');
+                        }
+                    }
+                });
+                checkExtraWordBtn.disabled = true;
+            });
+
+
+            tfButtons.forEach(button => button.addEventListener('click', handleTrueFalseClick));
+            
+            // Add cleanup listener for when the user leaves the page
+            window.addEventListener('beforeunload', cleanup);
+        }
+
+        function cleanup() {
+            draggables.forEach(draggable => {
+                draggable.removeEventListener('dragstart', handleDragStart);
+                draggable.removeEventListener('dragend', handleDragEnd);
+            });
+            dropZones.forEach(zone => {
+                zone.removeEventListener('dragover', handleDragOver);
+                zone.removeEventListener('dragleave', handleDragLeave);
+                zone.removeEventListener('drop', handleDrop);
+            });
+
+            if (checkGapsBtn) checkGapsBtn.removeEventListener('click', () => handleCheckGaps('preposition-exercise', checkGapsBtn));
+            if (checkInterviewBtn) checkInterviewBtn.removeEventListener('click', handleCheckInterview);
+            if (oddOneOutContainer) oddOneOutContainer.removeEventListener('click', handleOddOneOutClick);
+            if (boxA) boxA.removeEventListener('click', handleCompoundWordClick);
+            if (boxB) boxB.removeEventListener('click', handleCompoundWordClick);
+            if (checkCompoundsBtn) checkCompoundsBtn.removeEventListener('click', handleCheckCompounds);
+            if (checkWordOrderBtn) checkWordOrderBtn.removeEventListener('click', () => handleCheckWordOrder('word-order-container', checkWordOrderBtn));
+             if (checkAskingInfoBtn) checkAskingInfoBtn.removeEventListener('click', () => handleCheckWordOrder('asking-info-container', checkAskingInfoBtn));
+            if (checkMistakesBtn) checkMistakesBtn.removeEventListener('click', handleCheckMistakes);
+            if (checkVocabTableBtn) checkVocabTableBtn.removeEventListener('click', handleCheckVocabTable);
+            const checkLetterOrderBtn = document.getElementById('check-letter-order-btn');
+            if (checkLetterOrderBtn) checkLetterOrderBtn.removeEventListener('click', handleCheckLetterOrder);
+            if (checkComplexQuestionsBtn) checkComplexQuestionsBtn.removeEventListener('click', handleCheckComplexQuestions);
+             if (emailApplicationContainer) emailApplicationContainer.removeEventListener('click', handleFormalChoice);
+             if (checkParagraphsBtn) checkParagraphsBtn.removeEventListener('click', handleCheckParagraphs);
+             const checkFormalQuestionsBtn = document.getElementById('check-formal-questions-btn');
+             if(checkFormalQuestionsBtn) checkFormalQuestionsBtn.removeEventListener('click', handleCheckFormalQuestions);
+             const checkPrepositionsBtn = document.getElementById('check-prepositions-btn');
+             if(checkPrepositionsBtn) checkPrepositionsBtn.removeEventListener('click', () => handleCheckGaps('preposition-exercise', checkPrepositionsBtn));
+             const checkExtraWordBtn = document.getElementById('check-extra-word-btn');
+             if(checkExtraWordBtn) checkExtraWordBtn.removeEventListener('click', () => {});
+
+
+            tfButtons.forEach(button => button.addEventListener('click', handleTrueFalseClick));
+
+            if (observer) observer.disconnect();
+            
+            draggedItem = observer = draggables = dropZones = sections = navDots = checkGapsBtn = gapInputs = checkInterviewBtn = interviewInputs = tfButtons = oddOneOutContainer = boxA = boxB = userCombinations = checkCompoundsBtn = compoundFeedback = selectedWordA = selectedWordB = checkWordOrderBtn = mistakeCorrector = checkMistakesBtn = vocabTable = checkVocabTableBtn = checkAskingInfoBtn = checkComplexQuestionsBtn = emailApplicationContainer = checkParagraphsBtn = checkFormalQuestionsBtn = null;
+            
+            window.removeEventListener('beforeunload', cleanup);
+        }
+
+        // --- INITIALIZE THE SCRIPT ---
+        setup();
+    });
+    </script>
+</body>
+</html>
+
