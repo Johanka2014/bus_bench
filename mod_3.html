@@ -88,6 +88,10 @@
             transform: translateX(-50%);
             font-size: 2rem;
             animation: bounce 2s infinite;
+            display: none; /* Hide arrows by default */
+        }
+        .slide.active .arrow {
+            display: block; /* Show arrow only on active slide */
         }
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {
@@ -425,20 +429,9 @@
             <div class="activity-card">
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Vocabulary</h2>
                 <p class="text-slate-600 mb-6">Find words or phrases in the text on the previous page which mean the following. Drag the correct phrase to its definition.</p>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <!-- Definitions -->
-                    <div class="space-y-3 text-left">
-                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>1.</span><div class="drop-zone p-2 rounded-lg" data-answer="in-house"></div><span>= inside the company (Helen)</span></div>
-                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>2.</span><div class="drop-zone p-2 rounded-lg" data-answer="added bonuses"></div><span>= pleasant additional things (Mark)</span></div>
-                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>3.</span><div class="drop-zone p-2 rounded-lg" data-answer="nine-to-five kind of person"></div><span>= person who likes work that begins at nine and finishes at five (Mark)</span></div>
-                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>4.</span><div class="drop-zone p-2 rounded-lg" data-answer="standing over me"></div><span>= supervising (Mark)</span></div>
-                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>5.</span><div class="drop-zone p-2 rounded-lg" data-answer="take over"></div><span>= start doing a job that another person did before (Mark)</span></div>
-                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>6.</span><div class="drop-zone p-2 rounded-lg" data-answer="loads of"></div><span>= lots of (Deby)</span></div>
-                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>7.</span><div class="drop-zone p-2 rounded-lg" data-answer="venues"></div><span>= places where public events happen (Deby)</span></div>
-                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>8.</span><div class="drop-zone p-2 rounded-lg" data-answer="entry level"></div><span>= the lowest level of an organisation (Deby)</span></div>
-                    </div>
+                
                     <!-- Word Bank -->
-                     <div class="word-bank flex-col !items-stretch !justify-start !mt-0">
+                     <div class="word-bank  !items-stretch !justify-start !mt-0">
                         <div draggable="true" class="draggable word-item" data-word="in-house">in-house</div>
                         <div draggable="true" class="draggable word-item" data-word="added bonuses">added bonuses</div>
                         <div draggable="true" class="draggable word-item" data-word="nine-to-five kind of person">nine-to-five kind of person</div>
@@ -448,6 +441,19 @@
                         <div draggable="true" class="draggable word-item" data-word="venues">venues</div>
                         <div draggable="true" class="draggable word-item" data-word="entry level">entry level</div>
                     </div>
+                    <!-- Definitions -->
+                    
+                    <div class="space-y-3 text-left mt-6">
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>1.</span><div class="drop-zone p-2 rounded-lg" data-answer="in-house"></div><span>= inside the company (Helen)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>2.</span><div class="drop-zone p-2 rounded-lg" data-answer="added bonuses"></div><span>= pleasant additional things (Mark)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>3.</span><div class="drop-zone p-2 rounded-lg" data-answer="nine-to-five kind of person"></div><span>= person who likes work that begins at nine and finishes at five (Mark)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>4.</span><div class="drop-zone p-2 rounded-lg" data-answer="standing over me"></div><span>= supervising (Mark)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>5.</span><div class="drop-zone p-2 rounded-lg" data-answer="take over"></div><span>= start doing a job that another person did before (Mark)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>6.</span><div class="drop-zone p-2 rounded-lg" data-answer="loads of"></div><span>= lots of (Deby)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>7.</span><div class="drop-zone p-2 rounded-lg" data-answer="venues"></div><span>= places where public events happen (Deby)</span></div>
+                        <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3"><span>8.</span><div class="drop-zone p-2 rounded-lg" data-answer="entry level"></div><span>= the lowest level of an organisation (Deby)</span></div>
+                    </div>
+                    
                 </div>
             </div>
             <a href="#slide-6" class="arrow text-yellow-800"><i class="fas fa-chevron-down"></i></a>
@@ -608,7 +614,7 @@
 
         <!-- Slide 10: Advice on Job Applications -->
         <section id="slide-10" class="slide bg-gradient-to-br from-pink-200 to-fuchsia-200">
-            <div class="activity-card text-left">
+            <div class="activity-card">
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Advice on job applications</h2>
                 <h3 class="text-xl font-semibold text-slate-600 mb-4">Listening</h3>
                 <div id="advice-container">
@@ -656,7 +662,7 @@
         <!-- Slide 11: Listening - Advice from HR -->
         <section id="slide-11" class="slide bg-gradient-to-br from-rose-200 to-pink-200">
             <div class="activity-card">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 7: Advice from HR Officers</h2>
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Advice from HR Officers</h2>
                 <p class="text-slate-600 mb-4">You are going to hear an extract from a television programme in which five human resources officers give advice about applying for jobs. For each speaker, decide what advice from the previous activity is being given. Drag the advice to the correct speaker.</p>
                 <audio controls class="w-full max-w-md mx-auto mb-6">
                     <source src="https://johanka2014.github.io/bus_bench/mod_3/05%20Unit%203.mp3" type="audio/mpeg">
@@ -705,7 +711,7 @@
         <!-- Slide 12: An email of application -->
         <section id="slide-12" class="slide bg-gradient-to-br from-rose-200 to-pink-200">
             <div class="activity-card">
-                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 8: An email of application</h2>
+                 <h2 class="text-3xl font-bold text-slate-800 mb-2">An email of application</h2>
                  <h3 class="text-xl font-semibold text-slate-600 mb-6">Writing</h3>
                  <div class="grid md:grid-cols-2 gap-8 text-left">
                     <div>
@@ -725,25 +731,25 @@
                         </div>
                         <p class="mb-4">Dear Sir or Madam,</p>
                         <p class="mb-4">
-                            1 <span class="choice-pair">(<span class="formal-choice">I am writing</span> / <span class="formal-choice" data-answer="correct">I write</span>)</span>
-                            2 <span class="choice-pair">(<span class="formal-choice">to apply</span> / <span class="formal-choice" data-answer="correct">for applying</span>)</span> for the
+                            1 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">I am writing</span> / <span class="formal-choice">I write</span>)</span>
+                            2 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">to apply</span> / <span class="formal-choice">in application for</span>)</span> for the
                             3 <span class="choice-pair">(<span class="formal-choice">job</span> / <span class="formal-choice" data-answer="correct">post</span>)</span> of North-Western Area Sales Manager, as
-                            4 <span class="choice-pair">(<span class="formal-choice">currently advertised</span> / <span class="formal-choice" data-answer="correct">I have seen advertised</span>)</span> on your website.
+                            4 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">as currently advertised</span> / <span class="formal-choice">as advertised</span>)</span> on your website.
                         </p>
                          <p class="mb-4">
                             As you will see from my attached CV, I am a 28-year-old graduate in Business and Marketing from Hamburg University, with five years of experience in marketing and sales with Audi AGF based in Bremen. My 5 <span class="choice-pair">(<span class="formal-choice">present job</span> / <span class="formal-choice" data-answer="correct">current position</span>)</span> is Assistant Sales Manager for the Bremen and Niedersachsen region.
                          </p>
                         <p class="mb-4">
-                            Since leaving university, apart from 6 <span class="choice-pair">(<span class="formal-choice">working</span> / <span class="formal-choice" data-answer="correct">practical experience</span>)</span> in the various posts I have 7 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">held</span> / <span class="formal-choice">worked in</span>)</span>, I have studied 8 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">a lot</span> / <span class="formal-choice">extensively</span>)</span> at night school, 9 <span class="choice-pair">(<span class="formal-choice">going on</span> / <span class="formal-choice" data-answer="correct">attending</span>)</span> courses in Negotiating Skills, Personnel Management and Marketing. I have also 10 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">attended</span> / <span class="formal-choice">gone on</span>)</span> various internal courses in the same areas in the companies I have worked for.
+                            Since leaving university, apart from 6 <span class="choice-pair">(<span class="formal-choice">working</span> / <span class="formal-choice" data-answer="correct">practical experience</span>)</span> in the various posts I have 7 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">held</span> / <span class="formal-choice">worked in</span>)</span>, I have studied 8 <span class="choice-pair">(<span class="formal-choice">a lot</span> / <span class="formal-choice" data-answer="correct">extensively</span>)</span> at night school, 9 <span class="choice-pair">(<span class="formal-choice">going on</span> / <span class="formal-choice" data-answer="correct">attending</span>)</span> courses in Negotiating Skills, Personnel Management and Marketing. I have also 10 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">attended</span> / <span class="formal-choice">gone on</span>)</span> various internal courses in the same areas in the companies I have worked for.
                         </p>
                          <p class="mb-4">
-                            11 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">I am</span> / <span class="formal-choice">I'm</span>)</span> interested in the post advertised because it seems to me to 12 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">represent</span> / <span class="formal-choice">be</span>)</span> the type of opportunity I am 13 <span class="choice-pair">(<span class="formal-choice">looking for</span> / <span class="formal-choice" data-answer="correct">seeking</span>)</span>: to move into a large international producer of consumer products and to 14 <span class="choice-pair">(<span class="formal-choice">have the experience of managing</span> / <span class="formal-choice" data-answer="correct">be a</span>)</span> regional sales manager myself.
+                            11 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">I am</span> / <span class="formal-choice">I'm</span>)</span> interested in the post advertised because it seems to me to 12 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">represent</span> / <span class="formal-choice">be</span>)</span> the type of opportunity I am 13 <span class="choice-pair">(<span class="formal-choice">looking for</span> / <span class="formal-choice" data-answer="correct">seeking</span>)</span>: to move into a large international producer of consumer products and to 14 <span class="choice-pair">(<span class="formal-choice">have the experience of managing regional sales</span> / <span class="formal-choice" data-answer="correct">be a regional sales manager</span>)</span> myself.
                         </p>
                          <p class="mb-4">
-                            I hope my application and my 15 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">curriculum vitae</span> / <span class="formal-choice">CV</span>)</span> will be of interest to you. I am 16 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">ready</span> / <span class="formal-choice">available</span>)</span> to come to an interview at any time, and my 17 <span class="choice-pair">(<span class="formal-choice">present employers</span> / <span class="formal-choice" data-answer="correct">boss</span>)</span> would be happy to 18 <span class="choice-pair">(<span class="formal-choice">give</span> / <span class="formal-choice" data-answer="correct">supply</span>)</span> a reference.
+                            I hope my application and my 15 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">curriculum vitae</span> / <span class="formal-choice">CV</span>)</span> will be of interest to you. I am 16 <span class="choice-pair">(<span class="formal-choice">ready</span> / <span class="formal-choice" data-answer="correct">available</span>)</span> to come to an interview at any time, and my 17 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">present employers</span> / <span class="formal-choice">boss</span>)</span> would be happy to 18 <span class="choice-pair">(<span class="formal-choice">give</span> / <span class="formal-choice" data-answer="correct">supply</span>)</span> a reference.
                         </p>
                          <p class="mb-4">
-                             I 19 <span class="choice-pair">(<span class="formal-choice">look forward</span> / <span class="formal-choice" data-answer="correct">am looking forward</span>)</span> to hearing from you.
+                             I 19 <span class="choice-pair">(<span class="formal-choice" data-answer="correct">look forward</span> / <span class="formal-choice">am looking forward</span>)</span> to hearing from you.
                          </p>
                         <p class="mb-2">Yours faithfully,</p>
                         <p>Christa Schmidt</p>
@@ -793,30 +799,30 @@
         <!-- Slide 14: Reading - Extra Word -->
          <section id="slide-14" class="slide bg-gradient-to-br from-purple-200 to-indigo-200">
             <div class="activity-card text-left">
-                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity 9: Reading</h2>
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Reading</h2>
                  <p class="text-slate-600 mb-6">Read the following letter of application. In most lines, there is one extra word. It is either grammatically incorrect or does not fit in with the meaning of the text. Some lines, however, are correct. If a line is correct, put a tick (✓). If there is an extra word in the line, write it in the box.</p>
                 <div id="extra-word-container" class="space-y-2">
-                    <div class="extra-word-line" data-answer="for"><p>1. I am writing <strong>for</strong> to apply for the post of manager in your new branch</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="for"><p>1. I am writing forto apply for the post of manager in your new branch</p><input type="text" class="extra-word-input"></div>
                     <div class="extra-word-line" data-answer="correct"><p>2. to be opened in Lewisham, as advertised in the Daily Gazette of</p><div class="correct-tick"><input type="checkbox" id="line2"><label for="line2"> ✓</label></div></div>
                     <div class="extra-word-line" data-answer="correct"><p>3. 5 November.</p><div class="correct-tick"><input type="checkbox" id="line3"><label for="line3"> ✓</label></div></div>
-                    <div class="extra-word-line" data-answer="now"><p>4. As you will <strong>now</strong> see from my enclosed curriculum vitae, I am a</p><input type="text" class="extra-word-input"></div>
-                    <div class="extra-word-line" data-answer="qualification"><p>5. 33-year-old graduate <strong>qualification</strong> in social sciences from the</p><input type="text" class="extra-word-input"></div>
-                    <div class="extra-word-line" data-answer="of"><p>6. University of Bristol, with eight years' <strong>of</strong> experience in management</p><input type="text" class="extra-word-input"></div>
-                    <div class="extra-word-line" data-answer="being"><p>7. posts within the retail trade, my current position is <strong>being</strong> that of</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="now"><p>4. As you will now see from my enclosed curriculum vitae, I am a</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="qualification"><p>5. 33-year-old graduate qualification in social sciences from the</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="of"><p>6. University of Bristol, with eight years' of experience in management</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="being"><p>7. posts within the retail trade, my current position is >being that of</p><input type="text" class="extra-word-input"></div>
                     <div class="extra-word-line" data-answer="correct"><p>8. assistant manager at a branch of Dixons in Southampton.</p><div class="correct-tick"><input type="checkbox" id="line8"><label for="line8"> ✓</label></div></div>
-                    <div class="extra-word-line" data-answer="my"><p>9. Since <strong>my</strong> leaving university, apart from practical experience in the</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="my"><p>9. Since my leaving university, apart from practical experience in the</p><input type="text" class="extra-word-input"></div>
                     <div class="extra-word-line" data-answer="correct"><p>10. various posts I have held, although I have studied extensively at</p><div class="correct-tick"><input type="checkbox" id="line10"><label for="line10"> ✓</label></div></div>
                     <div class="extra-word-line" data-answer="correct"><p>11. night school, attending courses in Negotiating Skills, Personnel</p><div class="correct-tick"><input type="checkbox" id="line11"><label for="line11"> ✓</label></div></div>
-                    <div class="extra-word-line" data-answer="for"><p>12. Management and Marketing. Dixons have also sent <strong>for</strong> me on</p><input type="text" class="extra-word-input"></div>
-                    <div class="extra-word-line" data-answer="of"><p>13. various <strong>of</strong> internal courses in the same areas.</p><input type="text" class="extra-word-input"></div>
-                    <div class="extra-word-line" data-answer="so"><p>14. I am <strong>so</strong> interested in the post advertised because it seems to me</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="for"><p>12. Management and Marketing. Dixons have also sent for me on</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="of"><p>13. various of internal courses in the same areas.</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="so"><p>14. I am so interested in the post advertised because it seems to me</p><input type="text" class="extra-word-input"></div>
                     <div class="extra-word-line" data-answer="correct"><p>15. to represent the type of opportunity I am looking for - to move into a</p><div class="correct-tick"><input type="checkbox" id="line15"><label for="line15"> ✓</label></div></div>
-                    <div class="extra-word-line" data-answer="going"><p>16. large international retailing organisation and <strong>going</strong> to have the</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="going"><p>16. large international retailing organisation and going to have the</p><input type="text" class="extra-word-input"></div>
                     <div class="extra-word-line" data-answer="correct"><p>17. experience of setting up a new store from the start.</p><div class="correct-tick"><input type="checkbox" id="line17"><label for="line17"> ✓</label></div></div>
-                    <div class="extra-word-line" data-answer="for"><p>18. I hope <strong>for</strong> my application and my curriculum vitae will be of</p><input type="text" class="extra-word-input"></div>
-                    <div class="extra-word-line" data-answer="other"><p>19. interest to you. I am available for interview at any <strong>other</strong> time, and</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="for"><p>18. I hope for my application and my curriculum vitae will be of</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="other"><p>19. interest to you. I am available for interview at any other time, and</p><input type="text" class="extra-word-input"></div>
                     <div class="extra-word-line" data-answer="correct"><p>20. my present employers would be happy to supply you a reference.</p><div class="correct-tick"><input type="checkbox" id="line20"><label for="line20"> ✓</label></div></div>
-                    <div class="extra-word-line" data-answer="am"><p>I <strong>am</strong> look forward to hearing from you.</p><input type="text" class="extra-word-input"></div>
+                    <div class="extra-word-line" data-answer="am"><p>I am look forward to hearing from you.</p><input type="text" class="extra-word-input"></div>
                     <div class="extra-word-line" data-answer="correct"><p>Yours faithfully,</p><div class="correct-tick"><input type="checkbox" id="line22"><label for="line22"> ✓</label></div></div>
                 </div>
                 <button id="check-extra-word-btn" class="mt-6 bg-blue-600 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-700 transition">Check Answers</button>
@@ -837,23 +843,23 @@
                     <div draggable="true" class="draggable word-item !rounded-md" data-word="benefits">5. benefits</div>
                     <div draggable="true" class="draggable word-item !rounded-md" data-word="scope">6. scope</div>
                 </div>
-                <div class="mt-8 grid grid-cols-[250px_1fr] gap-4 items-center max-w-4xl mx-auto w-full text-left">
-                    <div class="drop-zone p-2 h-full" data-answer="challenging"></div>
+                <div class="mt-8 grid grid-cols-[auto_1fr] gap-4 items-center max-w-4xl mx-auto w-full text-left">
+                    <div class="drop-zone p-2 h-full w-48" data-answer="challenging"></div>
                     <p>a. difficult, in a way that tests your ability</p>
                     
-                    <div class="drop-zone p-2 h-full" data-answer="benefits"></div>
+                    <div class="drop-zone p-2 h-full w-48" data-answer="benefits"></div>
                     <p>b. things you get because of your job that are additional to your pay but are not money</p>
 
-                    <div class="drop-zone p-2 h-full" data-answer="atmosphere"></div>
+                    <div class="drop-zone p-2 h-full w-48" data-answer="atmosphere"></div>
                     <p>c. the character or feeling of a place</p>
 
-                    <div class="drop-zone p-2 h-full" data-answer="reputation"></div>
+                    <div class="drop-zone p-2 h-full w-48" data-answer="reputation"></div>
                     <p>d. the opinion that people in general have about someone or something</p>
 
-                    <div class="drop-zone p-2 h-full" data-answer="scope"></div>
+                    <div class="drop-zone p-2 h-full w-48" data-answer="scope"></div>
                     <p>e. the opportunity for doing something</p>
 
-                    <div class="drop-zone p-2 h-full" data-answer="promotion"></div>
+                    <div class="drop-zone p-2 h-full w-48" data-answer="promotion"></div>
                     <p>f. when someone is raised to a higher position</p>
                 </div>
             </div>
@@ -867,7 +873,7 @@
         // --- SCOPE-WIDE VARIABLES & STATE ---
         let draggedItem = null;
         let observer = null;
-        let draggables, dropZones, sections, navDots, checkGapsBtn, gapInputs, checkInterviewBtn, interviewInputs, tfButtons, oddOneOutContainer, boxA, boxB, userCombinations, checkCompoundsBtn, compoundFeedback, checkWordOrderBtn, mistakeCorrector, checkMistakesBtn, vocabTable, checkVocabTableBtn, checkAskingInfoBtn, checkComplexQuestionsBtn, emailApplicationContainer, checkParagraphsBtn, checkFormalQuestionsBtn, checkPrepositionsBtn, checkExtraWordBtn;
+        let draggables, dropZones, sections, navDots, checkAskingInfoBtn, checkComplexQuestionsBtn, emailApplicationContainer, checkParagraphsBtn, checkFormalQuestionsBtn, checkExtraWordBtn, checkPrepositionsBtn;
         let selectedWordA = null;
         let selectedWordB = null;
 
@@ -899,8 +905,16 @@
         function handleDragOver(e) {
             e.preventDefault();
             const target = e.currentTarget;
-            if(target.classList.contains('word-order-container') || target.id === 'letter-items-dropzone'){
-                const afterElement = getDragAfterElement(target, e.clientY);
+
+            if(target.classList.contains('word-order-container')) { // Horizontal container
+                 const afterElement = getDragAfterElementHorizontal(target, e.clientX); // Use new function and e.clientX
+                if (afterElement == null) {
+                    target.appendChild(draggedItem);
+                } else {
+                    target.insertBefore(draggedItem, afterElement);
+                }
+            } else if (target.id === 'letter-items-dropzone') { // Vertical container
+                const afterElement = getDragAfterElementVertical(target, e.clientY); // Use renamed function and e.clientY
                 if (afterElement == null) {
                     target.appendChild(draggedItem);
                 } else {
@@ -911,11 +925,24 @@
             }
         }
         
-        function getDragAfterElement(container, y) {
+        function getDragAfterElementVertical(container, y) { // Renamed
             const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
             return draggableElements.reduce((closest, child) => {
                 const box = child.getBoundingClientRect();
-                const offset = y - box.top - box.height / 2;
+                const offset = y - box.top - box.height / 2; // Uses y/top/height
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function getDragAfterElementHorizontal(container, x) { // New
+            const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = x - box.left - box.width / 2; // Uses x/left/width
                 if (offset < 0 && offset > closest.offset) {
                     return { offset: offset, element: child };
                 } else {
@@ -934,7 +961,7 @@
             if (!draggedItem || e.currentTarget.classList.contains('word-order-container')) return;
 
             const target = e.currentTarget;
-            if(target.id === 'letter-items-dropzone' || (target.parentElement && target.parentElement.id === 'letter-items-source')) {
+             if(target.id === 'letter-items-dropzone' || (target.parentElement && target.parentElement.id === 'letter-items-source')) {
                  if (target.id === 'letter-items-dropzone') target.appendChild(draggedItem);
                  return;
             }
@@ -958,6 +985,13 @@
             if (!droppedItem) return;
             const droppedWord = droppedItem.dataset.word;
             const correctAnswer = zone.dataset.answer;
+            
+            // Add guard for missing data attributes
+            if (typeof droppedWord === 'undefined' || typeof correctAnswer === 'undefined') {
+                zone.classList.remove('feedback-correct', 'feedback-incorrect'); // Clear feedback if any
+                return;
+            }
+
             zone.classList.remove('feedback-correct', 'feedback-incorrect');
             if (droppedWord.toLowerCase() === correctAnswer.toLowerCase()) {
                 zone.classList.add('feedback-correct');
@@ -984,121 +1018,7 @@
             });
             if(button) button.disabled = true;
         }
-
-        function handleCheckInterview() {
-            interviewInputs.forEach(input => {
-                const userAnswer = input.value.trim().toLowerCase().replace(/[?]/g, '');
-                const correctAnswer = input.dataset.answer.toLowerCase().replace(/[?]/g, '');
-                input.classList.remove('feedback-correct', 'feedback-incorrect');
-                if (userAnswer === correctAnswer) {
-                    input.classList.add('feedback-correct');
-                } else {
-                    input.classList.add('feedback-incorrect');
-                }
-            });
-        }
-
-        function handleTrueFalseClick(e) {
-            const button = e.target;
-            const parent = button.parentElement;
-            const buttons = parent.querySelectorAll('.tf-btn');
-            const correctAnswer = parent.parentElement.dataset.answer;
-            const userAnswer = button.innerText.toLowerCase();
-            buttons.forEach(btn => {
-                btn.classList.remove('selected', 'correct', 'incorrect');
-                btn.disabled = true;
-            });
-            button.classList.add('selected');
-            if (userAnswer === correctAnswer) {
-                button.classList.add('correct');
-            } else {
-                button.classList.add('incorrect');
-            }
-        }
-
-        function handleOddOneOutClick(e) {
-            const clickedItem = e.target;
-            if (!clickedItem.classList.contains('odd-one-out-item')) return;
-            const row = clickedItem.parentElement;
-            if (row.classList.contains('answered')) return;
-            const correctAnswer = row.dataset.answer;
-            const userAnswer = clickedItem.innerText;
-            row.classList.add('answered');
-            const itemsInRow = row.querySelectorAll('.odd-one-out-item');
-            if (userAnswer.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
-                clickedItem.classList.add('correct');
-            } else {
-                clickedItem.classList.add('incorrect');
-                itemsInRow.forEach(item => {
-                    if (item.innerText.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
-                        item.classList.add('correct');
-                    }
-                });
-            }
-        }
-
-        function handleCompoundWordClick(e) {
-            const target = e.target;
-            if (!target.classList.contains('compound-word-item')) return;
-            
-            const parentBox = target.parentElement;
-            
-            if (parentBox.id === 'boxA') {
-                if (selectedWordA) selectedWordA.classList.remove('selected');
-                selectedWordA = target;
-                selectedWordA.classList.add('selected');
-            } else if (parentBox.id === 'boxB') {
-                if (selectedWordB) selectedWordB.classList.remove('selected');
-                selectedWordB = target;
-                selectedWordB.classList.add('selected');
-            }
-
-            if (selectedWordA && selectedWordB) {
-                const newCombination = `${selectedWordA.innerText} ${selectedWordB.innerText}`;
-                const newPill = document.createElement('span');
-                newPill.className = 'user-combination p-2 bg-gray-200 rounded-full text-sm';
-                newPill.innerText = newCombination;
-                userCombinations.appendChild(newPill);
-
-                selectedWordA.classList.remove('selected');
-                selectedWordB.classList.remove('selected');
-                selectedWordA = null;
-                selectedWordB = null;
-            }
-        }
-
-        function handleCheckCompounds() {
-            const correctAnswers = [
-                "finance manager", "job satisfaction", "team work", "team worker",
-                "product development", "product manager", "advertising manager",
-                "office work", "office worker", "office manager", "sales manager", "work place"
-            ];
-            
-            const userAnswers = Array.from(userCombinations.children).map(el => el.innerText.toLowerCase());
-            let correctCount = 0;
-
-            userAnswers.forEach((answer, index) => {
-                const element = userCombinations.children[index];
-                if (correctAnswers.includes(answer)) {
-                    element.classList.add('correct');
-                    correctCount++;
-                } else {
-                    element.classList.add('incorrect');
-                }
-            });
-            
-            const missedAnswers = correctAnswers.filter(ans => !userAnswers.includes(ans));
-            
-            let feedbackHTML = `<h4 class="font-bold">Results</h4><p>You found ${correctCount} out of ${correctAnswers.length} possible combinations.</p>`;
-            if (missedAnswers.length > 0) {
-                feedbackHTML += `<p class="mt-2 font-semibold">Here are some you missed:</p><ul class="list-disc list-inside">`;
-                missedAnswers.forEach(ans => feedbackHTML += `<li>${ans}</li>`);
-                feedbackHTML += `</ul>`;
-            }
-            compoundFeedback.innerHTML = feedbackHTML;
-            checkCompoundsBtn.disabled = true;
-        }
-
+        
         function handleCheckWordOrder(containerId, button) {
             const containers = document.querySelectorAll(`#${containerId} > div`);
             containers.forEach(container => {
@@ -1130,11 +1050,11 @@
         }
         
         function handleCheckComplexQuestions() {
-            const questions = document.querySelectorAll('#complex-questions-container > div > div');
+            const questions = document.querySelectorAll('#complex-questions-container > div.space-y-3 > div'); // FIX: Corrected selector
              questions.forEach(q => {
                 const input = q.querySelector('input');
                 const userAnswer = input.value.trim().replace(/[.?]/g, '');
-                const correctAnswer = q.parentElement.dataset.answer.replace(/[.?]/g, '');
+                const correctAnswer = q.dataset.answer.replace(/[.?]/g, ''); // FIX: Get dataset from q
                 input.classList.remove('feedback-correct', 'feedback-incorrect');
                 if(userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
                     input.classList.add('feedback-correct');
@@ -1143,22 +1063,6 @@
                 }
             });
             checkComplexQuestionsBtn.disabled = true;
-        }
-
-
-        function handleCheckMistakes() {
-            const questions = mistakeCorrector.querySelectorAll('div');
-            questions.forEach(q => {
-                const input = q.querySelector('input');
-                const userAnswer = input.value.trim().replace(/\s\?/g, '?');
-                const correctAnswer = q.dataset.answer;
-                input.classList.remove('feedback-correct', 'feedback-incorrect');
-                if(userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
-                    input.classList.add('feedback-correct');
-                } else {
-                     input.classList.add('feedback-incorrect');
-                }
-            });
         }
         
         function handleFormalChoice(e) {
@@ -1211,33 +1115,34 @@
             document.getElementById('check-formal-questions-btn').disabled = true;
         }
 
-        function handleCheckVocabTable() {
-             const inputs = vocabTable.querySelectorAll('input[type="text"]');
-             inputs.forEach(input => {
-                const userAnswer = input.value.trim().toLowerCase();
-                const correctAnswer = input.dataset.answer.toLowerCase();
-                 input.classList.remove('feedback-correct', 'feedback-incorrect');
-                 if(userAnswer === correctAnswer) {
-                    input.classList.add('feedback-correct');
-                 } else {
-                     input.classList.add('feedback-incorrect');
-                 }
-             });
-        }
-
-
         function handleIntersection(entries) {
+            
+            let mostVisibleSlide = null;
+            let maxVisibility = 0;
+
+            // Find the slide that is most visible
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const currentSlideId = entry.target.id;
-                    navDots.forEach(dot => {
-                        dot.classList.remove('active');
-                        if (dot.getAttribute('href') === `#${currentSlideId}`) {
-                            dot.classList.add('active');
-                        }
-                    });
+                if (entry.intersectionRatio > maxVisibility) {
+                    maxVisibility = entry.intersectionRatio;
+                    mostVisibleSlide = entry.target;
                 }
             });
+
+            // If we found a slide that is at all visible
+            if (mostVisibleSlide) {
+                 const currentSlideId = mostVisibleSlide.id;
+
+                // Remove 'active' from all slides and dots
+                sections.forEach(s => s.classList.remove('active'));
+                navDots.forEach(dot => dot.classList.remove('active'));
+
+                // Add 'active' to the current (most visible) slide
+                mostVisibleSlide.classList.add('active');
+                
+                // Add 'active' to the corresponding dot
+                const currentDot = document.querySelector(`.nav-dots a[href="#${currentSlideId}"]`);
+                if(currentDot) currentDot.classList.add('active');
+            }
         }
 
         // --- SETUP AND CLEANUP ---
@@ -1247,44 +1152,26 @@
             dropZones = document.querySelectorAll('.drop-zone, .drop-zone-inline, .word-order-container, #letter-items-dropzone, #letter-items-source');
             sections = document.querySelectorAll('.slide');
             navDots = document.querySelectorAll('.nav-dots a');
-            checkGapsBtn = document.getElementById('check-gaps-btn');
-            gapInputs = document.querySelectorAll('#slide-9 input[type="text"]');
-            checkInterviewBtn = document.getElementById('check-interview-btn');
-            interviewInputs = document.querySelectorAll('#slide-11 input[type="text"]');
-            tfButtons = document.querySelectorAll('.tf-btn');
-            oddOneOutContainer = document.getElementById('odd-one-out-container');
-            boxA = document.getElementById('boxA');
-            boxB = document.getElementById('boxB');
-            userCombinations = document.getElementById('user-combinations');
-            checkCompoundsBtn = document.getElementById('check-compounds-btn');
-            compoundFeedback = document.getElementById('compound-feedback');
-            checkWordOrderBtn = document.getElementById('check-word-order-btn');
-            mistakeCorrector = document.getElementById('mistake-corrector');
-            checkMistakesBtn = document.getElementById('check-mistakes-btn');
-            vocabTable = document.getElementById('vocab-table');
-            checkVocabTableBtn = document.getElementById('check-vocab-table-btn');
             checkAskingInfoBtn = document.getElementById('check-asking-info-btn');
             const checkLetterOrderBtn = document.getElementById('check-letter-order-btn');
             checkComplexQuestionsBtn = document.getElementById('check-complex-questions-btn');
             emailApplicationContainer = document.getElementById('email-application-container');
             checkParagraphsBtn = document.getElementById('check-paragraphs-btn');
             const checkFormalQuestionsBtn = document.getElementById('check-formal-questions-btn');
-            const checkPrepositionsBtn = document.getElementById('check-prepositions-btn');
-            const checkExtraWordBtn = document.getElementById('check-extra-word-btn');
+            checkExtraWordBtn = document.getElementById('check-extra-word-btn');
+            checkPrepositionsBtn = document.getElementById('check-prepositions-btn');
 
-
-            // --- SHUFFLE ACTIVITY 5 (SLIDE 8) ---
-            const activity5WordBank = document.querySelector('#slide-8 .word-bank');
-            const activity5Definitions = document.querySelector('#slide-8 .grid');
-            if (activity5WordBank) shuffleChildren(activity5WordBank);
-            if (activity5Definitions) shuffleChildren(activity5Definitions);
-            // --- END SHUFFLE ---
+            // --- SET INITIAL ACTIVE SLIDE ---
+            if (sections.length > 0) {
+                sections[0].classList.add('active');
+            }
+            // --- END SET INITIAL ---
 
             // Setup Intersection Observer
             const observerOptions = {
                 root: document.querySelector('.container-snap'),
                 rootMargin: '0px',
-                threshold: 0.5
+                threshold: 0.1 // Use a small threshold
             };
             observer = new IntersectionObserver(handleIntersection, observerOptions);
             sections.forEach(section => observer.observe(section));
@@ -1301,16 +1188,7 @@
             });
 
             // Setup Button Click Listeners
-            if (checkGapsBtn) checkGapsBtn.addEventListener('click', () => handleCheckGaps('preposition-exercise', checkGapsBtn));
-            if (checkInterviewBtn) checkInterviewBtn.addEventListener('click', handleCheckInterview);
-            if (oddOneOutContainer) oddOneOutContainer.addEventListener('click', handleOddOneOutClick);
-            if (boxA) boxA.addEventListener('click', handleCompoundWordClick);
-            if (boxB) boxB.addEventListener('click', handleCompoundWordClick);
-            if (checkCompoundsBtn) checkCompoundsBtn.addEventListener('click', handleCheckCompounds);
-            if (checkWordOrderBtn) checkWordOrderBtn.addEventListener('click', () => handleCheckWordOrder('word-order-container', checkWordOrderBtn));
             if (checkAskingInfoBtn) checkAskingInfoBtn.addEventListener('click', () => handleCheckWordOrder('asking-info-container', checkAskingInfoBtn));
-            if (checkMistakesBtn) checkMistakesBtn.addEventListener('click', handleCheckMistakes);
-            if (checkVocabTableBtn) checkVocabTableBtn.addEventListener('click', handleCheckVocabTable);
             if (checkLetterOrderBtn) checkLetterOrderBtn.addEventListener('click', handleCheckLetterOrder);
             if (checkComplexQuestionsBtn) checkComplexQuestionsBtn.addEventListener('click', handleCheckComplexQuestions);
             if (emailApplicationContainer) emailApplicationContainer.addEventListener('click', handleFormalChoice);
@@ -1345,9 +1223,6 @@
                 });
                 checkExtraWordBtn.disabled = true;
             });
-
-
-            tfButtons.forEach(button => button.addEventListener('click', handleTrueFalseClick));
             
             // Add cleanup listener for when the user leaves the page
             window.addEventListener('beforeunload', cleanup);
@@ -1364,34 +1239,22 @@
                 zone.removeEventListener('drop', handleDrop);
             });
 
-            if (checkGapsBtn) checkGapsBtn.removeEventListener('click', () => handleCheckGaps('preposition-exercise', checkGapsBtn));
-            if (checkInterviewBtn) checkInterviewBtn.removeEventListener('click', handleCheckInterview);
-            if (oddOneOutContainer) oddOneOutContainer.removeEventListener('click', handleOddOneOutClick);
-            if (boxA) boxA.removeEventListener('click', handleCompoundWordClick);
-            if (boxB) boxB.removeEventListener('click', handleCompoundWordClick);
-            if (checkCompoundsBtn) checkCompoundsBtn.removeEventListener('click', handleCheckCompounds);
-            if (checkWordOrderBtn) checkWordOrderBtn.removeEventListener('click', () => handleCheckWordOrder('word-order-container', checkWordOrderBtn));
-             if (checkAskingInfoBtn) checkAskingInfoBtn.removeEventListener('click', () => handleCheckWordOrder('asking-info-container', checkAskingInfoBtn));
-            if (checkMistakesBtn) checkMistakesBtn.removeEventListener('click', handleCheckMistakes);
-            if (checkVocabTableBtn) checkVocabTableBtn.removeEventListener('click', handleCheckVocabTable);
+            if (checkAskingInfoBtn) checkAskingInfoBtn.removeEventListener('click', () => handleCheckWordOrder('asking-info-container', checkAskingInfoBtn));
             const checkLetterOrderBtn = document.getElementById('check-letter-order-btn');
             if (checkLetterOrderBtn) checkLetterOrderBtn.removeEventListener('click', handleCheckLetterOrder);
             if (checkComplexQuestionsBtn) checkComplexQuestionsBtn.removeEventListener('click', handleCheckComplexQuestions);
-             if (emailApplicationContainer) emailApplicationContainer.removeEventListener('click', handleFormalChoice);
-             if (checkParagraphsBtn) checkParagraphsBtn.removeEventListener('click', handleCheckParagraphs);
-             const checkFormalQuestionsBtn = document.getElementById('check-formal-questions-btn');
-             if(checkFormalQuestionsBtn) checkFormalQuestionsBtn.removeEventListener('click', handleCheckFormalQuestions);
+            if (emailApplicationContainer) emailApplicationContainer.removeEventListener('click', handleFormalChoice);
+            if (checkParagraphsBtn) checkParagraphsBtn.removeEventListener('click', handleCheckParagraphs);
+            const checkFormalQuestionsBtn = document.getElementById('check-formal-questions-btn');
+            if(checkFormalQuestionsBtn) checkFormalQuestionsBtn.removeEventListener('click', handleCheckFormalQuestions);
              const checkPrepositionsBtn = document.getElementById('check-prepositions-btn');
              if(checkPrepositionsBtn) checkPrepositionsBtn.removeEventListener('click', () => handleCheckGaps('preposition-exercise', checkPrepositionsBtn));
              const checkExtraWordBtn = document.getElementById('check-extra-word-btn');
              if(checkExtraWordBtn) checkExtraWordBtn.removeEventListener('click', () => {});
 
-
-            tfButtons.forEach(button => button.addEventListener('click', handleTrueFalseClick));
-
             if (observer) observer.disconnect();
             
-            draggedItem = observer = draggables = dropZones = sections = navDots = checkGapsBtn = gapInputs = checkInterviewBtn = interviewInputs = tfButtons = oddOneOutContainer = boxA = boxB = userCombinations = checkCompoundsBtn = compoundFeedback = selectedWordA = selectedWordB = checkWordOrderBtn = mistakeCorrector = checkMistakesBtn = vocabTable = checkVocabTableBtn = checkAskingInfoBtn = checkComplexQuestionsBtn = emailApplicationContainer = checkParagraphsBtn = checkFormalQuestionsBtn = null;
+            draggedItem = observer = draggables = dropZones = sections = navDots = checkAskingInfoBtn = checkComplexQuestionsBtn = emailApplicationContainer = checkParagraphsBtn = checkFormalQuestionsBtn = checkExtraWordBtn = checkPrepositionsBtn = null;
             
             window.removeEventListener('beforeunload', cleanup);
         }
