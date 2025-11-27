@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telephone Skills Module</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            scroll-snap-align: start;
+            position: relative;
+            text-align: center;
+            transition: background-color 0.5s ease;
+        }
+        .container-snap {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 10;
+        }
+        .nav-dots a {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .nav-dots a.active {
+            background-color: #3b82f6;
+            transform: scale(1.4);
+        }
+        /* Drag and Drop Styles */
+        .draggable {
+            cursor: move;
+            user-select: none;
+        }
+        .dragging {
+            opacity: 0.5;
+            background-color: #cce7ff;
+        }
+        .drop-zone {
+            border: 2px dashed #9ca3af;
+            transition: background-color 0.3s, border-color 0.3s;
+            min-height: 40px;
+            min-width: 100px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 0.5rem;
+            margin: 0 4px;
+            vertical-align: middle;
+        }
+        .drop-zone.over {
+            background-color: #e0f2fe;
+        }
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(248, 250, 252, 0.8);
+            border-radius: 0.5rem;
+        }
+        .word-item {
+            padding: 0.25rem 0.75rem;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 9999px;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            font-size: 0.9rem;
+        }
+        /* Quiz Styles */
+        .quiz-option {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            background-color: #f0f9ff;
+        }
+        .quiz-option.selected {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+        }
+        .quiz-option.correct {
+            background-color: #dcfce7 !important;
+            border-color: #22c55e !important;
+        }
+        .quiz-option.incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        /* Activity Card */
+        .activity-card {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 64rem;
+        }
+        .feedback-correct {
+            border: 2px solid #22c55e !important;
+            background-color: #f0fdf4 !important;
+        }
+        .feedback-incorrect {
+            border: 2px solid #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+        /* Input Styles */
+        input[type="text"] {
+            border-bottom: 2px solid #cbd5e1;
+            background: transparent;
+            outline: none;
+            padding: 0 4px;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus {
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container-snap">
+        <!-- Navigation Dots -->
+        <nav class="nav-dots">
+            <a href="#slide-1" class="active"></a>
+            <a href="#slide-2"></a>
+            <a href="#slide-3"></a>
+            <a href="#slide-4"></a>
+            <a href="#slide-5"></a>
+            <a href="#slide-6"></a>
+            <a href="#slide-7"></a>
+            <a href="#slide-8"></a>
+            <a href="#slide-9"></a>
+            <a href="#slide-10"></a>
+            <a href="#slide-11"></a>
+        </nav>
+
+        <!-- Slide 1: Title -->
+        <section id="slide-1" class="slide bg-gradient-to-br from-blue-100 to-indigo-100">
+            <div class="text-center">
+                <div class="mb-4 text-6xl text-blue-600"><i class="fas fa-phone-volume"></i></div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 text-slate-900">Telephone Skills</h1>
+                <p class="text-xl md:text-2xl opacity-70 mb-8">Business Benchmark Module 4</p>
+                <p class="animate-bounce">Scroll to begin</p>
+            </div>
+        </section>
+
+        <!-- Slide 2: Getting Started -->
+        <section id="slide-2" class="slide bg-gradient-to-br from-indigo-100 to-violet-100">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold mb-6 text-indigo-900">Getting Started</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <p class="font-semibold">Discuss these questions with a partner:</p>
+                        <ul class="list-disc list-inside space-y-2 text-slate-700">
+                            <li>Do you ever make telephone calls in English? When? What for?</li>
+                            <li>When is it better to make a phone call than send an email?</li>
+                            <li>What problems have you had when talking in English on the phone?</li>
+                            <li>Why is talking on the phone often more difficult than talking face to face?</li>
+                            <li>How can you prepare for telephone calls?</li>
+                        </ul>
+                    </div>
+                    <div class="flex items-center justify-center bg-white p-6 rounded-xl shadow-sm">
+                        <img src="https://johanka2014.github.io/bus_bench/mod_4/Gemini_Generated_Image_5rrhot5rrhot5rrh.png" alt="Two people in a business meeting discussing telephone skills" class="rounded-lg shadow-lg max-w-full h-auto" onerror="this.onerror=null;this.parentElement.innerHTML='<i class=\'fas fa-comments text-9xl text-indigo-200\'></i>';">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Telephone Language (Gap Fill) -->
+        <section id="slide-3" class="slide bg-gradient-to-br from-violet-100 to-fuchsia-100">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold mb-2 text-fuchsia-900">Telephone Language</h2>
+                <p class="mb-6">Drag the words to complete the conversation extracts.</p>
+                
+                <div class="space-y-4 leading-loose text-lg">
+                    <div>
+                        <strong>Receptionist:</strong> Fleming's Hotel. How <div class="drop-zone" data-answer="can I help"></div> you?
+                    </div>
+                    <div>
+                        <strong>Caller:</strong> Good afternoon. <div class="drop-zone" data-answer="This is"></div> Jack Rubenstein, and <div class="drop-zone" data-answer="I'm calling from"></div> New York.
+                    </div>
+                    <div>
+                        <strong>Receptionist:</strong> OK, sir. Let me get your details. Could you <div class="drop-zone" data-answer="spell your"></div> name again, please?
+                    </div>
+                    <div>
+                        <strong>Receptionist:</strong> And <div class="drop-zone" data-answer="what's"></div> the name of your company?
+                    </div>
+                     <div>
+                        <strong>Receptionist:</strong> OK, and what size room <div class="drop-zone" data-answer="would you"></div> like?
+                    </div>
+                    <div>
+                        <strong>Receptionist:</strong> When <div class="drop-zone" data-answer="is"></div> the room for?
+                    </div>
+                    <div>
+                        <strong>Caller:</strong> Good. Could you <div class="drop-zone" data-answer="tell me"></div> the rates, please?
+                    </div>
+                </div>
+
+                <div class="word-bank" id="tele-bank">
+                    <div draggable="true" class="draggable word-item" data-word="can I help">can I help</div>
+                    <div draggable="true" class="draggable word-item" data-word="This is">This is</div>
+                    <div draggable="true" class="draggable word-item" data-word="I'm calling from">I'm calling from</div>
+                    <div draggable="true" class="draggable word-item" data-word="spell your">spell your</div>
+                    <div draggable="true" class="draggable word-item" data-word="what's">what's</div>
+                    <div draggable="true" class="draggable word-item" data-word="would you">would you</div>
+                    <div draggable="true" class="draggable word-item" data-word="is">is</div>
+                    <div draggable="true" class="draggable word-item" data-word="tell me">tell me</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Role Play -->
+        <section id="slide-4" class="slide bg-gradient-to-br from-fuchsia-100 to-pink-100">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold mb-6 text-pink-900">Role-play: Booking a Room</h2>
+                <div class="grid md:grid-cols-2 gap-6 text-left">
+                    <div class="bg-white p-6 rounded-xl border-l-4 border-blue-500 shadow-sm">
+                        <h3 class="text-xl font-bold mb-2 text-blue-600">Student A: PA to HR Manager</h3>
+                        <p class="mb-4 text-sm">You need to call the Great Northern Hotel in Glasgow.</p>
+                        <ul class="list-disc list-inside text-sm space-y-1">
+                            <li><strong>Event:</strong> Interviews for Marketing Manager (Scotland)</li>
+                            <li><strong>Dates:</strong> Night of 13 June (2 single rooms), Morning of 14 June (1 meeting room)</li>
+                            <li><strong>Schedule:</strong> Start 9:30, Finish 13:00, Coffee break 11:00 (30 mins)</li>
+                            <li><strong>Task:</strong> Book rooms and find out prices.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border-l-4 border-green-500 shadow-sm">
+                        <h3 class="text-xl font-bold mb-2 text-green-600">Student B: Receptionist</h3>
+                        <p class="mb-4 text-sm">You work at the Great Northern Hotel.</p>
+                        <div class="text-sm bg-gray-50 p-3 rounded">
+                            <p><strong>Double room:</strong> £165/night</p>
+                            <p><strong>Single room:</strong> £135/night</p>
+                            <p><strong>Conference room:</strong> £50/hour</p>
+                            <p><strong>Large meeting room (max 25):</strong> £30/hour</p>
+                            <p><strong>Small meeting room (max 10):</strong> £20/hour</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Telephone Quiz -->
+        <section id="slide-5" class="slide bg-gradient-to-br from-pink-100 to-rose-100">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold mb-4 text-rose-900">A Telephone Quiz</h2>
+                <p class="mb-4">Select the best option for business calls.</p>
+                <div class="space-y-4 h-96 overflow-y-auto p-2 pr-4" id="quiz-container">
+                    <!-- Q1 -->
+                    <div class="border-b pb-4">
+                        <p class="font-semibold mb-2">1. Best way to answer the phone at work?</p>
+                        <div class="space-y-1">
+                            <div class="quiz-option p-2 rounded border" data-correct="false">A. Hello!</div>
+                            <div class="quiz-option p-2 rounded border" data-correct="false">B. Saying only your name.</div>
+                            <div class="quiz-option p-2 rounded border" data-correct="true">C. Saying your name and department/company.</div>
+                        </div>
+                    </div>
+                    <!-- Q2 -->
+                    <div class="border-b pb-4">
+                        <p class="font-semibold mb-2">2. How to introduce yourself to someone who already knows you?</p>
+                        <div class="space-y-1">
+                            <div class="quiz-option p-2 rounded border" data-correct="false">A. This is [Name].</div>
+                            <div class="quiz-option p-2 rounded border" data-correct="false">B. I'm [Name].</div>
+                            <div class="quiz-option p-2 rounded border" data-correct="true">C. It's [Name] here.</div>
+                        </div>
+                    </div>
+                    <!-- Q3 -->
+                    <div class="border-b pb-4">
+                        <p class="font-semibold mb-2">3. Asking someone to wait (formal)?</p>
+                        <div class="space-y-1">
+                            <div class="quiz-option p-2 rounded border" data-correct="true">A. Could you hold on a minute, please?</div>
+                            <div class="quiz-option p-2 rounded border" data-correct="false">B. Hang on!</div>
+                            <div class="quiz-option p-2 rounded border" data-correct="false">C. Wait, please.</div>
+                        </div>
+                    </div>
+                     <!-- Q4 -->
+                    <div class="border-b pb-4">
+                        <p class="font-semibold mb-2">4. Asking who is calling (polite)?</p>
+                        <div class="space-y-1">
+                            <div class="quiz-option p-2 rounded border" data-correct="false">A. Who's that?</div>
+                            <div class="quiz-option p-2 rounded border" data-correct="false">B. Who are you?</div>
+                            <div class="quiz-option p-2 rounded border" data-correct="true">C. Who's calling, please?</div>
+                        </div>
+                    </div>
+                    <!-- Q5 -->
+                    <div>
+                        <p class="font-semibold mb-2">5. Finding info on your computer?</p>
+                        <div class="space-y-1">
+                            <div class="quiz-option p-2 rounded border" data-correct="false">A. Wait while I get it.</div>
+                            <div class="quiz-option p-2 rounded border" data-correct="true">B. Just a moment while I get it up on the screen.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Talking Point (Course) -->
+        <section id="slide-6" class="slide bg-gradient-to-br from-rose-100 to-orange-100">
+            <div class="activity-card">
+                 <h2 class="text-3xl font-bold mb-4 text-orange-900">Project: Telephone Skills Course</h2>
+                 <div class="text-left">
+                     <p class="mb-4">Your company has decided to run a one-day course on effective telephone skills. Discuss and decide:</p>
+                     <div class="grid md:grid-cols-2 gap-4">
+                         <div class="bg-white p-4 rounded shadow text-center">
+                             <i class="fas fa-users text-4xl text-orange-400 mb-2"></i>
+                             <h3 class="font-bold">Target Audience</h3>
+                             <p class="text-sm">Which staff members would benefit most?</p>
+                         </div>
+                         <div class="bg-white p-4 rounded shadow text-center">
+                             <i class="fas fa-chalkboard-teacher text-4xl text-orange-400 mb-2"></i>
+                             <h3 class="font-bold">Content</h3>
+                             <p class="text-sm">What advice and training should be included?</p>
+                         </div>
+                     </div>
+                     <div class="mt-6 p-4 bg-orange-50 rounded border border-orange-200 text-sm">
+                         <strong>Useful language:</strong> "I think the most important thing is...", "For example...", "Another thing is...", "Finally, we should..."
+                     </div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Enquiring about a Job -->
+        <section id="slide-7" class="slide bg-gradient-to-br from-orange-100 to-amber-100">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold mb-2 text-amber-900">Enquiring about a job</h2>
+                <p class="mb-4">Complete the notes based on a phone enquiry for Burfords Engineering.</p>
+                
+                <div class="bg-white p-6 rounded-lg shadow-inner space-y-4 text-lg">
+                    <div class="border-b pb-2 font-bold text-gray-500">JOB NOTES</div>
+                    <div class="grid grid-cols-[auto_1fr] gap-4 items-center">
+                        <label>1. Working hours:</label>
+                        <input type="text" class="w-full" data-answer="9 to 5">
+                    </div>
+                    <div class="grid grid-cols-[auto_1fr] gap-4 items-center">
+                        <label>2. Duties: Office admin, typing and...</label>
+                        <input type="text" class="w-full" data-answer="filing">
+                    </div>
+                    <div class="grid grid-cols-[auto_1fr] gap-4 items-center">
+                        <label>3. Starting date:</label>
+                        <input type="text" class="w-full" data-answer="first of">
+                    </div>
+                    <div class="grid grid-cols-[auto_1fr] gap-4 items-center">
+                        <label>4. How to apply: Send CV by...</label>
+                        <input type="text" class="w-full" data-answer="post">
+                    </div>
+                </div>
+                <button id="check-job-notes" class="mt-6 bg-amber-600 text-white font-bold py-2 px-6 rounded-full hover:bg-amber-700 transition">Check Notes</button>
+            </div>
+        </section>
+
+        <!-- Slide 8: Phone Answering Tips -->
+        <section id="slide-8" class="slide bg-gradient-to-br from-amber-100 to-yellow-100">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold mb-6 text-yellow-900">Phone-answering Tips to Win Business</h2>
+                <div class="grid md:grid-cols-2 gap-6 text-left text-sm h-96 overflow-y-auto">
+                    <div class="bg-white p-4 rounded shadow">
+                        <h3 class="font-bold text-lg mb-2 border-b">Part A: First Impressions</h3>
+                        <ul class="list-decimal list-inside space-y-2">
+                            <li>Answer all calls before the <strong>third ring</strong>.</li>
+                            <li>Be <strong>warm and enthusiastic</strong>. Your voice is the company's image.</li>
+                            <li><strong>Welcome callers</strong> courteously and identify yourself and the company. e.g., "Cypress Technologies. Susan speaking."</li>
+                            <li>Speak <strong>slowly and clearly</strong> with moderate volume.</li>
+                            <li>Ask before putting someone on <strong>hold</strong>. Give progress reports every 30-45 seconds.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-4 rounded shadow">
+                        <h3 class="font-bold text-lg mb-2 border-b">Part B: Professionalism</h3>
+                        <ul class="list-decimal list-inside space-y-2">
+                            <li>Use <strong>positive vocabulary</strong>. Instead of "I don't know", say "Let me find out".</li>
+                            <li>Take messages <strong>completely and accurately</strong>. Ask for spelling if needed.</li>
+                            <li>Respond to calls within <strong>one business day</strong>. Early response gets the contract!</li>
+                            <li>Update your <strong>answering machine</strong> message regularly (e.g., for holidays).</li>
+                            <li><strong>Train everyone</strong> to answer the phone in the same professional manner.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Grammar - Comparisons -->
+        <section id="slide-9" class="slide bg-gradient-to-br from-yellow-100 to-lime-100">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold mb-2 text-lime-900">Grammar: Comparisons</h2>
+                <p class="mb-6">Complete with the comparative or superlative form of the word in brackets.</p>
+                <div class="space-y-3" id="grammar-comp-container">
+                    <div>1. I'd like a <input type="text" class="w-32" data-answer="more challenging"> (challenging) job.</div>
+                    <div>2. We are moving to somewhere <input type="text" class="w-32" data-answer="more economical"> (economical), but I'll have to travel <input type="text" class="w-24" data-answer="further"> (far).</div>
+                    <div>3. I was <input type="text" class="w-32" data-answer="more highly"> (highly) qualified than the others.</div>
+                    <div>4. I'll have to work <input type="text" class="w-24" data-answer="harder"> (hard) and have <input type="text" class="w-24" data-answer="more"> (much) responsibility.</div>
+                    <div>5. Martin is the <input type="text" class="w-24" data-answer="strongest"> (strong) candidate with the <input type="text" class="w-24" data-answer="most impressive"> (impressive) track record.</div>
+                </div>
+                <button id="check-comp-btn" class="mt-4 bg-lime-600 text-white font-bold py-2 px-6 rounded-full hover:bg-lime-700 transition">Check Grammar</button>
+            </div>
+        </section>
+
+        <!-- Slide 10: Grammar - Tenses -->
+        <section id="slide-10" class="slide bg-gradient-to-br from-lime-100 to-green-100">
+             <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold mb-2 text-green-900">Grammar: Tenses</h2>
+                <p class="mb-6">Choose Present Perfect or Past Simple.</p>
+                <div class="space-y-3" id="grammar-tense-container">
+                    <div class="p-2 bg-white rounded shadow-sm">1. I <select data-answer="have worked"><option>-</option><option>have worked</option><option>worked</option></select> here for 3 years, and I love it.</div>
+                    <div class="p-2 bg-white rounded shadow-sm">2. I <select data-answer="went"><option>-</option><option>have gone</option><option>went</option></select> on a course last month, but I <select data-answer="haven't gone"><option>-</option><option>haven't gone</option><option>didn't go</option></select> on one since then.</div>
+                    <div class="p-2 bg-white rounded shadow-sm">3. My boss <select data-answer="left"><option>-</option><option>has left</option><option>left</option></select> last year and I <select data-answer="haven't seen"><option>-</option><option>haven't seen</option><option>didn't see</option></select> her since.</div>
+                    <div class="p-2 bg-white rounded shadow-sm">4. In 2004, they <select data-answer="posted"><option>-</option><option>have posted</option><option>posted</option></select> him to Japan. He <select data-answer="has been"><option>-</option><option>has been</option><option>was</option></select> there ever since.</div>
+                </div>
+                 <button id="check-tense-btn" class="mt-4 bg-green-600 text-white font-bold py-2 px-6 rounded-full hover:bg-green-700 transition">Check Tenses</button>
+            </div>
+        </section>
+
+        <!-- Slide 11: Grammar - Complex Questions -->
+        <section id="slide-11" class="slide bg-gradient-to-br from-green-100 to-emerald-100">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold mb-2 text-emerald-900">Grammar: Complex Questions</h2>
+                <p class="mb-6">Rewrite these questions to be more polite.</p>
+                <div class="space-y-4 text-left" id="complex-q-container">
+                    <div>
+                        <p class="text-sm text-gray-600">1. How long have you been a manager?</p>
+                        <p>Could you tell me <input type="text" class="w-full md:w-96" data-answer="how long you have been a manager">?</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">2. Have you studied abroad?</p>
+                        <p>I'd like to know <input type="text" class="w-full md:w-96" data-answer="if you have studied abroad">.</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">3. What do you enjoy doing?</p>
+                        <p>I'd like you to tell me <input type="text" class="w-full md:w-96" data-answer="what you enjoy doing">.</p>
+                    </div>
+                     <div>
+                        <p class="text-sm text-gray-600">4. What will you be doing in ten years?</p>
+                        <p>Can you predict <input type="text" class="w-full md:w-96" data-answer="what you will be doing in ten years">?</p>
+                    </div>
+                </div>
+                <button id="check-complex-btn" class="mt-6 bg-emerald-600 text-white font-bold py-2 px-6 rounded-full hover:bg-emerald-700 transition">Check Answers</button>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Variables ---
+            const sections = document.querySelectorAll('.slide');
+            const navDots = document.querySelectorAll('.nav-dots a');
+            let draggedItem = null;
+
+            // --- Intersection Observer for Active Slide ---
+            const observer = new IntersectionObserver((entries) => {
+                let mostVisible = null;
+                let maxRatio = 0;
+
+                entries.forEach(entry => {
+                    if (entry.intersectionRatio > maxRatio) {
+                        maxRatio = entry.intersectionRatio;
+                        mostVisible = entry.target;
+                    }
+                });
+
+                if (mostVisible) {
+                    const id = mostVisible.id;
+                    // Update dots
+                    navDots.forEach(dot => {
+                        dot.classList.remove('active');
+                        if (dot.getAttribute('href') === `#${id}`) dot.classList.add('active');
+                    });
+                }
+            }, { threshold: 0.5 });
+
+            sections.forEach(section => observer.observe(section));
+
+            // --- Drag and Drop Logic ---
+            const draggables = document.querySelectorAll('.draggable');
+            const dropZones = document.querySelectorAll('.drop-zone');
+
+            draggables.forEach(el => {
+                el.addEventListener('dragstart', (e) => {
+                    draggedItem = e.target;
+                    setTimeout(() => e.target.classList.add('dragging'), 0);
+                });
+                el.addEventListener('dragend', (e) => {
+                    e.target.classList.remove('dragging');
+                    draggedItem = null;
+                });
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    zone.classList.add('over');
+                });
+                zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('over');
+                    if (draggedItem) {
+                        // Remove existing items if any to bank
+                        if (zone.children.length > 0) {
+                             const bank = document.getElementById('tele-bank');
+                             bank.appendChild(zone.firstElementChild);
+                        }
+                        zone.appendChild(draggedItem);
+                        checkDragAnswer(zone);
+                    }
+                });
+            });
+
+            function checkDragAnswer(zone) {
+                const item = zone.querySelector('.draggable');
+                if (item && item.dataset.word === zone.dataset.answer) {
+                    zone.classList.add('feedback-correct');
+                    zone.classList.remove('feedback-incorrect');
+                    item.draggable = false;
+                    item.style.cursor = 'default';
+                } else {
+                    zone.classList.add('feedback-incorrect');
+                    zone.classList.remove('feedback-correct');
+                }
+            }
+
+            // --- Quiz Logic ---
+            const quizOptions = document.querySelectorAll('.quiz-option');
+            quizOptions.forEach(opt => {
+                opt.addEventListener('click', () => {
+                    const parent = opt.parentElement;
+                    // Reset siblings
+                    Array.from(parent.children).forEach(child => {
+                        child.classList.remove('selected', 'correct', 'incorrect');
+                    });
+                    
+                    opt.classList.add('selected');
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.add('correct');
+                    } else {
+                        opt.classList.add('incorrect');
+                    }
+                });
+            });
+
+            // --- Check Buttons Logic ---
+            
+            // Job Notes
+            document.getElementById('check-job-notes')?.addEventListener('click', (e) => {
+                const inputs = document.querySelectorAll('#slide-7 input');
+                inputs.forEach(inp => checkInput(inp));
+                e.target.disabled = true;
+            });
+
+            // Grammar Comparisons
+            document.getElementById('check-comp-btn')?.addEventListener('click', (e) => {
+                const inputs = document.querySelectorAll('#grammar-comp-container input');
+                inputs.forEach(inp => checkInput(inp));
+                e.target.disabled = true;
+            });
+            
+             // Grammar Tenses
+            document.getElementById('check-tense-btn')?.addEventListener('click', (e) => {
+                const selects = document.querySelectorAll('#grammar-tense-container select');
+                selects.forEach(sel => {
+                    if(sel.value === sel.dataset.answer) {
+                        sel.classList.add('border-2', 'border-green-500');
+                    } else {
+                        sel.classList.add('border-2', 'border-red-500');
+                    }
+                });
+                e.target.disabled = true;
+            });
+
+            // Grammar Complex Questions
+            document.getElementById('check-complex-btn')?.addEventListener('click', (e) => {
+                const inputs = document.querySelectorAll('#complex-q-container input');
+                inputs.forEach(inp => checkInput(inp));
+                e.target.disabled = true;
+            });
+
+            function checkInput(input) {
+                const userAnswer = input.value.trim().toLowerCase().replace(/[?.]/g, '');
+                const correctAnswer = input.dataset.answer.toLowerCase().replace(/[?.]/g, '');
+                if (userAnswer === correctAnswer) {
+                    input.classList.add('border-green-500', 'text-green-600');
+                    input.classList.remove('border-red-500');
+                } else {
+                    input.classList.add('border-red-500', 'text-red-600');
+                     input.classList.remove('border-green-500');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
