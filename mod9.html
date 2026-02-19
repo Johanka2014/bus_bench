@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 9: Going It Alone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            scroll-snap-align: start;
+            position: relative;
+            text-align: center;
+        }
+        .container-snap {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        .activity-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 72rem;
+            border: 1px solid #e2e8f0;
+        }
+        .nav-dots {
+            position: fixed;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+        .nav-dots a {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .nav-dots a.active {
+            background-color: #059669;
+            transform: scale(1.5);
+        }
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.75rem;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            padding: 0.5rem;
+        }
+        .drop-zone.over {
+            background-color: #ecfdf5;
+            border-color: #10b981;
+        }
+        .draggable {
+            cursor: move;
+            user-select: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        .dragging {
+            opacity: 0.4;
+        }
+        .feedback-correct {
+            border-color: #10b981 !important;
+            background-color: #f0fdf4 !important;
+        }
+        .feedback-incorrect {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+        .arrow {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            display: none;
+        }
+        .slide.active .arrow {
+            display: block;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+            40% { transform: translate(-50%, -10px); }
+            60% { transform: translate(-50%, -5px); }
+        }
+        input[type="text"] {
+            border-bottom: 2px solid #cbd5e1;
+            background: transparent;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+        }
+        input[type="text"]:focus {
+            border-bottom-color: #10b981;
+        }
+        .letter-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .extra-word-input {
+            width: 100px;
+            padding: 2px 8px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body class="bg-emerald-50">
+
+    <div class="container-snap" id="scroller">
+        <!-- Slide 1: Welcome -->
+        <section id="slide-1" class="slide bg-emerald-700 text-white active">
+            <div class="text-center">
+                <span class="bg-emerald-600 px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase mb-4 inline-block">Unit 9</span>
+                <h1 class="text-6xl font-bold mb-6">Going it alone</h1>
+                <p class="text-2xl opacity-90 max-w-2xl mx-auto">Exploring the risks, rewards, and reality of starting your own business and the option of franchising.</p>
+                <button onclick="document.getElementById('slide-2').scrollIntoView()" class="mt-10 px-8 py-4 bg-white text-emerald-700 rounded-full font-bold hover:bg-emerald-50 transition shadow-xl">Start Learning</button>
+            </div>
+            <div class="arrow text-white"><i class="fas fa-chevron-down fa-2x"></i></div>
+        </section>
+
+        <!-- Slide 2: Getting Started -->
+        <section id="slide-2" class="slide">
+            <div class="activity-card">
+                <h2 class="text-4xl font-bold text-slate-800 mb-6">Why start your own business?</h2>
+                <div class="grid md:grid-cols-2 gap-10 text-left">
+                    <div class="space-y-6">
+                        <p class="text-lg text-slate-600">Discuss with your partner:</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-4">
+                                <span class="bg-emerald-100 text-emerald-700 w-10 h-10 flex items-center justify-center rounded-full flex-shrink-0 font-bold">1</span>
+                                <p class="font-medium text-slate-700">Think of as many reasons as you can for starting a business.</p>
+                            </li>
+                            <li class="flex items-center gap-4">
+                                <span class="bg-emerald-100 text-emerald-700 w-10 h-10 flex items-center justify-center rounded-full flex-shrink-0 font-bold">2</span>
+                                <p class="font-medium text-slate-700">Would you like to run your own business? Why or why not?</p>
+                            </li>
+                        </ul>
+                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200 italic text-slate-500">
+                            "I want to be my own boss and have the freedom to make my own decisions..."
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800" alt="Entrepreneurs working" class="rounded-2xl shadow-xl">
+                        <div class="absolute -bottom-4 -left-4 bg-emerald-600 text-white px-6 py-2 rounded-lg font-bold shadow-lg">Entrepreneurship</div>
+                    </div>
+                </div>
+            </div>
+            <div class="arrow text-slate-400"><i class="fas fa-chevron-down fa-lg"></i></div>
+        </section>
+
+        <!-- Slide 3: Listening - Motivations -->
+        <section id="slide-3" class="slide bg-white">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity: Why they started</h2>
+                <p class="text-slate-600 mb-8">Listen to Lisa, Naiara, and Marcelle. Why did they decide to "take the plunge"? Match the reason to the person.</p>
+                
+                <div class="bg-emerald-50 p-4 rounded-xl mb-10 flex items-center gap-4 max-w-md mx-auto shadow-sm">
+                    <i class="fas fa-headphones text-3xl text-emerald-600"></i>
+                    <div class="text-left flex-grow">
+                        <p class="text-xs text-emerald-600 uppercase font-bold tracking-widest">Track 16</p>
+                        <p class="text-sm font-semibold text-slate-700">Interviews with Entrepreneurs</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-10">
+                    <div class="flex flex-col gap-4">
+                        <h4 class="font-bold text-slate-800">Lisa</h4>
+                        <div class="drop-zone h-24" data-answer="g"></div>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <h4 class="font-bold text-slate-800">Naiara</h4>
+                        <div class="drop-zone h-24" data-answer="b"></div>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <h4 class="font-bold text-slate-800">Marcelle</h4>
+                        <div class="drop-zone h-24" data-answer="f"></div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-3 justify-center shuffle-container">
+                    <div draggable="true" class="draggable bg-white border border-emerald-200 text-emerald-700 shadow-sm" data-word="g">Because you see a gap in the market</div>
+                    <div draggable="true" class="draggable bg-white border border-emerald-200 text-emerald-700 shadow-sm" data-word="b">Because you are unemployed / redundant</div>
+                    <div draggable="true" class="draggable bg-white border border-emerald-200 text-emerald-700 shadow-sm" data-word="f">To become rich / get the profits for myself</div>
+                </div>
+            </div>
+            <div class="arrow text-slate-400"><i class="fas fa-chevron-down fa-lg"></i></div>
+        </section>
+
+        <!-- Slide 4: Vocabulary - Radio Transcript -->
+        <section id="slide-4" class="slide bg-slate-50">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Vocabulary Gaps</h2>
+                <p class="text-slate-600 mb-8">Complete the sentences from the radio programme by writing a word or phrase in the gaps.</p>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-inner border leading-relaxed text-slate-700 text-lg">
+                    <p class="mb-6">"Tonight on Building your Future we talk to three women who have made a 1. <input type="text" class="w-16" data-answer="go"> of starting their own businesses. We find out what it takes to be an 2. <input type="text" class="w-40" data-answer="entrepreneur"> in the 21st century."</p>
+                    <p class="mb-6">"So, I thought, here's my opportunity - no 3. <input type="text" class="w-32" data-answer="competition"> and a really good product, why not open my own 4. <input type="text" class="w-20" data-answer="outlet">?"</p>
+                    <p class="mb-6">"So with my redundancy money, I bought into this 5. <input type="text" class="w-32" data-answer="franchise"> which is actually a travel agent's, and since then, I've never 6. <input type="text" class="w-20" data-answer="looked"> back."</p>
+                    <p>"Basically, you buy the right to sell the products of a large organisation - you pay 7. <input type="text" class="w-20" data-answer="fees"> and part of your 8. <input type="text" class="w-20" data-answer="profits"> for the privilege."</p>
+                </div>
+                <button id="check-vocab-btn" class="mt-8 px-8 py-3 bg-emerald-600 text-white rounded-full font-bold hover:bg-emerald-700 transition shadow-lg">Verify Answers</button>
+            </div>
+        </section>
+
+        <!-- Slide 5: Reading - Oil & Vinegar -->
+        <section id="slide-5" class="slide">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Reading: We're doing it our way</h2>
+                <p class="text-slate-600 mb-6">Choose the best sentence (A-F) to fill each of the gaps in the article about Toby and Rebecca Ruddle.</p>
+                
+                <div class="bg-white p-8 rounded-2xl border leading-relaxed text-slate-700 max-h-[50vh] overflow-y-auto shadow-sm">
+                    <p class="mb-4">When my wife and I open the doors of our own business, a gourmet gift shop, next month, we will be leaving 13 years in secure office jobs behind. We are finally giving up the safety of a regular income to take the risk. <span class="bg-emerald-100 border-2 border-dashed border-emerald-400 p-1 rounded drop-zone" data-answer="G">Gap 1</span></p>
+                    <p class="mb-4">Starting up your own business means taking a massive risk. Our survival chances were slim, and that regular income that paid the mortgage didn't seem so bad after all. <span class="bg-emerald-100 border-2 border-dashed border-emerald-400 p-1 rounded drop-zone" data-answer="F">Gap 2</span></p>
+                    <p class="mb-4">Then we started looking at franchises. A little research, however, showed that if you were careful, failure wasn't inevitable. Despite the global nature of the company, each shop is a small business. <span class="bg-emerald-100 border-2 border-dashed border-emerald-400 p-1 rounded drop-zone" data-answer="A">Gap 3</span></p>
+                    <p class="mb-4">There are drawbacks, of course. You have to pay a start-up fee and follow their plan. <span class="bg-emerald-100 border-2 border-dashed border-emerald-400 p-1 rounded drop-zone" data-answer="B">Gap 4</span></p>
+                    <p class="mb-4">The company was called Oil & Vinegar. <span class="bg-emerald-100 border-2 border-dashed border-emerald-400 p-1 rounded drop-zone" data-answer="D">Gap 5</span> It was a gourmet gift shop selling luxury foods beautifully presented.</p>
+                </div>
+
+                <div class="mt-8 flex flex-wrap gap-3 shuffle-container">
+                    <div draggable="true" class="draggable bg-emerald-600 text-white p-2 text-sm rounded shadow" data-id="G">G. It is terrifying and exciting.</div>
+                    <div draggable="true" class="draggable bg-emerald-600 text-white p-2 text-sm rounded shadow" data-id="F">F. We fell into a pattern of looking into going it alone, getting scared and dropping the idea.</div>
+                    <div draggable="true" class="draggable bg-emerald-600 text-white p-2 text-sm rounded shadow" data-id="A">A. However, a 90% success rate encouraged us to start looking more closely.</div>
+                    <div draggable="true" class="draggable bg-emerald-600 text-white p-2 text-sm rounded shadow" data-id="B">B. I was surprised to learn that some household names are franchises.</div>
+                    <div draggable="true" class="draggable bg-emerald-600 text-white p-2 text-sm rounded shadow" data-id="D">D. Nothing caught our imagination until we came to the last stand.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Grammar - Time Clauses -->
+        <section id="slide-6" class="slide bg-emerald-100">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6">Grammar: Tenses in Time Clauses</h2>
+                <div class="grid md:grid-cols-2 gap-10 text-left">
+                    <div class="space-y-4">
+                        <div class="bg-white p-6 rounded-2xl border border-emerald-200 shadow-sm">
+                            <h3 class="font-bold text-emerald-800 mb-2">The Rule</h3>
+                            <p class="text-slate-600">For clauses starting with <em>after, as soon as, before, until, while, when:</em></p>
+                            <ul class="list-disc ml-5 mt-2 space-y-2 text-sm text-slate-700">
+                                <li><strong>Talking about future:</strong> Use the PRESENT tense. <br><span class="italic text-emerald-600">"We'll discuss it when we MEET in June."</span></li>
+                                <li><strong>Talking about past/present:</strong> Use the same tense as the main clause.</li>
+                                <li><strong>With 'since':</strong> Use present perfect in main, past in time clause.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="space-y-4 text-sm" id="grammar-check">
+                        <div class="p-3 bg-white rounded-xl border">
+                            1. She'll call you as soon as she <input type="text" class="w-20" data-answer="comes"> (come) out of the meeting.
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border">
+                            2. We <input type="text" class="w-24" data-answer="have been"> (be) happy since we <input type="text" class="w-24" data-answer="decided"> (decide) to go it alone.
+                        </div>
+                        <div class="p-3 bg-white rounded-xl border">
+                            3. They didn't change premises until they <input type="text" class="w-20" data-answer="found"> (find) somewhere cheaper.
+                        </div>
+                        <button id="check-grammar-btn" class="w-full py-2 bg-emerald-600 text-white rounded-lg font-bold">Validate Logic</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Financial Terms -->
+        <section id="slide-7" class="slide bg-white">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Financial Vocabulary</h2>
+                <p class="text-slate-600 mb-10">Match the financial terms to their specific meanings.</p>
+                
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 bg-emerald-50 p-2 rounded-xl border border-emerald-100">
+                            <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="turnover"></div>
+                            <span class="text-xs text-slate-500 text-left">Total amount of money received from sales.</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-emerald-50 p-2 rounded-xl border border-emerald-100">
+                            <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="asset"></div>
+                            <span class="text-xs text-slate-500 text-left">Something valuable belonging to an organisation.</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-emerald-50 p-2 rounded-xl border border-emerald-100">
+                            <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="liability"></div>
+                            <span class="text-xs text-slate-500 text-left">A debt or something an organisation owes.</span>
+                        </div>
+                    </div>
+                    <div class="word-bank h-fit flex-wrap gap-3 shuffle-container">
+                        <div draggable="true" class="draggable bg-white border border-slate-200" data-word="turnover">turnover</div>
+                        <div draggable="true" class="draggable bg-white border border-slate-200" data-word="asset">asset</div>
+                        <div draggable="true" class="draggable bg-white border border-slate-200" data-word="liability">liability</div>
+                        <div draggable="true" class="draggable bg-white border border-slate-200" data-word="profit">profit</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Letter Error Correction -->
+        <section id="slide-8" class="slide bg-slate-900 text-white">
+            <div class="activity-card !bg-slate-800 border-slate-700">
+                <h2 class="text-3xl font-bold mb-4">Letter to a Franchiser</h2>
+                <p class="text-slate-400 mb-8">Identify the <strong>extra word</strong> in each numbered line of this enquiry letter. Type it in the box on the right.</p>
+                
+                <div class="bg-slate-700 p-8 rounded-2xl font-mono text-xs md:text-sm text-slate-200 leading-relaxed max-w-4xl mx-auto shadow-2xl">
+                    <div class="letter-line">
+                        <span>Dear Sirs, I have worked for a large multinational retail company</span>
+                        <div class="bg-slate-800 px-2 rounded italic text-slate-500">Correct</div>
+                    </div>
+                    <div class="letter-line">
+                        <span>since I <strong>was</strong> graduated 5 years ago. When I was <strong>last</strong></span>
+                        <input type="text" class="extra-word-input bg-slate-800 border-slate-600 text-emerald-400" data-answer="was">
+                    </div>
+                    <div class="letter-line">
+                        <span><strong>time</strong> in London, I saw some of your shops and I am</span>
+                        <input type="text" class="extra-word-input bg-slate-800 border-slate-600 text-emerald-400" data-answer="time">
+                    </div>
+                    <div class="letter-line">
+                        <span>interested in taking out a franchise with your organisation.</span>
+                        <div class="bg-slate-800 px-2 rounded italic text-slate-500">Correct</div>
+                    </div>
+                    <div class="letter-line">
+                        <span>I would be <strong>the</strong> most grateful if you could send me details...</span>
+                        <input type="text" class="extra-word-input bg-slate-800 border-slate-600 text-emerald-400" data-answer="the">
+                    </div>
+                    <div class="letter-line">
+                        <span>Do you offer credit facilities <strong>for</strong> to cover the initial costs?</span>
+                        <input type="text" class="extra-word-input bg-slate-800 border-slate-600 text-emerald-400" data-answer="for">
+                    </div>
+                    <div class="letter-line">
+                        <span>Will you assist <strong>to</strong> me by supplying marketing materials?</span>
+                        <input type="text" class="extra-word-input bg-slate-800 border-slate-600 text-emerald-400" data-answer="to">
+                    </div>
+                </div>
+                <button id="check-letter-btn" class="mt-10 px-10 py-3 bg-emerald-600 rounded-full font-bold shadow-lg hover:bg-emerald-500">Check Errors</button>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Nav Dots -->
+    <nav class="nav-dots">
+        <a href="#slide-1" class="active"></a>
+        <a href="#slide-2"></a>
+        <a href="#slide-3"></a>
+        <a href="#slide-4"></a>
+        <a href="#slide-5"></a>
+        <a href="#slide-6"></a>
+        <a href="#slide-7"></a>
+        <a href="#slide-8"></a>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let draggedItem = null;
+
+            // Shuffle Function
+            const shuffleContainers = () => {
+                document.querySelectorAll('.shuffle-container').forEach(container => {
+                    const elements = Array.from(container.children);
+                    for (let i = elements.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        container.appendChild(elements[j]);
+                    }
+                });
+            };
+
+            // Drag and Drop Setup
+            const setupDragEvents = () => {
+                const draggables = document.querySelectorAll('.draggable');
+                const dropZones = document.querySelectorAll('.drop-zone');
+
+                draggables.forEach(d => {
+                    d.addEventListener('dragstart', () => {
+                        draggedItem = d;
+                        d.classList.add('dragging');
+                    });
+                    d.addEventListener('dragend', () => {
+                        if (draggedItem) draggedItem.classList.remove('dragging');
+                        draggedItem = null;
+                    });
+                });
+
+                dropZones.forEach(zone => {
+                    zone.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        zone.classList.add('over');
+                    });
+                    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+                    zone.addEventListener('drop', (e) => {
+                        zone.classList.remove('over');
+                        if (!draggedItem) return;
+
+                        const answer = zone.dataset.answer;
+                        const draggedVal = draggedItem.dataset.word || draggedItem.dataset.id;
+
+                        if (answer === draggedVal) {
+                            zone.classList.add('feedback-correct');
+                            zone.innerHTML = draggedItem.outerHTML;
+                            draggedItem.style.visibility = 'hidden';
+                        } else {
+                            zone.classList.add('feedback-incorrect');
+                            setTimeout(() => zone.classList.remove('feedback-incorrect'), 1000);
+                        }
+                    });
+                });
+            };
+
+            // Checker Logic
+            const setupCheckers = () => {
+                // Vocabulary
+                document.getElementById('check-vocab-btn')?.addEventListener('click', () => {
+                    document.querySelectorAll('#slide-4 input').forEach(input => {
+                        if (input.value.trim().toLowerCase() === input.dataset.answer.toLowerCase()) {
+                            input.style.borderBottomColor = '#10b981';
+                            input.style.color = '#047857';
+                        } else {
+                            input.style.borderBottomColor = '#ef4444';
+                        }
+                    });
+                });
+
+                // Grammar
+                document.getElementById('check-grammar-btn')?.addEventListener('click', () => {
+                    document.querySelectorAll('#grammar-check input').forEach(input => {
+                        if (input.value.trim().toLowerCase() === input.dataset.answer.toLowerCase()) {
+                            input.parentElement.classList.add('feedback-correct');
+                        } else {
+                            input.parentElement.classList.add('feedback-incorrect');
+                            setTimeout(() => input.parentElement.classList.remove('feedback-incorrect'), 2000);
+                        }
+                    });
+                });
+
+                // Letter Errors
+                document.getElementById('check-letter-btn')?.addEventListener('click', () => {
+                    document.querySelectorAll('#slide-8 input').forEach(input => {
+                        if (input.value.trim().toLowerCase() === input.dataset.answer.toLowerCase()) {
+                            input.style.borderColor = '#10b981';
+                            input.style.backgroundColor = '#064e3b';
+                        } else {
+                            input.style.borderColor = '#ef4444';
+                        }
+                    });
+                });
+            };
+
+            // Navigation Dots
+            const sections = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.nav-dots a');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        dots.forEach(dot => dot.classList.remove('active'));
+                        sections.forEach(s => s.classList.remove('active'));
+                        
+                        const currentId = entry.target.id;
+                        document.querySelector(`.nav-dots a[href="#${currentId}"]`).classList.add('active');
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            sections.forEach(section => observer.observe(section));
+
+            shuffleContainers();
+            setupDragEvents();
+            setupCheckers();
+        });
+    </script>
+</body>
+</html>
