@@ -121,6 +121,21 @@
         input[type="text"]:focus {
             border-bottom-color: #3b82f6;
         }
+        .grammar-slot {
+            width: 40px;
+            height: 40px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+            transition: 0.3s;
+        }
+        .grammar-slot.feedback-correct {
+            border-style: solid;
+        }
     </style>
 </head>
 <body class="bg-slate-100">
@@ -194,11 +209,16 @@
                         </div>
                     </div>
                     <div class="flex flex-col justify-center items-center gap-6">
-                        <div class="flex gap-4">
-                            <div draggable="true" class="draggable bg-blue-600 text-white shadow-lg text-2xl" data-word="V">V</div>
-                            <div draggable="true" class="draggable bg-indigo-600 text-white shadow-lg text-2xl" data-word="S">S</div>
+                        <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100 mb-4">
+                            <h4 class="font-bold text-indigo-800 mb-4 uppercase tracking-widest text-xs text-center">Draggable Options</h4>
+                            <div class="flex flex-wrap gap-4 justify-center shuffle-container">
+                                <div draggable="true" class="draggable bg-blue-600 text-white shadow-lg text-2xl" data-word="V">V</div>
+                                <div draggable="true" class="draggable bg-blue-600 text-white shadow-lg text-2xl" data-word="V">V</div>
+                                <div draggable="true" class="draggable bg-indigo-600 text-white shadow-lg text-2xl" data-word="S">S</div>
+                                <div draggable="true" class="draggable bg-indigo-600 text-white shadow-lg text-2xl" data-word="S">S</div>
+                            </div>
                         </div>
-                        <div class="p-6 bg-indigo-50 rounded-2xl border border-indigo-100 text-indigo-800 text-sm">
+                        <div class="p-6 bg-white rounded-2xl border border-slate-200 text-slate-600 text-sm">
                             <p><strong>Tip:</strong> Good salespeople (S) offer hospitality. Visitors (V) often compliment the stand and talk about their journey.</p>
                         </div>
                     </div>
@@ -233,8 +253,8 @@
                 <p class="text-slate-600 mb-8">Complete the questions Tessa, Susie, and Jack discuss about this new gadget.</p>
                 
                 <div class="grid md:grid-cols-2 gap-8 text-left">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <img src="https://johanka2014.github.io/bus_bench/mod_8/kitchen_scales.png?auto=format&fit=crop&q=80&w=600" alt="Kitchen Scale" class="rounded-xl mb-4 w-full h-48 object-cover">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center">
+                        <img src="https://johanka2014.github.io/bus_bench/mod_8/kitchen_scales.png" alt="Kitchen Scale" class="rounded-xl mb-4 w-full h-48 object-contain">
                         <h3 class="font-bold text-lg text-slate-800">Talking Kitchen Scale</h3>
                         <p class="text-sm text-slate-500">Ideal for people with low vision. Bowl is dishwasher safe. Weighs less than half a kilo.</p>
                     </div>
@@ -271,22 +291,22 @@
                     <div class="space-y-3">
                         <div class="flex items-center gap-4 bg-white p-2 rounded-xl border border-slate-200">
                             <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="mark-up"></div>
-                            <span class="text-xs text-slate-500">The amount by which the price is increased before resale.</span>
+                            <span class="text-xs text-slate-500 text-left">The amount by which the price is increased before resale.</span>
                         </div>
                         <div class="flex items-center gap-4 bg-white p-2 rounded-xl border border-slate-200">
                             <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="retail"></div>
-                            <span class="text-xs text-slate-500">To sell goods in shops or to the general public.</span>
+                            <span class="text-xs text-slate-500 text-left">To sell goods in shops or to the general public.</span>
                         </div>
                         <div class="flex items-center gap-4 bg-white p-2 rounded-xl border border-slate-200">
                             <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="gadget"></div>
-                            <span class="text-xs text-slate-500">A small device or machine with a particular purpose.</span>
+                            <span class="text-xs text-slate-500 text-left">A small device or machine with a particular purpose.</span>
                         </div>
                         <div class="flex items-center gap-4 bg-white p-2 rounded-xl border border-slate-200">
                             <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="stock"></div>
-                            <span class="text-xs text-slate-500">To keep a supply of goods ready for sale.</span>
+                            <span class="text-xs text-slate-500 text-left">To keep a supply of goods ready for sale.</span>
                         </div>
                     </div>
-                    <div class="word-bank !bg-slate-50 !p-6 rounded-2xl border-2 border-slate-200 flex flex-wrap gap-3 h-fit">
+                    <div class="word-bank !bg-slate-50 !p-6 rounded-2xl border-2 border-slate-200 flex flex-wrap gap-3 h-fit shuffle-container">
                         <div draggable="true" class="draggable bg-white border border-slate-300 shadow-sm" data-word="mark-up">mark-up</div>
                         <div draggable="true" class="draggable bg-white border border-slate-300 shadow-sm" data-word="retail">retail</div>
                         <div draggable="true" class="draggable bg-white border border-slate-300 shadow-sm" data-word="gadget">gadget</div>
@@ -317,7 +337,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-wrap gap-3 justify-center">
+                <div class="flex flex-wrap gap-3 justify-center shuffle-container">
                     <div draggable="true" class="draggable bg-white border p-2 text-xs shadow-sm" data-cat="A">5% on bulk orders</div>
                     <div draggable="true" class="draggable bg-white border p-2 text-xs shadow-sm" data-cat="B">30 days</div>
                     <div draggable="true" class="draggable bg-white border p-2 text-xs shadow-sm" data-cat="C">dispatched immediately</div>
@@ -332,26 +352,53 @@
         <section id="slide-8" class="slide">
             <div class="activity-card text-left">
                 <h2 class="text-3xl font-bold text-slate-800 mb-6">Grammar: The First Conditional</h2>
-                <div class="bg-indigo-700 text-white p-6 rounded-2xl mb-8 shadow-lg">
+                <div class="bg-indigo-700 text-white p-6 rounded-2xl mb-8 shadow-lg text-center">
                     <p class="text-lg mb-2 font-bold italic">"If we buy the scales at €100 each, our mark-up won't allow us to make a profit."</p>
-                    <p class="text-sm opacity-80">Used for real possibilities in the present or future. <strong>If + present, will/can/might + infinitive.</strong></p>
+                    <p class="text-sm opacity-80">Refer to real possibilities in the present or future. <strong>If / Unless + present, will / can / might + infinitive.</strong></p>
                 </div>
                 
-                <div class="space-y-4" id="conditional-match">
-                    <p class="font-bold text-slate-700">Match the sentence halves:</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-3">
-                            <div class="p-3 bg-white border rounded-lg text-sm" data-id="1">1. If you buy more than 1,000 units...</div>
-                            <div class="p-3 bg-white border rounded-lg text-sm" data-id="2">2. Unless you're late paying...</div>
-                            <div class="p-3 bg-white border rounded-lg text-sm" data-id="3">3. We'll arrange extra-fast delivery...</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-3 shuffle-container" id="grammar-draggables">
+                        <p class="font-bold text-slate-700 mb-2 no-shuffle">First Half (Drag these):</p>
+                        <div draggable="true" class="draggable bg-white border border-indigo-200 p-2 text-sm shadow-sm rounded-lg w-full" data-id="1">1. If you buy more than 1,000 units...</div>
+                        <div draggable="true" class="draggable bg-white border border-indigo-200 p-2 text-sm shadow-sm rounded-lg w-full" data-id="2">2. Unless you're late paying...</div>
+                        <div draggable="true" class="draggable bg-white border border-indigo-200 p-2 text-sm shadow-sm rounded-lg w-full" data-id="3">3. We'll arrange extra-fast delivery...</div>
+                        <div draggable="true" class="draggable bg-white border border-indigo-200 p-2 text-sm shadow-sm rounded-lg w-full" data-id="4">4. I might place a very large order...</div>
+                        <div draggable="true" class="draggable bg-white border border-indigo-200 p-2 text-sm shadow-sm rounded-lg w-full" data-id="5">5. As long as hygiene standards are met...</div>
+                        <div draggable="true" class="draggable bg-white border border-indigo-200 p-2 text-sm shadow-sm rounded-lg w-full" data-id="6">6. We'll be happy to pay in euros...</div>
+                        <div draggable="true" class="draggable bg-white border border-indigo-200 p-2 text-sm shadow-sm rounded-lg w-full" data-id="7">7. We'll sell on condition that...</div>
+                    </div>
+                    <div class="space-y-3 shuffle-container" id="grammar-targets">
+                        <p class="font-bold text-slate-700 mb-2 no-shuffle">Second Half (Drop here):</p>
+                        <div class="flex items-center gap-2">
+                            <div class="drop-zone grammar-slot" data-match="1"></div>
+                            <span class="text-xs text-slate-600">...we could manage a larger discount.</span>
                         </div>
-                        <div class="space-y-3">
-                            <div class="drop-zone text-sm" data-match="1">...we could manage a larger discount.</div>
-                            <div class="drop-zone text-sm" data-match="2">...we'll continue supplying you regularly.</div>
-                            <div class="drop-zone text-sm" data-match="3">...on condition you pay transport costs.</div>
+                        <div class="flex items-center gap-2">
+                            <div class="drop-zone grammar-slot" data-match="2"></div>
+                            <span class="text-xs text-slate-600">...we'll continue supplying you regularly.</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="drop-zone grammar-slot" data-match="3"></div>
+                            <span class="text-xs text-slate-600">...if you pay the transportation costs.</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="drop-zone grammar-slot" data-match="4"></div>
+                            <span class="text-xs text-slate-600">...provided we reach agreement on price.</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="drop-zone grammar-slot" data-match="5"></div>
+                            <span class="text-xs text-slate-600">...we should have no difficulty selling them.</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="drop-zone grammar-slot" data-match="6"></div>
+                            <span class="text-xs text-slate-600">...unless the exchange rate changes.</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="drop-zone grammar-slot" data-match="7"></div>
+                            <span class="text-xs text-slate-600">...you make us exclusive agents.</span>
                         </div>
                     </div>
-                    <button id="check-grammar-btn" class="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg">Validate Logic</button>
                 </div>
             </div>
         </section>
@@ -364,20 +411,20 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                     <div>
-                        <h4 class="text-emerald-400 font-bold mb-3 uppercase tracking-wider">Countable</h4>
+                        <h4 class="text-emerald-400 font-bold mb-3 uppercase tracking-wider text-center">Countable</h4>
                         <div class="drop-zone !bg-slate-700 !border-slate-600 min-h-[150px] flex-col gap-2" data-noun="C"></div>
                     </div>
                     <div>
-                        <h4 class="text-orange-400 font-bold mb-3 uppercase tracking-wider">Uncountable</h4>
+                        <h4 class="text-orange-400 font-bold mb-3 uppercase tracking-wider text-center">Uncountable</h4>
                         <div class="drop-zone !bg-slate-700 !border-slate-600 min-h-[150px] flex-col gap-2" data-noun="U"></div>
                     </div>
                     <div>
-                        <h4 class="text-blue-400 font-bold mb-3 uppercase tracking-wider">Both</h4>
+                        <h4 class="text-blue-400 font-bold mb-3 uppercase tracking-wider text-center">Both</h4>
                         <div class="drop-zone !bg-slate-700 !border-slate-600 min-h-[150px] flex-col gap-2" data-noun="B"></div>
                     </div>
                 </div>
 
-                <div class="flex flex-wrap gap-2 justify-center">
+                <div class="flex flex-wrap gap-2 justify-center shuffle-container">
                     <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="C">advertisement</div>
                     <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="U">advertising</div>
                     <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="U">advice</div>
@@ -393,12 +440,12 @@
         <!-- Slide 10: Final roleplay -->
         <section id="slide-10" class="slide bg-indigo-900 text-white">
             <div class="activity-card !bg-slate-900 border-indigo-500 shadow-2xl">
-                <h2 class="text-4xl font-bold mb-6 text-indigo-400">Final Role-play: Negotiating the Deal</h2>
+                <h2 class="text-4xl font-bold mb-6 text-indigo-400 text-center">Final Role-play: Negotiating the Deal</h2>
                 <div class="grid md:grid-cols-2 gap-10 text-left">
                     <div>
                         <h4 class="text-xl font-bold text-white mb-4">The Scenario: CorkPops</h4>
-                        <p class="text-slate-400 mb-6">Buyers want 2,000 units at €8 with 60 days payment. Sellers want €12 with immediate payment.</p>
-                        <ul class="space-y-3 text-sm">
+                        <p class="text-slate-400 mb-6 text-sm">Buyers want 2,000 units at €8 with 60 days payment. Sellers want €12 with immediate payment.</p>
+                        <ul class="space-y-3 text-xs">
                             <li class="flex items-start gap-2"><i class="fas fa-check-circle text-indigo-500 mt-1"></i> <span>Establish a relationship first (The Weather, The Hotel).</span></li>
                             <li class="flex items-start gap-2"><i class="fas fa-check-circle text-indigo-500 mt-1"></i> <span>Discuss technical specs (The Needle, The Cartridge).</span></li>
                             <li class="flex items-start gap-2"><i class="fas fa-check-circle text-indigo-500 mt-1"></i> <span>Move to terms: Price vs. Discount vs. Payment terms.</span></li>
@@ -407,14 +454,14 @@
                     <div class="bg-indigo-800/50 p-6 rounded-2xl border border-indigo-400/30">
                         <h4 class="font-bold mb-4">Key Phrases to Use:</h4>
                         <div class="space-y-3 font-mono text-xs">
-                            <p class="text-indigo-200">"If we buy 500, could you give us an extra discount?"</p>
-                            <p class="text-indigo-200">"30 days is our bottom line, otherwise we'll have cashflow problems."</p>
-                            <p class="text-indigo-200">"How quickly could you supply them if they sell well?"</p>
+                            <p class="text-indigo-200 italic">"If we buy 500, could you give us an extra discount?"</p>
+                            <p class="text-indigo-200 italic">"30 days is our bottom line, otherwise we'll have cashflow problems."</p>
+                            <p class="text-indigo-200 italic">"How quickly could you supply them if they sell well?"</p>
                         </div>
                     </div>
                 </div>
-                <div class="mt-12">
-                    <button onclick="window.scrollTo(0,0)" class="px-10 py-4 bg-indigo-600 rounded-full font-bold shadow-lg hover:bg-indigo-500">Restart Module</button>
+                <div class="mt-12 text-center">
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="px-10 py-4 bg-indigo-600 rounded-full font-bold shadow-lg hover:bg-indigo-500">Restart Module</button>
                 </div>
             </div>
         </section>
@@ -438,7 +485,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             let draggedItem = null;
 
-            // 1. Mark Extra Word Logic (Slide 3 Match)
+            const shuffleElements = () => {
+                document.querySelectorAll('.shuffle-container').forEach(container => {
+                    const elements = Array.from(container.children).filter(child => !child.classList.contains('no-shuffle'));
+                    for (let i = elements.length - 1; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        container.appendChild(elements[j]);
+                    }
+                });
+            };
+
             const setupDragAndDrop = () => {
                 const draggables = document.querySelectorAll('.draggable');
                 const dropZones = document.querySelectorAll('.drop-zone');
@@ -449,7 +505,7 @@
                         d.classList.add('dragging');
                     });
                     d.addEventListener('dragend', () => {
-                        d.classList.remove('dragging');
+                        if (draggedItem) draggedItem.classList.remove('dragging');
                         draggedItem = null;
                     });
                 });
@@ -462,13 +518,34 @@
                     zone.addEventListener('dragleave', () => zone.classList.remove('over'));
                     zone.addEventListener('drop', (e) => {
                         zone.classList.remove('over');
-                        const answer = zone.dataset.answer || zone.dataset.match || zone.dataset.cat || zone.dataset.noun;
+                        if (!draggedItem) return;
+
+                        const answer = zone.dataset.answer || zone.dataset.match || zone.dataset.cat || zone.dataset.noun || zone.dataset.category;
                         const draggedVal = draggedItem.dataset.word || draggedItem.dataset.id || draggedItem.dataset.cat || draggedItem.dataset.type;
 
                         if (answer === draggedVal) {
                             zone.classList.add('feedback-correct');
-                            zone.innerHTML = draggedItem.outerHTML;
-                            draggedItem.style.visibility = 'hidden';
+                            
+                            if (zone.classList.contains('flex-col')) {
+                                const clone = draggedItem.cloneNode(true);
+                                clone.classList.remove('dragging', 'draggable');
+                                clone.style.cursor = 'default';
+                                clone.style.margin = '2px';
+                                clone.style.visibility = 'visible';
+                                zone.appendChild(clone);
+                                draggedItem.style.visibility = 'hidden';
+                            } else {
+                                zone.innerHTML = '';
+                                const clone = draggedItem.cloneNode(true);
+                                clone.classList.remove('dragging', 'draggable', 'w-full');
+                                clone.style.width = '100%';
+                                clone.style.height = '100%';
+                                clone.style.display = 'flex';
+                                clone.style.alignItems = 'center';
+                                clone.style.justifyContent = 'center';
+                                zone.appendChild(clone);
+                                draggedItem.style.visibility = 'hidden';
+                            }
                         } else {
                             zone.classList.add('feedback-incorrect');
                             setTimeout(() => zone.classList.remove('feedback-incorrect'), 1000);
@@ -477,9 +554,7 @@
                 });
             };
 
-            // 2. Generic Input Checkers
             const setupCheckers = () => {
-                // Slide 4 Dialogue
                 document.getElementById('check-dialogue-btn')?.addEventListener('click', () => {
                     document.querySelectorAll('#slide-4 input').forEach(input => {
                         if (input.value.trim().toLowerCase() === input.dataset.answer.toLowerCase()) {
@@ -491,7 +566,6 @@
                     });
                 });
 
-                // Slide 5 Scale Questions
                 document.getElementById('check-scale-btn')?.addEventListener('click', () => {
                     document.querySelectorAll('#slide-5 input').forEach(input => {
                         if (input.value.trim().toLowerCase() === input.dataset.answer.toLowerCase()) {
@@ -501,23 +575,17 @@
                         }
                     });
                 });
-
-                // Slide 8 Grammar
-                document.getElementById('check-grammar-btn')?.addEventListener('click', () => {
-                    document.querySelectorAll('#slide-8 .drop-zone').forEach(zone => {
-                        if (zone.querySelector('.draggable')) {
-                            zone.classList.add('feedback-correct');
-                        } else {
-                            zone.classList.add('feedback-incorrect');
-                        }
-                    });
-                });
             };
 
-            // 3. Nav Dots Interaction
             const sections = document.querySelectorAll('.slide');
             const dots = document.querySelectorAll('.nav-dots a');
-            const observerOptions = { threshold: 0.5 };
+            const scroller = document.getElementById('scroller');
+
+            const observerOptions = { 
+                root: scroller,
+                threshold: 0.5 
+            };
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -525,7 +593,8 @@
                         sections.forEach(s => s.classList.remove('active'));
                         
                         const currentId = entry.target.id;
-                        document.querySelector(`.nav-dots a[href="#${currentId}"]`).classList.add('active');
+                        const activeDot = document.querySelector(`.nav-dots a[href="#${currentId}"]`);
+                        if (activeDot) activeDot.classList.add('active');
                         entry.target.classList.add('active');
                     }
                 });
@@ -533,6 +602,7 @@
 
             sections.forEach(section => observer.observe(section));
 
+            shuffleElements();
             setupDragAndDrop();
             setupCheckers();
         });
