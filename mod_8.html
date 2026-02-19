@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 8: Establishing Relationships and Negotiating</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            scroll-snap-align: start;
+            position: relative;
+            text-align: center;
+        }
+        .container-snap {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        .activity-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 72rem;
+            border: 1px solid #e2e8f0;
+        }
+        .nav-dots {
+            position: fixed;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+        .nav-dots a {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .nav-dots a.active {
+            background-color: #2563eb;
+            transform: scale(1.5);
+        }
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.75rem;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            padding: 0.5rem;
+        }
+        .drop-zone.over {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .draggable {
+            cursor: move;
+            user-select: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        .dragging {
+            opacity: 0.4;
+        }
+        .feedback-correct {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+        }
+        .feedback-incorrect {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+        .arrow {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            display: none;
+        }
+        .slide.active .arrow {
+            display: block;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+            40% { transform: translate(-50%, -10px); }
+            60% { transform: translate(-50%, -5px); }
+        }
+        input[type="text"] {
+            border-bottom: 2px solid #cbd5e1;
+            background: transparent;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+        }
+        input[type="text"]:focus {
+            border-bottom-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+
+    <div class="container-snap" id="scroller">
+        <!-- Slide 1: Welcome -->
+        <section id="slide-1" class="slide bg-indigo-700 text-white">
+            <div class="text-center">
+                <span class="bg-indigo-600 px-4 py-1 rounded-full text-sm font-bold tracking-widest uppercase mb-4 inline-block">Unit 8</span>
+                <h1 class="text-6xl font-bold mb-6">Establishing relationships and negotiating</h1>
+                <p class="text-2xl opacity-90 max-w-2xl mx-auto">Learn the art of business rapport, technical inquiry, and the mechanics of closing a fair deal.</p>
+                <button onclick="document.getElementById('slide-2').scrollIntoView()" class="mt-10 px-8 py-4 bg-white text-indigo-700 rounded-full font-bold hover:bg-indigo-50 transition shadow-xl">Get Started</button>
+            </div>
+            <div class="arrow text-white"><i class="fas fa-chevron-down fa-2x"></i></div>
+        </section>
+
+        <!-- Slide 2: Getting Started -->
+        <section id="slide-2" class="slide">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6">Getting Started</h2>
+                <div class="grid md:grid-cols-2 gap-10 text-left">
+                    <div class="space-y-6">
+                        <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
+                            <h3 class="font-bold text-indigo-800 mb-4 italic">Discussion Points:</h3>
+                            <ul class="space-y-4 text-slate-700">
+                                <li>• How can retailers find out about new products to sell?</li>
+                                <li>• How important are new products for a store's image?</li>
+                                <li>• Is price the only factor customers care about?</li>
+                            </ul>
+                        </div>
+                        <p class="text-slate-600">Consider the negotiation factors on the right. Which do you believe are essential for a win-win outcome?</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                        <h3 class="font-bold text-slate-800 mb-4">Negotiation Factors</h3>
+                        <div class="grid grid-cols-1 gap-2">
+                            <div class="p-3 bg-white rounded-lg border border-slate-200 text-sm shadow-sm">• Building a good relationship</div>
+                            <div class="p-3 bg-white rounded-lg border border-slate-200 text-sm shadow-sm">• Being ready to reach a compromise</div>
+                            <div class="p-3 bg-white rounded-lg border border-slate-200 text-sm shadow-sm text-red-500">• Sticking to your demands (Aggressive)</div>
+                            <div class="p-3 bg-white rounded-lg border border-slate-200 text-sm shadow-sm">• Preparing in advance</div>
+                            <div class="p-3 bg-white rounded-lg border border-slate-200 text-sm shadow-sm">• Taking a long-term view</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="arrow text-slate-400"><i class="fas fa-chevron-down fa-lg"></i></div>
+        </section>
+
+        <!-- Slide 3: Meeting and Greeting -->
+        <section id="slide-3" class="slide bg-slate-50">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Establishing a Relationship</h2>
+                <p class="text-slate-600 mb-8">Business conversations aren't always about business. Identify who is more likely to say each phrase: the <strong>Visitor (V)</strong> or the <strong>Salesperson (S)</strong>.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="drop-zone w-12 h-12 flex-shrink-0" data-answer="S"></div>
+                            <p class="text-sm">"Would either of you like a cup of coffee?"</p>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="drop-zone w-12 h-12 flex-shrink-0" data-answer="V"></div>
+                            <p class="text-sm">"The airport is so convenient for this fair."</p>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="drop-zone w-12 h-12 flex-shrink-0" data-answer="S"></div>
+                            <p class="text-sm">"Where are you staying?"</p>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                            <div class="drop-zone w-12 h-12 flex-shrink-0" data-answer="V"></div>
+                            <p class="text-sm">"So this is your stand? Very smart!"</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-center items-center gap-6">
+                        <div class="flex gap-4">
+                            <div draggable="true" class="draggable bg-blue-600 text-white shadow-lg text-2xl" data-word="V">V</div>
+                            <div draggable="true" class="draggable bg-indigo-600 text-white shadow-lg text-2xl" data-word="S">S</div>
+                        </div>
+                        <div class="p-6 bg-indigo-50 rounded-2xl border border-indigo-100 text-indigo-800 text-sm">
+                            <p><strong>Tip:</strong> Good salespeople (S) offer hospitality. Visitors (V) often compliment the stand and talk about their journey.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="arrow text-slate-400"><i class="fas fa-chevron-down fa-lg"></i></div>
+        </section>
+
+        <!-- Slide 4: Interactive Dialogue -->
+        <section id="slide-4" class="slide">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Activity: The Trade Fair Encounter</h2>
+                <p class="text-slate-600 mb-8">Complete the dialogue from the listening track (13.2) by typing the missing words.</p>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-inner border max-h-[50vh] overflow-y-auto leading-relaxed text-slate-700">
+                    <p class="mb-4"><strong>Jack:</strong> Hello. Good morning. Tessa Marcovitz? My name's Jack Lemming, and this 1. <input type="text" class="w-16" data-answer="is"> my colleague, Susie Chen.</p>
+                    <p class="mb-4"><strong>Tessa:</strong> Hello. Nice to 2. <input type="text" class="w-16" data-answer="meet"> you. So you got my letter? That's great.</p>
+                    <p class="mb-4"><strong>Susie:</strong> Hello. Nice to meet you 3. <input type="text" class="w-16" data-answer="too">. So this is your stand? Very smart, and 4. <input type="text" class="w-16" data-answer="thanks"> for inviting us, by the way.</p>
+                    <p class="mb-4"><strong>Tessa:</strong> Well, we've been wanting to 5. <input type="text" class="w-24" data-answer="talk"> to you people for some time... Did you have a good 6. <input type="text" class="w-16" data-answer="trip">?</p>
+                    <p class="mb-4"><strong>Susie:</strong> Yes, the airport's so convenient for this fair. 7. <input type="text" class="w-20" data-answer="Lovely"> city, isn't it?</p>
+                    <p class="mb-4"><strong>Tessa:</strong> Yes, lovely. Where are you 8. <input type="text" class="w-24" data-answer="staying">?</p>
+                    <p class="mb-4"><strong>Susie:</strong> We're staying at the Ritz, in the city centre.</p>
+                </div>
+                <button id="check-dialogue-btn" class="mt-8 px-8 py-3 bg-indigo-600 text-white rounded-full font-bold hover:bg-indigo-700 transition shadow-lg">Verify Dialogue</button>
+            </div>
+        </section>
+
+        <!-- Slide 5: Asking Questions about a Product -->
+        <section id="slide-5" class="slide bg-blue-100">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">The Talking Kitchen Scale</h2>
+                <p class="text-slate-600 mb-8">Complete the questions Tessa, Susie, and Jack discuss about this new gadget.</p>
+                
+                <div class="grid md:grid-cols-2 gap-8 text-left">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <img src="https://images.unsplash.com/photo-1594759842811-9f9a440995e3?auto=format&fit=crop&q=80&w=600" alt="Kitchen Scale" class="rounded-xl mb-4 w-full h-48 object-cover">
+                        <h3 class="font-bold text-lg text-slate-800">Talking Kitchen Scale</h3>
+                        <p class="text-sm text-slate-500">Ideal for people with low vision. Bowl is dishwasher safe. Weighs less than half a kilo.</p>
+                    </div>
+                    <div class="space-y-4 text-sm" id="scale-questions">
+                        <div class="p-3 bg-white rounded-lg border">
+                            <p><strong>1.</strong> Is it <input type="text" class="w-24" data-answer="easy"> to keep clean?</p>
+                            <p class="text-xs text-slate-400 mt-1">A: You just pop the bowl in the dishwasher.</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border">
+                            <p><strong>2.</strong> How much <input type="text" class="w-24" data-answer="does it weigh">?</p>
+                            <p class="text-xs text-slate-400 mt-1">A: It's very light. Less than half a kilo.</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border">
+                            <p><strong>3.</strong> How quickly <input type="text" class="w-32" data-answer="could you get"> them to us?</p>
+                            <p class="text-xs text-slate-400 mt-1">A: Within the week, if necessary.</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-lg border">
+                            <p><strong>4.</strong> <input type="text" class="w-32" data-answer="Does it come"> supplied with a battery?</p>
+                            <p class="text-xs text-slate-400 mt-1">A: Yes, the battery is included.</p>
+                        </div>
+                        <button id="check-scale-btn" class="w-full py-2 bg-blue-600 text-white rounded-lg font-bold">Check Questions</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Vocabulary Definitions -->
+        <section id="slide-6" class="slide">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Vocabulary: Business Terms</h2>
+                <p class="text-slate-600 mb-8">Match the business terms from the dialogue with their correct definitions.</p>
+                
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-4 bg-white p-2 rounded-xl border border-slate-200">
+                            <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="mark-up"></div>
+                            <span class="text-xs text-slate-500">The amount by which the price is increased before resale.</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white p-2 rounded-xl border border-slate-200">
+                            <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="retail"></div>
+                            <span class="text-xs text-slate-500">To sell goods in shops or to the general public.</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white p-2 rounded-xl border border-slate-200">
+                            <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="gadget"></div>
+                            <span class="text-xs text-slate-500">A small device or machine with a particular purpose.</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white p-2 rounded-xl border border-slate-200">
+                            <div class="drop-zone w-36 h-10 flex-shrink-0" data-answer="stock"></div>
+                            <span class="text-xs text-slate-500">To keep a supply of goods ready for sale.</span>
+                        </div>
+                    </div>
+                    <div class="word-bank !bg-slate-50 !p-6 rounded-2xl border-2 border-slate-200 flex flex-wrap gap-3 h-fit">
+                        <div draggable="true" class="draggable bg-white border border-slate-300 shadow-sm" data-word="mark-up">mark-up</div>
+                        <div draggable="true" class="draggable bg-white border border-slate-300 shadow-sm" data-word="retail">retail</div>
+                        <div draggable="true" class="draggable bg-white border border-slate-300 shadow-sm" data-word="gadget">gadget</div>
+                        <div draggable="true" class="draggable bg-white border border-slate-300 shadow-sm" data-word="stock">stock</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Terms and Conditions -->
+        <section id="slide-7" class="slide bg-indigo-50">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Terms and Conditions</h2>
+                <p class="text-slate-600 mb-10">Negotiation involves three main pillars. Drag the clauses into the correct category.</p>
+                
+                <div class="grid md:grid-cols-3 gap-6 mb-12">
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-indigo-600">A. Discount</h4>
+                        <div class="drop-zone min-h-[120px] flex-col gap-2" data-category="A"></div>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-indigo-600">B. Payment Terms</h4>
+                        <div class="drop-zone min-h-[120px] flex-col gap-2" data-category="B"></div>
+                    </div>
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-indigo-600">C. Delivery Date</h4>
+                        <div class="drop-zone min-h-[120px] flex-col gap-2" data-category="C"></div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <div draggable="true" class="draggable bg-white border p-2 text-xs shadow-sm" data-cat="A">5% on bulk orders</div>
+                    <div draggable="true" class="draggable bg-white border p-2 text-xs shadow-sm" data-cat="B">30 days</div>
+                    <div draggable="true" class="draggable bg-white border p-2 text-xs shadow-sm" data-cat="C">dispatched immediately</div>
+                    <div draggable="true" class="draggable bg-white border p-2 text-xs shadow-sm" data-cat="B">at sight</div>
+                    <div draggable="true" class="draggable bg-white border p-2 text-xs shadow-sm" data-cat="C">within two weeks</div>
+                    <div draggable="true" class="draggable bg-white border p-2 text-xs shadow-sm" data-cat="A">7.5% on 100+ units</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Grammar: First Conditional -->
+        <section id="slide-8" class="slide">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6">Grammar: The First Conditional</h2>
+                <div class="bg-indigo-700 text-white p-6 rounded-2xl mb-8 shadow-lg">
+                    <p class="text-lg mb-2 font-bold italic">"If we buy the scales at €100 each, our mark-up won't allow us to make a profit."</p>
+                    <p class="text-sm opacity-80">Used for real possibilities in the present or future. <strong>If + present, will/can/might + infinitive.</strong></p>
+                </div>
+                
+                <div class="space-y-4" id="conditional-match">
+                    <p class="font-bold text-slate-700">Match the sentence halves:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-3">
+                            <div class="p-3 bg-white border rounded-lg text-sm" data-id="1">1. If you buy more than 1,000 units...</div>
+                            <div class="p-3 bg-white border rounded-lg text-sm" data-id="2">2. Unless you're late paying...</div>
+                            <div class="p-3 bg-white border rounded-lg text-sm" data-id="3">3. We'll arrange extra-fast delivery...</div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="drop-zone text-sm" data-match="1">...we could manage a larger discount.</div>
+                            <div class="drop-zone text-sm" data-match="2">...we'll continue supplying you regularly.</div>
+                            <div class="drop-zone text-sm" data-match="3">...on condition you pay transport costs.</div>
+                        </div>
+                    </div>
+                    <button id="check-grammar-btn" class="mt-4 px-6 py-2 bg-indigo-600 text-white rounded-lg">Validate Logic</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Countable vs Uncountable -->
+        <section id="slide-9" class="slide bg-slate-900 text-white">
+            <div class="activity-card !bg-slate-800 border-slate-700">
+                <h2 class="text-3xl font-bold mb-4">Nouns: Countable vs Uncountable</h2>
+                <p class="text-slate-400 mb-8">Some business terms change meaning based on whether they are countable. Classify the following.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div>
+                        <h4 class="text-emerald-400 font-bold mb-3 uppercase tracking-wider">Countable</h4>
+                        <div class="drop-zone !bg-slate-700 !border-slate-600 min-h-[150px] flex-col gap-2" data-noun="C"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-orange-400 font-bold mb-3 uppercase tracking-wider">Uncountable</h4>
+                        <div class="drop-zone !bg-slate-700 !border-slate-600 min-h-[150px] flex-col gap-2" data-noun="U"></div>
+                    </div>
+                    <div>
+                        <h4 class="text-blue-400 font-bold mb-3 uppercase tracking-wider">Both</h4>
+                        <div class="drop-zone !bg-slate-700 !border-slate-600 min-h-[150px] flex-col gap-2" data-noun="B"></div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 justify-center">
+                    <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="C">advertisement</div>
+                    <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="U">advertising</div>
+                    <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="U">advice</div>
+                    <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="C">job</div>
+                    <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="U">information</div>
+                    <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="B">business</div>
+                    <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="B">experience</div>
+                    <div draggable="true" class="draggable bg-slate-700 text-xs border border-slate-600" data-type="B">work</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: Final roleplay -->
+        <section id="slide-10" class="slide bg-indigo-900 text-white">
+            <div class="activity-card !bg-slate-900 border-indigo-500 shadow-2xl">
+                <h2 class="text-4xl font-bold mb-6 text-indigo-400">Final Role-play: Negotiating the Deal</h2>
+                <div class="grid md:grid-cols-2 gap-10 text-left">
+                    <div>
+                        <h4 class="text-xl font-bold text-white mb-4">The Scenario: CorkPops</h4>
+                        <p class="text-slate-400 mb-6">Buyers want 2,000 units at €8 with 60 days payment. Sellers want €12 with immediate payment.</p>
+                        <ul class="space-y-3 text-sm">
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-indigo-500 mt-1"></i> <span>Establish a relationship first (The Weather, The Hotel).</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-indigo-500 mt-1"></i> <span>Discuss technical specs (The Needle, The Cartridge).</span></li>
+                            <li class="flex items-start gap-2"><i class="fas fa-check-circle text-indigo-500 mt-1"></i> <span>Move to terms: Price vs. Discount vs. Payment terms.</span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-indigo-800/50 p-6 rounded-2xl border border-indigo-400/30">
+                        <h4 class="font-bold mb-4">Key Phrases to Use:</h4>
+                        <div class="space-y-3 font-mono text-xs">
+                            <p class="text-indigo-200">"If we buy 500, could you give us an extra discount?"</p>
+                            <p class="text-indigo-200">"30 days is our bottom line, otherwise we'll have cashflow problems."</p>
+                            <p class="text-indigo-200">"How quickly could you supply them if they sell well?"</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-12">
+                    <button onclick="window.scrollTo(0,0)" class="px-10 py-4 bg-indigo-600 rounded-full font-bold shadow-lg hover:bg-indigo-500">Restart Module</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Navigation Dots -->
+    <nav class="nav-dots">
+        <a href="#slide-1" class="active"></a>
+        <a href="#slide-2"></a>
+        <a href="#slide-3"></a>
+        <a href="#slide-4"></a>
+        <a href="#slide-5"></a>
+        <a href="#slide-6"></a>
+        <a href="#slide-7"></a>
+        <a href="#slide-8"></a>
+        <a href="#slide-9"></a>
+        <a href="#slide-10"></a>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let draggedItem = null;
+
+            // 1. Mark Extra Word Logic (Slide 3 Match)
+            const setupDragAndDrop = () => {
+                const draggables = document.querySelectorAll('.draggable');
+                const dropZones = document.querySelectorAll('.drop-zone');
+
+                draggables.forEach(d => {
+                    d.addEventListener('dragstart', (e) => {
+                        draggedItem = d;
+                        d.classList.add('dragging');
+                    });
+                    d.addEventListener('dragend', () => {
+                        d.classList.remove('dragging');
+                        draggedItem = null;
+                    });
+                });
+
+                dropZones.forEach(zone => {
+                    zone.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        zone.classList.add('over');
+                    });
+                    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+                    zone.addEventListener('drop', (e) => {
+                        zone.classList.remove('over');
+                        const answer = zone.dataset.answer || zone.dataset.match || zone.dataset.cat || zone.dataset.noun;
+                        const draggedVal = draggedItem.dataset.word || draggedItem.dataset.id || draggedItem.dataset.cat || draggedItem.dataset.type;
+
+                        if (answer === draggedVal) {
+                            zone.classList.add('feedback-correct');
+                            zone.innerHTML = draggedItem.outerHTML;
+                            draggedItem.style.visibility = 'hidden';
+                        } else {
+                            zone.classList.add('feedback-incorrect');
+                            setTimeout(() => zone.classList.remove('feedback-incorrect'), 1000);
+                        }
+                    });
+                });
+            };
+
+            // 2. Generic Input Checkers
+            const setupCheckers = () => {
+                // Slide 4 Dialogue
+                document.getElementById('check-dialogue-btn')?.addEventListener('click', () => {
+                    document.querySelectorAll('#slide-4 input').forEach(input => {
+                        if (input.value.trim().toLowerCase() === input.dataset.answer.toLowerCase()) {
+                            input.style.borderBottomColor = '#22c55e';
+                            input.style.color = '#15803d';
+                        } else {
+                            input.style.borderBottomColor = '#ef4444';
+                        }
+                    });
+                });
+
+                // Slide 5 Scale Questions
+                document.getElementById('check-scale-btn')?.addEventListener('click', () => {
+                    document.querySelectorAll('#slide-5 input').forEach(input => {
+                        if (input.value.trim().toLowerCase() === input.dataset.answer.toLowerCase()) {
+                            input.parentElement.classList.add('feedback-correct');
+                        } else {
+                            input.parentElement.classList.add('feedback-incorrect');
+                        }
+                    });
+                });
+
+                // Slide 8 Grammar
+                document.getElementById('check-grammar-btn')?.addEventListener('click', () => {
+                    document.querySelectorAll('#slide-8 .drop-zone').forEach(zone => {
+                        if (zone.querySelector('.draggable')) {
+                            zone.classList.add('feedback-correct');
+                        } else {
+                            zone.classList.add('feedback-incorrect');
+                        }
+                    });
+                });
+            };
+
+            // 3. Nav Dots Interaction
+            const sections = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.nav-dots a');
+            const observerOptions = { threshold: 0.5 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        dots.forEach(dot => dot.classList.remove('active'));
+                        sections.forEach(s => s.classList.remove('active'));
+                        
+                        const currentId = entry.target.id;
+                        document.querySelector(`.nav-dots a[href="#${currentId}"]`).classList.add('active');
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => observer.observe(section));
+
+            setupDragAndDrop();
+            setupCheckers();
+        });
+    </script>
+</body>
+</html>
