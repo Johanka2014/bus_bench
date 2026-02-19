@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 7: A Stand at a Trade Fair</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .slide {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            scroll-snap-align: start;
+            position: relative;
+            text-align: center;
+        }
+        .container-snap {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+        .activity-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 72rem;
+            border: 1px solid #e2e8f0;
+        }
+        .nav-dots {
+            position: fixed;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+        .nav-dots a {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(0,0,0,0.2);
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .nav-dots a.active {
+            background-color: #2563eb;
+            transform: scale(1.5);
+        }
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.75rem;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .drop-zone.over {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+        }
+        .draggable {
+            cursor: move;
+            user-select: none;
+        }
+        .dragging {
+            opacity: 0.4;
+        }
+        .extra-word-btn {
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .extra-word-btn:hover {
+            background-color: #fee2e2;
+        }
+        .extra-word-btn.selected-wrong {
+            background-color: #ef4444;
+            color: white;
+            text-decoration: line-through;
+        }
+        .feedback-correct {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+        }
+        .feedback-incorrect {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+        .arrow {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
+            40% { transform: translate(-50%, -10px); }
+            60% { transform: translate(-50%, -5px); }
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+
+    <div class="container-snap">
+        <!-- Slide 1: Introduction -->
+        <section id="slide-1" class="slide bg-blue-600 text-white">
+            <div class="text-center">
+                <h1 class="text-6xl font-bold mb-6">Unit 7: A stand at a trade fair</h1>
+                <p class="text-2xl opacity-90 max-w-2xl mx-auto">Mastering the language and logistics of business exhibitions, from booking space to designing your brand impact.</p>
+                <button onclick="document.getElementById('slide-2').scrollIntoView()" class="mt-10 px-8 py-4 bg-white text-blue-600 rounded-full font-bold hover:bg-blue-50 transition shadow-xl">Get Started</button>
+            </div>
+            <div class="arrow text-white"><i class="fas fa-chevron-down fa-2x"></i></div>
+        </section>
+
+        <!-- Slide 2: Getting Started -->
+        <section id="slide-2" class="slide">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-6">Getting Started</h2>
+                <div class="grid md:grid-cols-2 gap-10">
+                    <div class="text-left space-y-6">
+                        <p class="text-lg text-slate-600">Look at the images of trade fairs. Discuss these questions with a partner:</p>
+                        <ul class="space-y-4">
+                            <li class="flex gap-4">
+                                <span class="bg-blue-100 text-blue-600 w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0 font-bold">1</span>
+                                <p>What is happening in the pictures? Describe the interactions between staff and visitors.</p>
+                            </li>
+                            <li class="flex gap-4">
+                                <span class="bg-blue-100 text-blue-600 w-8 h-8 flex items-center justify-center rounded-full flex-shrink-0 font-bold">2</span>
+                                <p>How can companies promote their products effectively by having a stand? Think about prestige, competitors, and handling products.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=800" alt="Trade Fair" class="rounded-2xl shadow-lg">
+                    </div>
+                </div>
+            </div>
+            <div class="arrow text-slate-400"><i class="fas fa-chevron-down fa-lg"></i></div>
+        </section>
+
+        <!-- Slide 3: The International Food Exhibition -->
+        <section id="slide-3" class="slide bg-slate-50">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Case Study: Pop-the-Cork Ltd</h2>
+                <p class="text-slate-600 mb-8">Frank O'Donnell receives a memo and email from his boss, Bill Cowley, about next year's International Food Exhibition (IFE).</p>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white border p-6 rounded-xl shadow-sm font-mono text-sm">
+                        <p class="font-bold text-blue-600 mb-2 border-b pb-1">INTERNAL MEMO</p>
+                        <p><strong>From:</strong> Bill Cowley</p>
+                        <p><strong>To:</strong> All Staff</p>
+                        <p><strong>Subject:</strong> The International Food Exhibition</p>
+                        <p class="mt-4">Following conversations with suppliers, I have decided that next year we will take a stand at the IFE in London. The objective will be to expand our customer base and find new export markets.</p>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-100 p-6 rounded-xl shadow-sm text-sm">
+                        <p class="font-bold text-blue-800 mb-2">EMAIL</p>
+                        <p><strong>To:</strong> Frank O'Donnell</p>
+                        <p><strong>Subject:</strong> Action: IFE Organisers</p>
+                        <p class="mt-4">Frank, can you get in touch with the organisers and find out:</p>
+                        <ul class="list-disc ml-5 mt-2 space-y-1">
+                            <li>How much it costs to have a stand.</li>
+                            <li>When we need to book the space.</li>
+                        </ul>
+                        <p class="mt-2 text-blue-600">http://www.showfood.co.uk</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: Error Correction Activity -->
+        <section id="slide-4" class="slide">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Activity: Error Correction</h2>
+                <p class="text-slate-600 mb-8">Frank drafted an email to the organisers, but there is <strong>one extra word</strong> in each line. Click the extra word to remove it.</p>
+                
+                <div id="email-error-task" class="bg-white p-8 rounded-xl shadow-inner border text-left leading-loose text-lg">
+                    <p class="mb-2">Dear Sir/Madam,</p>
+                    <div class="line" data-correct="the">We are a small company from the Republic of <span class="extra-word-btn" onclick="markExtra(this, 'the')">the</span> Ireland specialising in...</div>
+                    <div class="line" data-correct="the">the <span class="extra-word-btn" onclick="markExtra(this, 'the')">the</span> producing and exporting typical and regional foods...</div>
+                    <div class="line" data-correct="the">We are interested in <span class="extra-word-btn" onclick="markExtra(this, 'the')">the</span> having possibility of exhibiting at the IFE...</div>
+                    <div class="line" data-correct="these">and we would like answers to the following <span class="extra-word-btn" onclick="markExtra(this, 'these')">these</span> questions:</div>
+                    <div class="line" data-correct="for">How much would it cost <span class="extra-word-btn" onclick="markExtra(this, 'for')">for</span> to hire a space for a stand?</div>
+                    <div class="line" data-correct="do">Can you tell us when <span class="extra-word-btn" onclick="markExtra(this, 'do')">do</span> we would need to make a booking?</div>
+                    <div class="line" data-correct="are">We <span class="extra-word-btn" onclick="markExtra(this, 'are')">are</span> look forward to hearing from you, and thank you in...</div>
+                    <div class="line" data-correct="the">the <span class="extra-word-btn" onclick="markExtra(this, 'the')">the</span> advance for the information.</div>
+                </div>
+                <div id="error-feedback" class="mt-4 font-bold text-blue-600"></div>
+            </div>
+        </section>
+
+        <!-- Slide 5: Listening Activity -->
+        <section id="slide-5" class="slide bg-blue-50">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-4">Listening: Info from Mandy</h2>
+                <p class="text-slate-600 mb-8">Listen to the call from Showfood Ltd and complete Frank's notes.</p>
+                
+                <div class="bg-white p-4 rounded-xl mb-8 flex items-center gap-4 max-w-md mx-auto shadow-sm">
+                    <i class="fas fa-play-circle text-3xl text-blue-600 cursor-pointer"></i>
+                    <div class="text-left flex-grow">
+                        <p class="text-xs text-slate-400 uppercase font-bold tracking-widest">Track 12.2</p>
+                        <p class="text-sm font-semibold">IFE Booking Details</p>
+                    </div>
+                    <audio controls class="h-8">
+                        <source src="" type="audio/mpeg"> <!-- Path to 12.2 -->
+                    </audio>
+                </div>
+
+                <div class="bg-yellow-50 p-8 rounded-xl border border-yellow-200 text-left space-y-6 max-w-3xl mx-auto shadow-sm font-mono">
+                    <h3 class="text-xl font-bold border-b border-yellow-300 pb-2">Frank's Notes: IFE</h3>
+                    <div class="space-y-4">
+                        <p>Cost of <input type="text" class="w-40 border-b border-black bg-transparent outline-none px-1" data-answer="floor space"> : £120 - £200 / sqm</p>
+                        <p>Reservations to be made <input type="text" class="w-40 border-b border-black bg-transparent outline-none px-1" data-answer="in writing"> by Sept 1st.</p>
+                        <p>Deposit of 50% payable by <input type="text" class="w-40 border-b border-black bg-transparent outline-none px-1" data-answer="cheque"> with reservation.</p>
+                        <p>They will send the <input type="text" class="w-40 border-b border-black bg-transparent outline-none px-1" data-answer="floor plan"> soon.</p>
+                        <p>Full payment by Feb 13th, or space is not <input type="text" class="w-40 border-b border-black bg-transparent outline-none px-1" data-answer="guaranteed">.</p>
+                    </div>
+                    <button id="check-notes-btn" class="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Check Answers</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Grammar - Scrambled Questions -->
+        <section id="slide-6" class="slide">
+            <div class="activity-card text-left">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Grammar Workshop</h2>
+                <p class="text-slate-600 mb-8">Form questions by dragging the words into the correct order.</p>
+                
+                <div class="space-y-8" id="scrambled-container">
+                    <div class="scramble-block" data-answer="How much does a ticket to the exhibition cost?">
+                        <p class="text-sm text-slate-500 mb-2">1. cost / much / ticket / does / a / exhibition / how / to / the / ?</p>
+                        <div class="word-order-container drop-zone flex flex-wrap gap-2 p-3 bg-slate-50 border-2 border-dashed rounded-xl min-h-[60px]" id="q1">
+                            <!-- JS will inject words -->
+                        </div>
+                    </div>
+                    <div class="scramble-block" data-answer="How many exhibitors were there at the exhibition?">
+                        <p class="text-sm text-slate-500 mb-2">2. many / exhibitors / there / at / the / exhibition / were / how / ?</p>
+                        <div class="word-order-container drop-zone flex flex-wrap gap-2 p-3 bg-slate-50 border-2 border-dashed rounded-xl min-h-[60px]" id="q2">
+                            <!-- JS will inject words -->
+                        </div>
+                    </div>
+                </div>
+                <button id="check-scramble-btn" class="mt-8 px-8 py-3 bg-blue-600 text-white rounded-full font-bold shadow-lg hover:bg-blue-700 transition">Verify Order</button>
+            </div>
+        </section>
+
+        <!-- Slide 7: Choosing a Builder -->
+        <section id="slide-7" class="slide bg-slate-900 text-white">
+            <div class="activity-card !bg-slate-800 border-slate-700">
+                <h2 class="text-3xl font-bold mb-6">Reading: The Stand Builders</h2>
+                <div class="grid md:grid-cols-3 gap-6 text-left text-sm">
+                    <div class="p-5 bg-slate-700 rounded-xl border border-slate-600">
+                        <h4 class="font-bold text-blue-400 mb-2">Apex.co.uk</h4>
+                        <p>Provides a complete marketing solution including pre-event promotions and show activity. Works with you to <strong>maximise visitor numbers</strong>.</p>
+                    </div>
+                    <div class="p-5 bg-slate-700 rounded-xl border border-slate-600">
+                        <h4 class="font-bold text-orange-400 mb-2">Stand the Pace</h4>
+                        <p>Custom-built stands for <strong>hire or sale</strong>. Keen prices due to huge stocks of <strong>ready-made equipment</strong>.</p>
+                    </div>
+                    <div class="p-5 bg-slate-700 rounded-xl border border-slate-600">
+                        <h4 class="font-bold text-emerald-400 mb-2">Maxim Design</h4>
+                        <p>Delivered worldwide for <strong>almost every market</strong>. Uses 3D images and project management to ensure <strong>deadlines are met</strong>.</p>
+                    </div>
+                </div>
+                
+                <div class="mt-10 space-y-4">
+                    <p class="text-lg">Which builder...</p>
+                    <div class="flex flex-wrap gap-4 justify-center">
+                        <div class="bg-white/10 p-4 rounded-lg flex items-center gap-4">
+                            <span>...supplies ready-made equipment?</span>
+                            <select class="bg-slate-700 border-none rounded p-1 text-xs outline-none" data-correct="Stand the Pace"><option>Select...</option><option>Apex</option><option>Stand the Pace</option><option>Maxim</option></select>
+                        </div>
+                        <div class="bg-white/10 p-4 rounded-lg flex items-center gap-4">
+                            <span>...has wide international experience?</span>
+                            <select class="bg-slate-700 border-none rounded p-1 text-xs outline-none" data-correct="Maxim"><option>Select...</option><option>Apex</option><option>Stand the Pace</option><option>Maxim</option></select>
+                        </div>
+                    </div>
+                    <button id="check-builders-btn" class="mt-4 px-6 py-2 bg-blue-600 rounded-lg font-bold">Check Matches</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Compound Nouns Match -->
+        <section id="slide-8" class="slide bg-gradient-to-br from-indigo-50 to-blue-100">
+            <div class="activity-card">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Vocabulary: Compound Nouns</h2>
+                <p class="text-slate-600 mb-8">Match a word from Box A with a word from Box B to create business terms.</p>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+                    <!-- Targets -->
+                    <div class="space-y-4">
+                         <div class="drop-zone p-4 bg-white shadow-sm" data-match="customer"><span>... base</span></div>
+                         <div class="drop-zone p-4 bg-white shadow-sm" data-match="event"><span>... organisers</span></div>
+                    </div>
+                    <div class="space-y-4">
+                         <div class="drop-zone p-4 bg-white shadow-sm" data-match="exhibition"><span>... centre</span></div>
+                         <div class="drop-zone p-4 bg-white shadow-sm" data-match="floor"><span>... space</span></div>
+                    </div>
+                    <!-- Source Words -->
+                    <div class="col-span-2 word-bank !p-6 !bg-white/50 !rounded-2xl border-2 border-indigo-100">
+                        <div draggable="true" class="draggable word-item bg-indigo-600 text-white" data-word="customer">customer</div>
+                        <div draggable="true" class="draggable word-item bg-indigo-600 text-white" data-word="event">event</div>
+                        <div draggable="true" class="draggable word-item bg-indigo-600 text-white" data-word="exhibition">exhibition</div>
+                        <div draggable="true" class="draggable word-item bg-indigo-600 text-white" data-word="floor">floor</div>
+                        <div draggable="true" class="draggable word-item bg-indigo-600 text-white" data-word="publicity">publicity</div>
+                        <div draggable="true" class="draggable word-item bg-indigo-600 text-white" data-word="export">export</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Role-play Scenario -->
+        <section id="slide-9" class="slide bg-slate-900 text-white">
+            <div class="activity-card !bg-slate-800 border-slate-700">
+                <h2 class="text-3xl font-bold mb-6">Final Challenge: The Meeting</h2>
+                <p class="text-slate-400 mb-10">You are Frank and Bill. You've received designs from 'Stand the Pace'. Decide on the following points for your reply:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                    <div class="bg-slate-700 p-6 rounded-2xl">
+                        <i class="fas fa-ruler-combined text-blue-400 mb-4 text-2xl"></i>
+                        <h4 class="font-bold mb-2">Space</h4>
+                        <p class="text-sm text-slate-300">Decide exactly how much floor space (e.g. 40 sqm) you want to book.</p>
+                    </div>
+                    <div class="bg-slate-700 p-6 rounded-2xl">
+                        <i class="fas fa-door-open text-orange-400 mb-4 text-2xl"></i>
+                        <h4 class="font-bold mb-2">Layout</h4>
+                        <p class="text-sm text-slate-300">Do you want an open stand (welcoming) or a closed stand (exclusive)?</p>
+                    </div>
+                    <div class="bg-slate-700 p-6 rounded-2xl">
+                        <i class="fas fa-users text-emerald-400 mb-4 text-2xl"></i>
+                        <h4 class="font-bold mb-2">Capacity</h4>
+                        <p class="text-sm text-slate-300">How many sales staff and visitors do you need to accommodate at once?</p>
+                    </div>
+                </div>
+                
+                <div class="mt-12 bg-white/5 p-6 rounded-xl border border-white/10 italic text-slate-300">
+                    "We would like to book a corner site of 40 square metres and we'd prefer the design to be open..."
+                </div>
+                
+                <button onclick="window.scrollTo(0,0)" class="mt-10 px-8 py-3 bg-blue-600 rounded-full font-bold">Restart Module</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Navigation Dots -->
+    <nav class="nav-dots">
+        <a href="#slide-1" class="active"></a>
+        <a href="#slide-2"></a>
+        <a href="#slide-3"></a>
+        <a href="#slide-4"></a>
+        <a href="#slide-5"></a>
+        <a href="#slide-6"></a>
+        <a href="#slide-7"></a>
+        <a href="#slide-8"></a>
+        <a href="#slide-9"></a>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let draggedItem = null;
+
+            // 1. Mark Extra Word Logic
+            window.markExtra = (el, word) => {
+                const line = el.closest('.line');
+                const correct = line.dataset.correct;
+                
+                // Clear previous state in this line
+                line.querySelectorAll('.extra-word-btn').forEach(b => b.classList.remove('selected-wrong'));
+                line.classList.remove('feedback-correct', 'feedback-incorrect');
+
+                if (word === correct) {
+                    line.classList.add('feedback-correct');
+                } else {
+                    el.classList.add('selected-wrong');
+                    line.classList.add('feedback-incorrect');
+                }
+            };
+
+            // 2. Note Check Logic
+            document.getElementById('check-notes-btn').addEventListener('click', () => {
+                document.querySelectorAll('#slide-5 input').forEach(input => {
+                    if (input.value.trim().toLowerCase() === input.dataset.answer.toLowerCase()) {
+                        input.style.borderBottomColor = '#22c55e';
+                        input.style.color = '#15803d';
+                    } else {
+                        input.style.borderBottomColor = '#ef4444';
+                    }
+                });
+            });
+
+            // 3. Scramble Logic
+            const scrambles = [
+                { id: 'q1', text: "How much does a ticket to the exhibition cost ?" },
+                { id: 'q2', text: "How many exhibitors were there at the exhibition ?" }
+            ];
+
+            scrambles.forEach(s => {
+                const container = document.getElementById(s.id);
+                const words = s.text.split(' ').sort(() => Math.random() - 0.5);
+                words.forEach(w => {
+                    const span = document.createElement('span');
+                    span.className = "draggable bg-white px-3 py-1 rounded border shadow-sm cursor-move hover:bg-blue-50";
+                    span.draggable = true;
+                    span.textContent = w;
+                    container.appendChild(span);
+                });
+            });
+
+            // 4. Drag & Drop Engine (Horizontal & Vertical)
+            const setupDragEvents = () => {
+                const allDraggables = document.querySelectorAll('.draggable');
+                const allZones = document.querySelectorAll('.drop-zone');
+
+                allDraggables.forEach(d => {
+                    d.addEventListener('dragstart', () => {
+                        draggedItem = d;
+                        d.classList.add('dragging');
+                    });
+                    d.addEventListener('dragend', () => {
+                        draggedItem.classList.remove('dragging');
+                        draggedItem = null;
+                    });
+                });
+
+                allZones.forEach(zone => {
+                    zone.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        zone.classList.add('over');
+                        
+                        // Horizontal sorting for scramble containers
+                        if (zone.classList.contains('word-order-container')) {
+                            const afterElement = getDragAfterElementHorizontal(zone, e.clientX);
+                            if (afterElement == null) {
+                                zone.appendChild(draggedItem);
+                            } else {
+                                zone.insertBefore(draggedItem, afterElement);
+                            }
+                        }
+                    });
+
+                    zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+
+                    zone.addEventListener('drop', (e) => {
+                        zone.classList.remove('over');
+                        
+                        // Match-up logic (Compound Nouns)
+                        if (zone.dataset.match) {
+                            if (draggedItem.dataset.word === zone.dataset.match) {
+                                zone.classList.add('feedback-correct');
+                                zone.innerHTML = `<span class="font-bold text-green-700">${draggedItem.textContent} ${zone.textContent}</span>`;
+                                draggedItem.remove();
+                            } else {
+                                zone.classList.add('feedback-incorrect');
+                                setTimeout(() => zone.classList.remove('feedback-incorrect'), 800);
+                            }
+                        }
+                    });
+                });
+            };
+
+            function getDragAfterElementHorizontal(container, x) {
+                const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = x - box.left - box.width / 2;
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+
+            setupDragEvents();
+
+            // 5. Scramble Check
+            document.getElementById('check-scramble-btn').addEventListener('click', () => {
+                document.querySelectorAll('.scramble-block').forEach(block => {
+                    const zone = block.querySelector('.word-order-container');
+                    const userOrder = [...zone.querySelectorAll('span')].map(s => s.textContent).join(' ');
+                    const answer = block.dataset.answer;
+                    
+                    if (userOrder.replace('?', ' ?').trim() === answer.replace('?', ' ?').trim()) {
+                        zone.classList.add('feedback-correct');
+                    } else {
+                        zone.classList.add('feedback-incorrect');
+                        setTimeout(() => zone.classList.remove('feedback-incorrect'), 1500);
+                    }
+                });
+            });
+
+            // 6. Builder Check
+            document.getElementById('check-builders-btn').addEventListener('click', () => {
+                document.querySelectorAll('#slide-7 select').forEach(sel => {
+                    if (sel.value === sel.dataset.correct) {
+                        sel.parentElement.classList.add('bg-green-500/20');
+                    } else {
+                        sel.parentElement.classList.add('bg-red-500/20');
+                        setTimeout(() => sel.parentElement.classList.remove('bg-red-500/20'), 1000);
+                    }
+                });
+            });
+
+            // 7. Nav Dots Observer
+            const dots = document.querySelectorAll('.nav-dots a');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        dots.forEach(dot => {
+                            dot.classList.remove('active');
+                            if (dot.getAttribute('href') === `#${entry.target.id}`) {
+                                dot.classList.add('active');
+                            }
+                        });
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            document.querySelectorAll('.slide').forEach(s => observer.observe(s));
+        });
+    </script>
+</body>
+</html>
